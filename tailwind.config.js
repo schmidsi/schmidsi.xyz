@@ -5,7 +5,11 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,md,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      lineHeight: {
+        negative: "0.85",
+      },
+    },
   },
   plugins: [],
 };
