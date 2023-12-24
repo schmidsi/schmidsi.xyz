@@ -7,7 +7,11 @@ module.exports = {
   theme: {
     extend: {
       lineHeight: {
-        negative: "0.85",
+        negative: "0.8",
+      },
+      fontFamily: {
+        sans: ["var(--font-figtree)"],
+        mono: ["var(--font-roboto-mono)"],
       },
     },
   },
