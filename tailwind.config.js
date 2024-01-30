@@ -1,19 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./pages/**/*.{js,ts,jsx,tsx,md,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,md,mdx}",
+    './pages/**/*.{js,ts,jsx,tsx,md,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,md,mdx}',
   ],
   theme: {
     extend: {
       lineHeight: {
-        negative: "0.8",
+        negative: '0.8',
       },
       fontFamily: {
-        sans: ["var(--font-figtree)"],
-        mono: ["var(--font-roboto-mono)"],
+        sans: ['var(--font-figtree)'],
+        mono: ['var(--font-roboto-mono)'],
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 };
