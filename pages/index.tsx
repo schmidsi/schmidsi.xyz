@@ -21,9 +21,9 @@ const Home = () => {
       </h1>
 
       <div className="mt-6">
-        <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
+      <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
           <Link href="https://warpcast.com/schmidsi" legacyBehavior>
-            <a>Warpcast</a>
+            <a>Farcaster</a>
           </Link>
         </div>
         <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
@@ -41,18 +41,19 @@ const Home = () => {
             <a>GitHub</a>
           </Link>
         </div>
-        <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
+        {/* <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
           <Link href="https://converse.xyz/dm/schmidsi.eth" legacyBehavior>
             <a>
               Converse <span className="text-gray-400 text-xs">XMTP</span>
             </a>
           </Link>
-        </div>
+        </div> */}
         <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
           <Link href="mailto:simon@schmid.io" legacyBehavior>
             <a>Mail</a>
           </Link>
         </div>
+
         <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
           <Link href="https://hey.xyz/u/schmidsi" legacyBehavior>
             <a>
@@ -70,14 +71,14 @@ const Home = () => {
         <br className="clear-left" />
       </div>
 
-      <h2 className="text-lg font-semibold mt-6">Read</h2>
+      {/* <h2 className="text-lg font-semibold mt-6">Read</h2>
       <ul>
         <li>
           <Link href="/posts/hello-world" className="underline">
             Hello world! The path to Blogosphere 2.0
           </Link>
         </li>
-      </ul>
+      </ul> */}
     </div>
   );
 };
