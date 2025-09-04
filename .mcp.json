@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ethid-mcp": {
+      "type": "sse",
+      "url": "https://ethid-mcp.efp.workers.dev/sse"
+    }
+  }
+}

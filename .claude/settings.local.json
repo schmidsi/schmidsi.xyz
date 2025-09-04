@@ -1,0 +1,6 @@
+{
+  "enabledMcpjsonServers": [
+    "ethid-mcp"
+  ],
+  "enableAllProjectMcpServers": true
+}
