@@ -21,7 +21,7 @@ const Home = () => {
       </h1>
 
       <div className="mt-6">
-      <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
+        <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
           <Link href="https://warpcast.com/schmidsi" legacyBehavior>
             <a>Farcaster</a>
           </Link>
@@ -71,14 +71,14 @@ const Home = () => {
         <br className="clear-left" />
       </div>
 
-      {/* <h2 className="text-lg font-semibold mt-6">Read</h2>
+      <h2 className="text-lg font-semibold mt-6">Read</h2>
       <ul>
         <li>
           <Link href="/posts/hello-world" className="underline">
-            Hello world! The path to Blogosphere 2.0
+            Hello world! The path to Blogosphere 2.0 (2024-1-15)
           </Link>
         </li>
-      </ul> */}
+      </ul>
     </div>
   );
 };
