@@ -2,7 +2,6 @@ import "nextra-theme-blog/style.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import "../styles/main.css";
-import 'ethereum-identity-kit/css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider, createConfig, http } from 'wagmi';
 import { mainnet } from 'wagmi/chains';

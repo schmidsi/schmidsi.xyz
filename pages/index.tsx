@@ -146,11 +146,6 @@ const Home = () => {
           </Link>
         </li>
       </ul>
-
-      <h2 className="text-lg font-semibold mt-6">Profile Card</h2>
-      <div className="mt-4">
-        <ProfileCard addressOrName="ses.eth" />
-      </div>
     </div>
   );
 };
