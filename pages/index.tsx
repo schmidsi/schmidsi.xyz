@@ -2,12 +2,8 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Figtree, Roboto_Mono } from 'next/font/google';
 import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
-
-const ProfileCard = dynamic(() => import('ethereum-identity-kit').then(mod => ({ default: mod.ProfileCard })), {
-  ssr: false,
-  loading: () => <p>Loading profile...</p>
-});
+import { LoadingSpinner } from '../components/LoadingSpinner';
+import { FollowButton } from '../components/FollowButton';
 
 const figtree = Figtree({
   subsets: ['latin'],
@@ -23,9 +19,6 @@ const Home = () => {
   const [followers, setFollowers] = useState<number | null>(null);
   const [following, setFollowing] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
-  const [spinnerFrame, setSpinnerFrame] = useState(0);
-
-  const spinnerChars = ['—', '\\', '|', '/'];
 
   useEffect(() => {
     // Fetch EFP stats
@@ -45,13 +38,6 @@ const Home = () => {
         setFollowing(null);
         setLoading(false);
       });
-
-    // Animate spinner while loading
-    const interval = setInterval(() => {
-      setSpinnerFrame((prev) => (prev + 1) % spinnerChars.length);
-    }, 100);
-
-    return () => clearInterval(interval);
   }, []);
   return (
     <div className={`${figtree.variable} ${robotoMono.variable} font-sans mt-8 mx-4`}>
@@ -68,14 +54,14 @@ const Home = () => {
       <div className="mt-6 mb-6">
         <div className="text-sm text-gray-600">
           <Link href="https://app.ens.domains/ses.eth" legacyBehavior>
-            <a className="font-mono hover:underline">ses.eth</a>
+            <a className="hover:underline">ses.eth</a>
           </Link>
           {' · '}
           <Link href="https://efp.app/0x546457bbddf5e09929399768ab5a9d588cb0334d?ssr=false" legacyBehavior>
             <a className="hover:underline">
               {loading ? (
                 <>
-                  <span className="font-mono">{spinnerChars[spinnerFrame]}</span> followers · <span className="font-mono">{spinnerChars[spinnerFrame]}</span> following
+                  <LoadingSpinner /> followers · <LoadingSpinner /> following
                 </>
               ) : (
                 <>
@@ -84,6 +70,8 @@ const Home = () => {
               )}
             </a>
           </Link>
+          {' · '}
+          <FollowButton targetAddress="0x546457bbddf5e09929399768ab5a9d588cb0334d" />
         </div>
       </div>
 

@@ -6,7 +6,8 @@
       "mcp__ethid-mcp__searchContexts",
       "Bash(curl:*)",
       "mcp__ethid-mcp__getToolGuidance",
-      "mcp__context7__get-library-docs"
+      "mcp__context7__get-library-docs",
+      "mcp__context7__resolve-library-id"
     ]
   },
   "enableAllProjectMcpServers": true,
