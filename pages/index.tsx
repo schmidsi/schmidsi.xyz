@@ -1,13 +1,19 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { Figtree } from 'next/font/google';
+import { GetServerSideProps } from 'next';
 
 const figtree = Figtree({
   subsets: ['latin'],
   variable: '--font-figtree',
 });
 
-const Home = () => {
+interface HomeProps {
+  followers: number;
+  following: number;
+}
+
+const Home = ({ followers, following }: HomeProps) => {
   return (
     <div className={`${figtree.variable} font-sans mt-8 mx-4`}>
       <Head>
@@ -28,7 +34,7 @@ const Home = () => {
           {' · '}
           <Link href="https://efp.app/0x546457bbddf5e09929399768ab5a9d588cb0334d?ssr=false" legacyBehavior>
             <a className="hover:underline">
-              <span className="font-semibold">13</span> followers · <span className="font-semibold">85</span> following
+              <span className="font-semibold">{followers}</span> followers · <span className="font-semibold">{following}</span> following
             </a>
           </Link>
         </div>
@@ -95,6 +101,34 @@ const Home = () => {
       </ul>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
+  try {
+    const response = await fetch('https://api.ethfollow.xyz/api/v1/users/ses.eth/stats');
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch stats');
+    }
+    
+    const data = await response.json();
+    
+    return {
+      props: {
+        followers: data.followers_count || 0,
+        following: data.following_count || 0,
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching EFP stats:', error);
+    // Return fallback values if API fails
+    return {
+      props: {
+        followers: 0,
+        following: 0,
+      },
+    };
+  }
 };
 
 export default Home;
