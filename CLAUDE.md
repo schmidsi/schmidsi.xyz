@@ -31,3 +31,6 @@ This is a Next.js personal website/blog using Nextra as the static site generato
 - Tailwind CSS for styling with custom configuration
 - Typography plugin enabled for prose content
 - Custom font (Figtree) loaded via Next.js font optimization
+
+# Other
+- Ethereum Identity Kit library id on Context7: "/ethereumidentitykit/docs"

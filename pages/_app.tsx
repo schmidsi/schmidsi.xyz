@@ -2,6 +2,24 @@ import "nextra-theme-blog/style.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import "../styles/main.css";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider, createConfig, http } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
+
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  transports: {
+    [mainnet.id]: http(),
+  },
+});
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+    },
+  },
+});
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -14,7 +32,11 @@ export default function App({ Component, pageProps }: AppProps) {
           href="/feed.xml"
         />
       </Head>
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient}>
+        <WagmiProvider config={wagmiConfig}>
+          <Component {...pageProps} />
+        </WagmiProvider>
+      </QueryClientProvider>
     </>
   );
 }
