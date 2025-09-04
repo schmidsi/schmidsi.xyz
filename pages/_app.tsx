@@ -5,12 +5,6 @@ import "../styles/main.css";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider, createConfig, http } from 'wagmi';
 import { mainnet } from 'wagmi/chains';
-import dynamic from 'next/dynamic';
-
-const TransactionProvider = dynamic(() => import('ethereum-identity-kit').then(mod => ({ default: mod.TransactionProvider })), {
-  ssr: false,
-  loading: () => <></>
-});
 
 const wagmiConfig = createConfig({
   chains: [mainnet],
@@ -40,9 +34,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <WagmiProvider config={wagmiConfig}>
-          <TransactionProvider>
-            <Component {...pageProps} />
-          </TransactionProvider>
+          <Component {...pageProps} />
         </WagmiProvider>
       </QueryClientProvider>
     </>
