@@ -1,11 +1,16 @@
 import Head from 'next/head';
 import Link from 'next/link';
-import { Figtree } from 'next/font/google';
+import { Figtree, Roboto_Mono } from 'next/font/google';
 import { useEffect, useState } from 'react';
 
 const figtree = Figtree({
   subsets: ['latin'],
   variable: '--font-figtree',
+});
+
+const robotoMono = Roboto_Mono({
+  subsets: ['latin'],
+  variable: '--font-roboto-mono',
 });
 
 const Home = () => {
@@ -43,7 +48,7 @@ const Home = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className={`${figtree.variable} font-sans mt-8 mx-4`}>
+    <div className={`${figtree.variable} ${robotoMono.variable} font-sans mt-8 mx-4`}>
       <Head>
         <title>Simon Emanuel Schmid</title>
       </Head>
