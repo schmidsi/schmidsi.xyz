@@ -2,6 +2,12 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { Figtree, Roboto_Mono } from 'next/font/google';
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+
+const ProfileCard = dynamic(() => import('ethereum-identity-kit').then(mod => ({ default: mod.ProfileCard })), {
+  ssr: false,
+  loading: () => <p>Loading profile...</p>
+});
 
 const figtree = Figtree({
   subsets: ['latin'],
@@ -140,6 +146,11 @@ const Home = () => {
           </Link>
         </li>
       </ul>
+
+      <h2 className="text-lg font-semibold mt-6">Profile Card</h2>
+      <div className="mt-4">
+        <ProfileCard addressOrName="ses.eth" />
+      </div>
     </div>
   );
 };
