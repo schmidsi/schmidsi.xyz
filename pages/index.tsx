@@ -1,19 +1,47 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { Figtree } from 'next/font/google';
-import { GetServerSideProps } from 'next';
+import { useEffect, useState } from 'react';
 
 const figtree = Figtree({
   subsets: ['latin'],
   variable: '--font-figtree',
 });
 
-interface HomeProps {
-  followers: number;
-  following: number;
-}
+const Home = () => {
+  const [followers, setFollowers] = useState<number | null>(null);
+  const [following, setFollowing] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [spinnerFrame, setSpinnerFrame] = useState(0);
 
-const Home = ({ followers, following }: HomeProps) => {
+  const spinnerChars = ['—', '\\', '|', '/'];
+
+  useEffect(() => {
+    // Fetch EFP stats
+    fetch('https://api.ethfollow.xyz/api/v1/users/ses.eth/stats')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch');
+        return res.json();
+      })
+      .then((data) => {
+        setFollowers(data.followers_count || 0);
+        setFollowing(data.following_count || 0);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching EFP stats:', error);
+        setFollowers(null);
+        setFollowing(null);
+        setLoading(false);
+      });
+
+    // Animate spinner while loading
+    const interval = setInterval(() => {
+      setSpinnerFrame((prev) => (prev + 1) % spinnerChars.length);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className={`${figtree.variable} font-sans mt-8 mx-4`}>
       <Head>
@@ -34,7 +62,15 @@ const Home = ({ followers, following }: HomeProps) => {
           {' · '}
           <Link href="https://efp.app/0x546457bbddf5e09929399768ab5a9d588cb0334d?ssr=false" legacyBehavior>
             <a className="hover:underline">
-              <span className="font-semibold">{followers}</span> followers · <span className="font-semibold">{following}</span> following
+              {loading ? (
+                <>
+                  <span className="font-mono">{spinnerChars[spinnerFrame]}</span> followers · <span className="font-mono">{spinnerChars[spinnerFrame]}</span> following
+                </>
+              ) : (
+                <>
+                  <span className="font-semibold">{followers !== null ? followers : '?'}</span> followers · <span className="font-semibold">{following !== null ? following : '?'}</span> following
+                </>
+              )}
             </a>
           </Link>
         </div>
@@ -101,34 +137,6 @@ const Home = ({ followers, following }: HomeProps) => {
       </ul>
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-  try {
-    const response = await fetch('https://api.ethfollow.xyz/api/v1/users/ses.eth/stats');
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch stats');
-    }
-    
-    const data = await response.json();
-    
-    return {
-      props: {
-        followers: data.followers_count || 0,
-        following: data.following_count || 0,
-      },
-    };
-  } catch (error) {
-    console.error('Error fetching EFP stats:', error);
-    // Return fallback values if API fails
-    return {
-      props: {
-        followers: 0,
-        following: 0,
-      },
-    };
-  }
 };
 
 export default Home;
