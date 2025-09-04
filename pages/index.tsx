@@ -20,6 +20,20 @@ const Home = () => {
         <span className="text-gray-900">S</span>chmid
       </h1>
 
+      <div className="mt-6 mb-6">
+        <div className="text-sm text-gray-600">
+          <Link href="https://app.ens.domains/ses.eth" legacyBehavior>
+            <a className="font-mono hover:underline">ses.eth</a>
+          </Link>
+          {' · '}
+          <Link href="https://efp.app/0x546457bbddf5e09929399768ab5a9d588cb0334d?ssr=false" legacyBehavior>
+            <a className="hover:underline">
+              <span className="font-semibold">13</span> followers · <span className="font-semibold">85</span> following
+            </a>
+          </Link>
+        </div>
+      </div>
+
       <div className="mt-6">
         <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
           <Link href="https://warpcast.com/schmidsi" legacyBehavior>
