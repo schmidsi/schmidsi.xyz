@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Figtree, Roboto_Mono } from 'next/font/google';
 import { useEffect, useState } from 'react';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import { FollowButton } from '../components/FollowButton';
+// import { FollowButton } from '../components/FollowButton';
 
 const figtree = Figtree({
   subsets: ['latin'],
@@ -70,8 +70,8 @@ const Home = () => {
               )}
             </a>
           </Link>
-          {' · '}
-          <FollowButton targetAddress="0x546457bbddf5e09929399768ab5a9d588cb0334d" />
+          {/* {' · '}
+          <FollowButton targetAddress="0x546457bbddf5e09929399768ab5a9d588cb0334d" /> */}
         </div>
       </div>
 
