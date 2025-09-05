@@ -5,6 +5,7 @@ const withNextra = require("nextra")({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // any configs you need
+  transpilePackages: ['ethereum-identity-kit'],
 };
 
 module.exports = withNextra(nextConfig);
