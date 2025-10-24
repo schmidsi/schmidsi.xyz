@@ -10,7 +10,8 @@
       "mcp__context7__resolve-library-id",
       "Bash(pnpm build:*)",
       "Bash(pnpm install:*)",
-      "Bash(pnpm dev:*)"
+      "Bash(pnpm dev:*)",
+      "Bash(tree:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
