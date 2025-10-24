@@ -129,6 +129,11 @@ const Home = () => {
       <h2 className="text-lg font-semibold mt-6">Read</h2>
       <ul>
         <li>
+          <Link href="/posts/nouns" className="underline">
+            I minted a Noun (2025-10-24)
+          </Link>
+        </li>
+        <li>
           <Link href="/posts/hello-world" className="underline">
             Hello world! The path to Blogosphere 2.0 (2024-1-15)
           </Link>
