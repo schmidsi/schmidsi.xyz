@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPost, getAllPostSlugs } from '@/lib/posts';
-import { MDXRemote } from 'next-mdx-remote/rsc';
+import { compileMDX } from '@/lib/mdx';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -44,6 +44,8 @@ export default async function PostPage({ params }: Props) {
     notFound();
   }
 
+  const MDXContent = await compileMDX(post.content);
+
   return (
     <div className="my-8 mx-4">
       <Link href="/">
@@ -54,7 +56,7 @@ export default async function PostPage({ params }: Props) {
         </header>
       </Link>
       <main className="prose mt-8 mb-8">
-        <MDXRemote source={post.content} />
+        <MDXContent />
       </main>
     </div>
   );
