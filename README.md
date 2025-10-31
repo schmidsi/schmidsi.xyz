@@ -1,16 +1,29 @@
 # ses.box
 
-Personal website and blog for ses.eth - a Next.js-powered platform embracing the "Blogosphere 2.0" philosophy of content ownership with distributed presence.
+Personal website and blog for ses.eth - a hackable Next.js playground embracing "Blogosphere 2.0".
+
+## 🎯 Philosophy: Low Dependencies, High Hackability
+
+This site is intentionally built with **minimal dependencies** to maximize:
+- **Hackability**: Easy to understand, modify, and experiment with
+- **Maintainability**: Fewer dependencies = fewer breaking changes
+- **Control**: Direct access to Next.js primitives without abstractions
+- **Learning**: Perfect playground for testing new ideas
+
+We avoid heavy frameworks and stick to official, well-maintained packages:
+- Next.js core features (no extra frameworks)
+- Official next-mdx-remote (no static site generators)
+- Standard Web3 libraries (wagmi, viem)
 
 ## Overview
 
-This is a **Next.js blog** built with Nextra that combines traditional blogging with Web3/blockchain integration. The site features:
+Next.js 16 + App Router blog with Web3 integration. Features:
 
-- Personal blog posts in MDX format
-- Web3 identity integration (ENS, EFP, Bluesky/ATProto)
-- Ethereum wallet connectivity
+- Personal blog posts in MDX
+- Dynamic OG images per page (planned)
+- Web3 identity (ENS, EFP, Bluesky/ATProto)
 - Auto-generated RSS feeds
-- Custom Nextra theme
+- Ethereum wallet connectivity
 
 ## Quick Start
 
@@ -23,60 +36,80 @@ pnpm start      # Start production server
 
 ## Architecture
 
-### Technology Stack
+### Technology Stack (Minimal by Design)
 
-- **Framework**: Next.js (latest) with TypeScript
-- **Static Site Generation**: Nextra (^2.13.2) + custom theme
-- **Styling**: Tailwind CSS + Typography plugin
-- **Web3**: Wagmi + Viem for Ethereum integration
-- **Identity**: ethereum-identity-kit, ENS, EFP
-- **State Management**: TanStack React Query
-- **Fonts**: Figtree (sans-serif), Roboto Mono (monospace)
+**Core:**
+- Next.js 16 (App Router)
+- TypeScript  
+- React 18
+
+**Content:**
+- next-mdx-remote (official Next.js MDX support)
+- gray-matter (frontmatter parsing)
+
+**Styling:**
+- Tailwind CSS
+- @tailwindcss/typography
+
+**Web3:**
+- wagmi + viem (Ethereum)
+- ethereum-identity-kit (ENS, EFP)
+
+**State:**
+- TanStack React Query
 
 ### Project Structure
 
 ```
-/
-├── components/
-│   ├── Theme.tsx              # Custom Nextra theme layout
-│   ├── FollowButton.tsx       # Web3 wallet-connected follow button
-│   └── LoadingSpinner.tsx     # Animated loading component
-├── pages/
-│   ├── index.tsx              # Homepage (custom React component)
-│   ├── posts/                 # Published blog posts (MDX)
-│   ├── drafts/                # Work-in-progress posts
-│   └── _app.tsx               # App wrapper with Wagmi/Web3 setup
-├── public/
-│   ├── feed.xml               # Auto-generated RSS feed
-│   └── .well-known/
-│       └── atproto-did        # Bluesky domain verification
-├── scripts/
-│   └── gen-rss.js             # RSS generation script
-├── CLAUDE.md                  # Project instructions for Claude Code
-└── package.json
+app/                              # Next.js 16 App Router
+├── layout.tsx                    # Root layout + providers + metadata
+├── page.tsx                      # Homepage
+├── posts/[slug]/
+│   ├── page.tsx                  # Blog post pages
+│   └── opengraph-image.tsx       # Dynamic OG images (planned)
+└── api/rss/route.ts             # RSS feed endpoint
+
+content/posts/                    # MDX blog posts
+├── hello-world.mdx
+├── nouns.mdx
+└── _drafts-start-with-underscore.mdx
+
+components/                       # Reusable components
+├── LoadingSpinner.tsx
+└── FollowButton.tsx
+
+lib/                             # Utilities
+├── posts.ts                     # Post fetching/parsing
+└── wagmi.ts                     # Wagmi configuration
+
+public/                          # Static assets
+└── .well-known/
+    └── atproto-did              # Bluesky verification
+
+docs/issues/                     # Project documentation
 ```
 
 ## Content Management
 
 ### Writing Blog Posts
 
-Create MDX files in `pages/posts/` with frontmatter:
+Create MDX files in `content/posts/` with frontmatter:
 
 ```yaml
 ---
 title: Your Post Title
-date: YYYY/MM/DD
+date: YYYY-MM-DD
 description: Brief description for RSS/SEO
 tag: comma, separated, tags
 author: Your Name
 ---
 
-Your content here...
+Your content here in MDX...
 ```
 
 ### Drafts
 
-Place work-in-progress posts in `pages/drafts/` to keep them out of the RSS feed and production build.
+Prefix filename with underscore: `_my-draft.mdx` - won't be published or included in RSS.
 
 ### Published Posts
 
@@ -102,30 +135,42 @@ The site uses Wagmi for Ethereum wallet connectivity:
 
 ## Build System
 
-### RSS Generation
+### RSS Feed
 
-The build process automatically generates an RSS feed:
-
-1. `scripts/gen-rss.js` scans `pages/posts/` for MDX files
-2. Extracts frontmatter (title, date, description, tags, author)
-3. Generates `public/feed.xml` in RSS 2.0 format
-4. Next.js build runs after RSS generation
+RSS is available as an API route at `/api/rss` and updates dynamically:
+- Scans `content/posts/` for MDX files
+- Excludes drafts (files starting with _)
+- Includes post metadata and links
+- Cached for 1 hour
 
 ### Production Build
 
 ```bash
 pnpm build
-# 1. Generates RSS feed from posts
-# 2. Builds Next.js application
+# 1. Generates static pages for all posts
+# 2. Creates optimized production bundle
+# 3. RSS available at /api/rss
 ```
+
+## Adding Dependencies
+
+⚠️ **Think twice before adding dependencies!**
+
+Ask yourself:
+1. Can I implement this in ~100 lines of code?
+2. Is this officially maintained (Next.js, React, Vercel teams)?
+3. Does this have minimal sub-dependencies?
+4. Will this still work in 2 years?
+
+If unsure, implement it yourself. Code you control > code you don't.
 
 ## Configuration Files
 
-- **next.config.js**: Nextra integration
-- **tailwind.config.js**: Custom theme with Figtree font
-- **tsconfig.json**: TypeScript (loose typing)
+- **next.config.ts**: Clean Next.js configuration
+- **tailwind.config.js**: Custom theme with Figtree/Roboto Mono fonts
+- **tsconfig.json**: TypeScript with path aliases (@/*)
 - **.mcp.json**: Model Context Protocol (ethid-mcp)
-- **CLAUDE.md**: Instructions for Claude Code AI assistant
+- **AGENTS.md**: Instructions for AI coding assistants
 
 ## Development
 
@@ -133,21 +178,21 @@ pnpm build
 
 - **Prettier**: 80 char width, trailing commas, single quotes
 - **EditorConfig**: 2-space indents, LF line endings, UTF-8
-- **TypeScript**: Enabled with relaxed strictness
+- **TypeScript**: Relaxed strictness for hackability
 
-### Key Components
+### Key Features
 
-**Theme.tsx** - Wraps all blog posts with:
-- Header navigation
-- Figtree font application
-- Tailwind prose styling
-- Homepage link
-
-**Homepage** - Standalone React component featuring:
-- ENS identity display
+**Homepage** - Client component (`app/page.tsx`) featuring:
+- ENS identity display (ses.eth)
 - EFP follower/following stats (live API fetch)
-- Social links (Farcaster, Telegram, GitHub, etc.)
-- Follow button with wallet connection
+- Social links across platforms
+- Blog post index
+
+**Blog Posts** - Server components with:
+- MDX rendering via next-mdx-remote
+- Frontmatter metadata extraction
+- Dynamic routing ([slug])
+- Draft exclusion (underscore prefix)
 
 ## Identity & Verification
 
@@ -160,7 +205,13 @@ The site supports multiple decentralized identity standards:
 
 ## Philosophy
 
-This project embodies "Blogosphere 2.0" - owning your content while maintaining distributed presence across platforms. The integration of Web3 identity protocols demonstrates a commitment to decentralized, user-controlled digital identity.
+This project embodies:
+1. **Blogosphere 2.0**: Own your content, distribute everywhere
+2. **Low Dependencies**: Simple > complex, boring > exciting
+3. **Hackability**: Easy to fork, modify, experiment
+4. **Web3 Native**: Decentralized identity without vendor lock-in
+
+Perfect playground for testing ideas without framework overhead.
 
 ## Notes
 
