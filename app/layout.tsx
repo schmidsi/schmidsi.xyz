@@ -3,7 +3,8 @@
 import { Figtree, Roboto_Mono } from 'next/font/google';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
-import { wagmiConfig } from '@/lib/wagmi';
+import { createConfig, http } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 import './globals.css';
 
 const figtree = Figtree({
@@ -14,6 +15,13 @@ const figtree = Figtree({
 const robotoMono = Roboto_Mono({
   subsets: ['latin'],
   variable: '--font-roboto-mono',
+});
+
+const wagmiConfig = createConfig({
+  chains: [mainnet],
+  transports: {
+    [mainnet.id]: http(),
+  },
 });
 
 const queryClient = new QueryClient({

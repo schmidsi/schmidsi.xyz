@@ -64,23 +64,19 @@ pnpm start      # Start production server
 app/                              # Next.js 16 App Router
 ├── layout.tsx                    # Root layout + providers + metadata
 ├── page.tsx                      # Homepage
-├── posts/[slug]/
-│   ├── page.tsx                  # Blog post pages
-│   └── opengraph-image.tsx       # Dynamic OG images (planned)
+├── posts/
+│   ├── hello-world.mdx           # Blog posts colocated with routes
+│   ├── nouns.mdx
+│   ├── _drafts-start-with-underscore.mdx
+│   └── [slug]/
+│       └── page.tsx              # Post route with inline MDX compilation
 └── api/rss/route.ts             # RSS feed endpoint
 
-content/posts/                    # MDX blog posts
-├── hello-world.mdx
-├── nouns.mdx
-└── _drafts-start-with-underscore.mdx
-
 components/                       # Reusable components
-├── LoadingSpinner.tsx
-└── FollowButton.tsx
+└── LoadingSpinner.tsx
 
 lib/                             # Utilities
-├── posts.ts                     # Post fetching/parsing
-└── wagmi.ts                     # Wagmi configuration
+└── posts.ts                     # Post fetching/parsing
 
 public/                          # Static assets
 └── .well-known/
@@ -93,7 +89,7 @@ docs/issues/                     # Project documentation
 
 ### Writing Blog Posts
 
-Create MDX files in `content/posts/` with frontmatter:
+Create MDX files in `app/posts/` with frontmatter:
 
 ```yaml
 ---
@@ -138,7 +134,7 @@ The site uses Wagmi for Ethereum wallet connectivity:
 ### RSS Feed
 
 RSS is available as an API route at `/api/rss` and updates dynamically:
-- Scans `content/posts/` for MDX files
+- Scans `app/posts/` for MDX files
 - Excludes drafts (files starting with _)
 - Includes post metadata and links
 - Cached for 1 hour

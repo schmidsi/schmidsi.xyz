@@ -40,18 +40,19 @@ Before suggesting ANY new dependency:
 ## Architecture Notes
 
 - **Next.js 16 App Router** - Modern, server-first architecture
-- **MDX via @mdx-js/mdx** - Custom 17-line compiler in `lib/mdx.tsx`
-- **Content in `content/` directory** - MDX files separate from code, easy to manage
+- **MDX via @mdx-js/mdx** - Compiled inline in post page (no separate abstraction)
+- **Content colocated with routes** - MDX files in `app/posts/` alongside route handlers
 - **RSS as API Route** - `/api/rss` generates feed dynamically
 - **Server Components by default** - Client components only when needed ('use client')
 - **Low dependency count** - Intentionally minimal for hackability and maintainability
 
 ## File Organization
 
-- `app/` - Routes and pages (App Router)
-- `content/posts/` - MDX blog posts (underscore prefix = draft)
+- `app/` - Routes, pages, and MDX content (App Router)
+  - `app/posts/*.mdx` - Blog posts colocated with routes (underscore prefix = draft)
+  - `app/posts/[slug]/page.tsx` - Post route handler with inline MDX compilation
 - `components/` - Reusable React components
-- `lib/` - Utility functions (posts, mdx, wagmi config)
+- `lib/` - Utility functions (posts)
 - `public/` - Static assets
 - `docs/issues/` - Project documentation and migration records
 

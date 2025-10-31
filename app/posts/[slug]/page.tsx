@@ -1,14 +1,16 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPost, getAllPostSlugs } from '@/lib/posts';
-import { compileMDX } from '@/lib/mdx';
+import { compile, run } from '@mdx-js/mdx';
+import * as runtime from 'react/jsx-runtime';
+import remarkGfm from 'remark-gfm';
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  const slugs = await getAllPostSlugs();
+  const slugs = getAllPostSlugs();
   return slugs;
 }
 
@@ -44,7 +46,14 @@ export default async function PostPage({ params }: Props) {
     notFound();
   }
 
-  const MDXContent = await compileMDX(post.content);
+  // Compile MDX to React component
+  const code = String(
+    await compile(post.content, {
+      outputFormat: 'function-body',
+      remarkPlugins: [remarkGfm],
+    }),
+  );
+  const { default: MDXContent } = await run(code, runtime);
 
   return (
     <div className="my-8 mx-4">

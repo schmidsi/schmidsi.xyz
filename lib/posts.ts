@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 
-const postsDirectory = path.join(process.cwd(), 'content/posts');
+const postsDirectory = path.join(process.cwd(), 'app/posts');
 
 export interface Post {
   slug: string;
@@ -14,11 +14,10 @@ export interface Post {
   content: string;
 }
 
-export async function getPosts(): Promise<Post[]> {
+export function getPosts(): Post[] {
   const fileNames = fs.readdirSync(postsDirectory);
   const posts = fileNames
-    .filter((fileName) => fileName.endsWith('.mdx'))
-    .filter((fileName) => !fileName.startsWith('_')) // Exclude drafts with _
+    .filter((f) => f.endsWith('.mdx') && !f.startsWith('_')) // Exclude drafts with _
     .map((fileName) => {
       const slug = fileName.replace(/\.mdx$/, '');
       const fullPath = path.join(postsDirectory, fileName);
@@ -60,11 +59,10 @@ export async function getPost(slug: string): Promise<Post | null> {
   }
 }
 
-export async function getAllPostSlugs() {
+export function getAllPostSlugs() {
   const fileNames = fs.readdirSync(postsDirectory);
   return fileNames
-    .filter((fileName) => fileName.endsWith('.mdx'))
-    .filter((fileName) => !fileName.startsWith('_'))
+    .filter((f) => f.endsWith('.mdx') && !f.startsWith('_'))
     .map((fileName) => ({
       slug: fileName.replace(/\.mdx$/, ''),
     }));

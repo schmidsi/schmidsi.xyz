@@ -2,7 +2,7 @@ import RSS from 'rss';
 import { getPosts } from '@/lib/posts';
 
 export async function GET() {
-  const posts = await getPosts();
+  const posts = getPosts();
 
   const feed = new RSS({
     title: 'Simon Emanuel Schmid',
