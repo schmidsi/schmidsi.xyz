@@ -64,6 +64,9 @@ export default function HomePage() {
 
       <div className="mt-6">
         <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
+          <Link href="https://bsky.app/profile/ses.box">Bluesky</Link>
+        </div>
+        <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
           <Link href="https://warpcast.com/schmidsi">Farcaster</Link>
         </div>
         <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
