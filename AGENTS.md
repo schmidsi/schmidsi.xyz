@@ -40,7 +40,7 @@ Before suggesting ANY new dependency:
 ## Architecture Notes
 
 - **Next.js 16 App Router** - Modern, server-first architecture
-- **MDX via next-mdx-remote** - Official MDX support without framework overhead
+- **MDX via @mdx-js/mdx** - Custom 17-line compiler in `lib/mdx.tsx`
 - **Content in `content/` directory** - MDX files separate from code, easy to manage
 - **RSS as API Route** - `/api/rss` generates feed dynamically
 - **Server Components by default** - Client components only when needed ('use client')
@@ -51,20 +51,23 @@ Before suggesting ANY new dependency:
 - `app/` - Routes and pages (App Router)
 - `content/posts/` - MDX blog posts (underscore prefix = draft)
 - `components/` - Reusable React components
-- `lib/` - Utility functions (posts, wagmi config)
+- `lib/` - Utility functions (posts, mdx, wagmi config)
 - `public/` - Static assets
-- `docs/issues/` - Migration plans and project documentation
+- `docs/issues/` - Project documentation and migration records
+
+## Context & Resources
+
+- Ethereum Identity Kit library on Context7: `/ethereumidentitykit/docs`
+- EFP API: https://api.ethfollow.xyz
 
 ## When Making Changes
 
-- Never ask me for file changes, just change them. We have git for that.
-   But never commit without confirmation from my side.
-
-- If a git command fails with error "1Password: Could not connect to socket. Is the agent running?":
-  1. Check if 1Password is running: `ps aux | grep -i "1password" | grep -v grep | grep -v browser-helper`
-  2. If not running, start it: `open -a "1Password"`
-  3. Wait a few seconds for it to initialize
-  4. Retry the git command
+- Never ask for confirmation before changing files - just do it. We have git.
+- But never commit without confirmation from user.
+- If git fails with "1Password: Could not connect to socket":
+  1. Check if 1Password running: `ps aux | grep -i "1password" | grep -v grep | grep -v browser-helper`
+  2. If not running: `open -a "1Password"`
+  3. Wait a few seconds, then retry
 - Simple is better than complex
 - Keep it hackable - complexity is the enemy
 - Write obvious code - clever code breaks
