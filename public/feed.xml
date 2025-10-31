@@ -4,17 +4,8 @@
         <description><![CDATA[Your Name]]></description>
         <link>https://yoursite.com</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Wed, 29 Oct 2025 20:22:00 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 31 Oct 2025 11:53:15 GMT</lastBuildDate>
         <atom:link href="https://yoursite.com/feed.xml" rel="self" type="application/rss+xml"/>
-        <item>
-            <title><![CDATA[Hello world! The path to Blogosphere 2.0]]></title>
-            <description><![CDATA[Some ideas about a Blogosphere 2.0]]></description>
-            <link>/posts/hello-world</link>
-            <guid isPermaLink="true">/posts/hello-world</guid>
-            <category><![CDATA[blogosphere-2]]></category>
-            <dc:creator><![CDATA[You]]></dc:creator>
-            <pubDate>Mon, 15 Jan 2024 00:00:00 GMT</pubDate>
-        </item>
         <item>
             <title><![CDATA[I minted a Noun]]></title>
             <description><![CDATA[Why I minted Noun \#1689]]></description>
@@ -24,6 +15,15 @@
             <category><![CDATA[nouns]]></category>
             <dc:creator><![CDATA[You]]></dc:creator>
             <pubDate>Fri, 24 Oct 2025 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Hello world! The path to Blogosphere 2.0]]></title>
+            <description><![CDATA[Some ideas about a Blogosphere 2.0]]></description>
+            <link>/posts/hello-world</link>
+            <guid isPermaLink="true">/posts/hello-world</guid>
+            <category><![CDATA[blogosphere-2]]></category>
+            <dc:creator><![CDATA[You]]></dc:creator>
+            <pubDate>Mon, 15 Jan 2024 00:00:00 GMT</pubDate>
         </item>
     </channel>
 </rss>
