@@ -21,6 +21,7 @@ export async function GET() {
       date: new Date(post.date),
       categories: post.tag.split(',').map((t) => t.trim()),
       author: post.author,
+      custom_elements: [{ 'content:encoded': post.content }],
     });
   });
 
