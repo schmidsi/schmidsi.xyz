@@ -84,7 +84,7 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
-          <Link href="https://twitter.com/schmid_si">
+          <Link href="https://x.com/schmidsi">
             X <span className="text-gray-400 text-xs">Twitter</span>
           </Link>
         </div>
