@@ -325,14 +325,14 @@ Simpler mental model
 
 ## ✅ Success Criteria
 
-- [ ] Build succeeds: `pnpm build`
-- [ ] Homepage works: http://localhost:3000
-- [ ] Blog posts work: /posts/nouns, /posts/hello-world
-- [ ] RSS works: /api/rss
-- [ ] File count reduced by 2
-- [ ] Line count reduced by ~20%
-- [ ] No unused imports
-- [ ] Clearer mental model
+- [x] Build succeeds: `pnpm build`
+- [x] Homepage works: http://localhost:3000
+- [x] Blog posts work: /posts/nouns, /posts/hello-world
+- [x] RSS works: /api/rss
+- [x] File count reduced by 2
+- [x] Line count reduced by ~20%
+- [x] No unused imports
+- [x] Clearer mental model
 
 ---
 
@@ -434,7 +434,7 @@ This refactoring embodies the "Low Dependencies, High Hackability" philosophy:
 ### Cleanup
 - [x] Update AGENTS.md (file organization section)
 - [x] Update README.md (structure diagram)
-- [ ] Commit changes
+- [x] Commit changes
 - [x] Update this issue status to COMPLETE
 
 ---
