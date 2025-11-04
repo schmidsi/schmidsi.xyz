@@ -43,8 +43,36 @@ Before suggesting ANY new dependency:
 - **MDX via @mdx-js/mdx** - Compiled inline in post page (no separate abstraction)
 - **Content colocated with routes** - MDX files in `app/posts/` alongside route handlers
 - **RSS as API Route** - `/api/rss` generates feed dynamically
+- **OG Images via @vercel/og** - Dynamic Open Graph images with JSX templates
 - **Server Components by default** - Client components only when needed ('use client')
 - **Low dependency count** - Intentionally minimal for hackability and maintainability
+
+## Open Graph Images
+
+**System:** @vercel/og for JSX-based OG image generation (Edge Runtime)
+
+**Files:**
+- `app/opengraph-image.tsx` - Homepage OG image (1200×630 PNG)
+- `app/posts/[slug]/opengraph-image.tsx` - Dynamic post OG images
+- `app/og-preview/page.tsx` - Dev tool for live preview with reload
+
+**Adding new posts:**
+1. Add post metadata to `postMetadata` object in `app/posts/[slug]/opengraph-image.tsx`
+2. Use default template OR add custom case to `switch` statement
+3. Preview at http://localhost:3000/og-preview
+
+**Custom per-post designs:**
+- Edit the `switch` statement in `renderOGImage()` function
+- Add a new `case 'slug-name':` with custom JSX
+- Inline styles only (Flexbox supported, no Grid)
+- Keep it simple and hackable
+
+**Edge Runtime limitations:**
+- No Node.js APIs (fs, path, etc.) - that's why metadata is inlined
+- Satori CSS subset only (Flexbox, no Grid, inline styles)
+- System fonts work best (custom fonts add complexity)
+
+**Philosophy:** Keep templates inline in same file, explicit over abstracted, easy to understand and modify
 
 ## File Organization
 

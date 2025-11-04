@@ -20,7 +20,7 @@ We avoid heavy frameworks and stick to official, well-maintained packages:
 Next.js 16 + App Router blog with Web3 integration. Features:
 
 - Personal blog posts in MDX
-- Dynamic OG images per page (planned)
+- Dynamic OG images per page
 - Web3 identity (ENS, EFP, Bluesky/ATProto)
 - Auto-generated RSS feeds
 - Ethereum wallet connectivity
@@ -55,6 +55,9 @@ pnpm start      # Start production server
 - wagmi + viem (Ethereum)
 - ethereum-identity-kit (ENS, EFP)
 
+**Images:**
+- @vercel/og (Open Graph image generation)
+
 **State:**
 - TanStack React Query
 
@@ -64,12 +67,16 @@ pnpm start      # Start production server
 app/                              # Next.js 16 App Router
 ├── layout.tsx                    # Root layout + providers + metadata
 ├── page.tsx                      # Homepage
+├── opengraph-image.tsx           # Homepage OG image (1200×630)
+├── og-preview/                   # OG image dev tool
+│   └── page.tsx
 ├── posts/
 │   ├── hello-world.mdx           # Blog posts colocated with routes
 │   ├── nouns.mdx
 │   ├── _drafts-start-with-underscore.mdx
 │   └── [slug]/
-│       └── page.tsx              # Post route with inline MDX compilation
+│       ├── page.tsx              # Post route with inline MDX compilation
+│       └── opengraph-image.tsx   # Dynamic post OG images
 └── api/rss/route.ts             # RSS feed endpoint
 
 components/                       # Reusable components
@@ -144,9 +151,70 @@ RSS is available as an API route at `/api/rss` and updates dynamically:
 ```bash
 pnpm build
 # 1. Generates static pages for all posts
-# 2. Creates optimized production bundle
-# 3. RSS available at /api/rss
+# 2. Generates OG images for homepage and posts
+# 3. Creates optimized production bundle
+# 4. RSS available at /api/rss
 ```
+
+## Open Graph Images
+
+This site generates dynamic OG images (1200×630 PNG) for social media sharing using @vercel/og.
+
+### Files
+
+- **Homepage**: `app/opengraph-image.tsx` → `/opengraph-image`
+- **Posts**: `app/posts/[slug]/opengraph-image.tsx` → `/posts/{slug}/opengraph-image`
+- **Dev Tool**: `app/og-preview/page.tsx` → `/og-preview`
+
+### Development
+
+```bash
+pnpm dev
+# Visit http://localhost:3000/og-preview to preview OG images with live reload
+```
+
+The preview tool lets you:
+- Select different routes (homepage, posts)
+- Reload images to see changes
+- Preview how cards appear on Twitter, Facebook, LinkedIn
+- Open images directly or view the source page
+
+### Adding OG Images for New Posts
+
+1. **Edit** `app/posts/[slug]/opengraph-image.tsx`
+2. **Add metadata** to the `postMetadata` object:
+   ```typescript
+   'your-slug': {
+     title: 'Your Post Title',
+     date: '2025-01-15',
+     tag: 'your, tags',
+   }
+   ```
+3. **Optional**: Add custom design in the `switch` statement:
+   ```typescript
+   case 'your-slug':
+     return (
+       <div style={{ /* custom JSX design */ }}>
+         {post.title}
+       </div>
+     );
+   ```
+4. **Preview** at http://localhost:3000/og-preview
+
+### Design Constraints
+
+- **Size**: 1200×630px (recommended)
+- **Format**: PNG (auto-generated)
+- **Runtime**: Edge (fast, global)
+- **Styles**: Inline only, Flexbox supported (no Grid)
+- **Fonts**: System fonts (sans-serif) - custom fonts add complexity
+
+### Testing
+
+After deploying, test your OG images:
+- [OpenGraph.xyz](https://www.opengraph.xyz/) - General validator
+- [Twitter Card Validator](https://cards-dev.twitter.com/validator) - Twitter/X
+- [Facebook Debugger](https://developers.facebook.com/tools/debug/) - Facebook/LinkedIn
 
 ## Adding Dependencies
 
