@@ -1,7 +1,8 @@
 ## Issue 003: OG Image Generation System
 
-**Status:** 🟡 IN PROGRESS  
+**Status:** ✅ COMPLETE  
 **Created:** 2025-11-04  
+**Completed:** 2025-11-04  
 **Priority:** High  
 **Goal:** Provide first-class Open Graph image generation with sensible defaults, easy customization, and a live preview workflow.
 
@@ -31,11 +32,11 @@
    - Audit which routes already surface metadata (title/description) and extend `lib/posts.ts` as needed to expose OG-friendly data (hero image, excerpt).
 
 2. **Shared OG Renderer**
-   - Create `app/api/og/[...slug]/route.ts` that resolves a request to a page slug, loads data (post content, homepage info), and returns an `ImageResponse` using a new `components/OgTemplate.tsx`.
+   - Create `app/og/[...slug]/route.tsx` that resolves a request to a page slug, loads data (post content, homepage info), and returns an `ImageResponse` using a new `components/OgTemplate.tsx`.
    - Template will map the page's existing layout styles into 1200×630 dimensions.
 
 3. **Custom JSX Overrides**
-   - Define lookup convention: if `app/posts/[slug]/og.tsx` (or similar) exports `renderOgImage()`, invoke that instead of the shared renderer.
+   - Maintain a registry in `lib/og.ts` (`overrideRenderers`) that maps slugs to custom renderer functions.
    - Document the API (props provided, fallback behavior) and ensure TypeScript types stay lightweight.
 
 4. **Preview Surface**
@@ -71,8 +72,18 @@ This keeps us aligned with the "Low Dependencies, High Hackability" philosophy. 
 ## ✅ Success Criteria
 
 - Every published blog post returns an OG image generated via the default renderer.
-- Authors can create a `og.tsx` (or equivalent) file next to a page/MDX file and see their custom design in production.
+- Authors can register a custom renderer in `lib/og.ts` and see their bespoke design in production.
 - Visiting `/og-preview/posts/nouns` in dev shows a live-updating image when editing the corresponding OG JSX.
-- No new third-party dependencies added; builds remain fast and deployable on Vercel edge runtime.
+- No new third-party dependencies added; build stays fast and the Node runtime keeps `fs`-backed loaders working.
 - Documentation explains how to opt into overrides and how the preview tool works.
+
+---
+
+## 🛠️ Outcome
+
+- Added `app/og/[...slug]/route.tsx` (Node runtime) to hydrate OG payloads from `lib/posts.ts` and render the shared `OgTemplate` via `ImageResponse`.
+- Created `lib/og.ts` to centralize dimensions, payload resolution, and a straightforward `overrideRenderers` map for custom JSX entries.
+- Implemented `app/og-preview/[...slug]/page.tsx` plus a client-side control panel for presets, cache-busting refresh, and manual dimension tweaking.
+- Updated `app/layout.tsx` to use the App Router metadata API; blog posts now advertise `/og/posts/{slug}` images through `generateMetadata`.
+- Documented setup and override instructions in `README.md`, linked to the preview workflow, and captured final decisions here.
 
