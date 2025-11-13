@@ -55,7 +55,7 @@ const footerStyle: CSSProperties = {
 };
 
 const badgeStyle: CSSProperties = {
-  display: 'inline-flex',
+  display: 'flex',
   alignItems: 'center',
   gap: 12,
   padding: '12px 24px',
