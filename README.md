@@ -20,7 +20,7 @@ We avoid heavy frameworks and stick to official, well-maintained packages:
 Next.js 16 + App Router blog with Web3 integration. Features:
 
 - Personal blog posts in MDX
-- Dynamic OG images per page (planned)
+- Dynamic OG images per page (default + custom overrides)
 - Web3 identity (ENS, EFP, Bluesky/ATProto)
 - Auto-generated RSS feeds
 - Ethereum wallet connectivity
@@ -62,8 +62,11 @@ pnpm start      # Start production server
 
 ```
 app/                              # Next.js 16 App Router
-├── layout.tsx                    # Root layout + providers + metadata
+├── layout.tsx                    # Root layout + metadata wiring
+├── providers.tsx                 # Client-side providers (wagmi, react-query)
 ├── page.tsx                      # Homepage
+├── og/[...slug]/route.tsx        # OG image generator (default template)
+├── og-preview/[...slug]/page.tsx # OG preview tool with live reload controls
 ├── posts/
 │   ├── hello-world.mdx           # Blog posts colocated with routes
 │   ├── nouns.mdx
@@ -73,10 +76,12 @@ app/                              # Next.js 16 App Router
 └── api/rss/route.ts             # RSS feed endpoint
 
 components/                       # Reusable components
-└── LoadingSpinner.tsx
+├── LoadingSpinner.tsx
+└── OgTemplate.tsx                # Shared OG image layout
 
 lib/                             # Utilities
-└── posts.ts                     # Post fetching/parsing
+├── posts.ts                     # Post fetching/parsing
+└── og.ts                        # OG defaults + override registry
 
 public/                          # Static assets
 └── .well-known/
@@ -111,6 +116,46 @@ Prefix filename with underscore: `_my-draft.mdx` - won't be published or include
 
 1. **hello-world.mdx** (2024-01-15) - Blogosphere 2.0 philosophy
 2. **nouns.mdx** (2025-10-24) - Noun #1689 minting story
+
+## Open Graph Images
+
+### Default generator
+
+- Every page routes through `GET /og[/{path}]`, which renders the shared template in `components/OgTemplate.tsx`.
+- Blog posts automatically pull title, description, tag, and date from frontmatter to populate the OG card.
+- Query parameters `?width=` and `?height=` are accepted (320–2000px) for quick experimentation.
+
+### Custom overrides
+
+- To craft a bespoke design, add an entry to the `overrideRenderers` map in `lib/og.ts`.
+- Each renderer receives the request context (segments, search params, desired width/height) and should return a React node rendered by `ImageResponse`.
+
+```typescript
+// lib/og.ts
+overrideRenderers['posts/hello-world'] = ({ width, height }) => (
+  <div
+    style={{
+      width,
+      height,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: 'Figtree, sans-serif',
+      fontSize: 72,
+      background: '#0f172a',
+      color: '#f8fafc',
+    }}
+  >
+    Hello, Blogosphere 2.0!
+  </div>
+);
+```
+
+### Preview tool
+
+- Run `pnpm dev` and open `http://localhost:3000/og-preview` for the homepage or append any path (e.g. `/og-preview/posts/nouns`).
+- Toggle auto-refresh, switch between presets (1200×630, 1080×1080, 1080×1920), or punch in custom dimensions.
+- The preview appends a cache-busting query param so changes to OG JSX show up instantly.
 
 ## Web3 Integration
 
