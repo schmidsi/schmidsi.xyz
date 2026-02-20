@@ -97,6 +97,11 @@ export default function HomePage() {
       <h2 className="text-lg font-semibold mt-6">Read</h2>
       <ul>
         <li>
+          <Link href="/posts/sandbox-claude-apple-container" className="underline">
+            Sandbox Claude Code on Mac Without Docker Overhead (2026-02-20)
+          </Link>
+        </li>
+        <li>
           <Link href="/posts/nouns" className="underline">
             I minted a Noun (2025-10-24)
           </Link>
