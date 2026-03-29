@@ -1,9 +1,11 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getPost, getAllPostSlugs } from '@/lib/posts';
 import { compile, run } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 import remarkGfm from 'remark-gfm';
+import { getPost, getAllPostSlugs } from '@/lib/posts';
+import { OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from '@/lib/og';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -14,11 +16,13 @@ export async function generateStaticParams() {
   return slugs;
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
   
   if (!post) return {};
+
+  const imagePath = `/og/posts/${slug}`;
 
   return {
     title: post.title,
@@ -29,11 +33,19 @@ export async function generateMetadata({ params }: Props) {
       type: 'article',
       publishedTime: post.date,
       authors: [post.author],
+      images: [
+        {
+          url: imagePath,
+          width: OG_IMAGE_WIDTH,
+          height: OG_IMAGE_HEIGHT,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.description,
+      images: [imagePath],
     },
   };
 }
