@@ -25,8 +25,7 @@ jobs:
       - run: pnpm build
 
       - name: Deploy with Omnipin
-        run: pnpm dlx omnipin@1.7.0 deploy out --providers Filecoin,Pinata --ens ses.eth --strict
+        run: pnpm dlx omnipin@1.7.0 deploy out --providers Filecoin --ens ses.eth --strict
         env:
           OMNIPIN_FILECOIN_TOKEN: ${{ secrets.OMNIPIN_FILECOIN_TOKEN }}
-          OMNIPIN_PINATA_TOKEN: ${{ secrets.OMNIPIN_PINATA_TOKEN }}
           OMNIPIN_PK: ${{ secrets.OMNIPIN_PK }}
