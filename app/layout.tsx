@@ -48,7 +48,7 @@ export default function RootLayout({
         <meta property="og:description" content="Personal website and blog - Blogosphere 2.0" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@schmid_si" />
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="/api/rss" />
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss.xml" />
       </head>
       <body className="font-sans">
         <QueryClientProvider client={queryClient}>
