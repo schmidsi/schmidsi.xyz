@@ -3,13 +3,10 @@ import { getPosts, formatDate } from '@/lib/posts';
 import { EfpStats } from '@/components/EfpStats';
 
 const socialLinks = [
-  { label: 'Bluesky', href: 'https://bsky.app/profile/ses.box' },
-  { label: 'Farcaster', href: 'https://warpcast.com/schmidsi' },
   { label: 'Telegram', href: 'https://t.me/schmidsi' },
   { label: 'LinkedIn', href: 'https://www.linkedin.com/in/schmidsi/' },
   { label: 'GitHub', href: 'https://github.com/schmidsi' },
   { label: 'Mail', href: 'mailto:simon@schmid.io' },
-  { label: 'Hey', href: 'https://hey.xyz/u/schmidsi', hint: 'Lens' },
   { label: 'X', href: 'https://x.com/schmidsi', hint: 'Twitter' },
 ];
 
