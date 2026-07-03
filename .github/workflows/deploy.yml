@@ -22,9 +22,12 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: pnpm build
+      # Installs `op`; scripts/deploy.sh reads the Filecoin key from 1Password.
+      # Add OP_SERVICE_ACCOUNT_TOKEN (scoped to the Agents - Privileged vault) as
+      # a repo secret — no raw private key is ever stored in CI.
+      - uses: 1password/install-cli-action@v1
 
-      - name: Deploy with Omnipin
-        run: pnpm dlx omnipin@1.7.0 deploy out --providers Filecoin --strict
+      - name: Build + deploy with Omnipin
+        run: pnpm deploy
         env:
-          OMNIPIN_FILECOIN_TOKEN: ${{ secrets.OMNIPIN_FILECOIN_TOKEN }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
