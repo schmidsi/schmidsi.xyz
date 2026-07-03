@@ -1,0 +1,32 @@
+name: Deploy to ses.eth.limo
+
+# Manual trigger only. An EOA key that updates ENS on every push is risky, so
+# deployment is opt-in. Run from the Actions tab when you want to publish.
+# To auto-deploy on push, add `push: { branches: [main] }` here — but consider
+# a Safe delegate key instead of a raw EOA before doing that.
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm build
+
+      - name: Deploy with Omnipin
+        run: pnpm dlx omnipin@1.7.0 deploy out --providers Filecoin,Pinata --ens ses.eth --strict
+        env:
+          OMNIPIN_FILECOIN_TOKEN: ${{ secrets.OMNIPIN_FILECOIN_TOKEN }}
+          OMNIPIN_PINATA_TOKEN: ${{ secrets.OMNIPIN_PINATA_TOKEN }}
+          OMNIPIN_PK: ${{ secrets.OMNIPIN_PK }}
