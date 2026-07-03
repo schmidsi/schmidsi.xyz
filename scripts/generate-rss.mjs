@@ -6,7 +6,8 @@ import path from 'path';
 import matter from 'gray-matter';
 import RSS from 'rss';
 
-const SITE_URL = 'https://www.ses.box';
+// ses.eth via the eth.limo gateway — the ses.box domain is lost, don't use it
+const SITE_URL = 'https://ses.eth.limo';
 const postsDirectory = path.join(process.cwd(), 'app/posts');
 
 function getPosts() {
