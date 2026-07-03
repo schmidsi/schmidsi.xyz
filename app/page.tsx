@@ -39,7 +39,7 @@ export default function HomePage() {
         {socialLinks.map(({ label, href, hint }) => (
           <div
             key={label}
-            className="p-1 bg-slate-200 hover:bg-transparent border"
+            className="p-1 bg-slate-200 hover:bg-transparent border border-gray-200"
           >
             <Link href={href}>
               {label}
