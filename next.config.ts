@@ -11,7 +11,6 @@ const nextConfig: NextConfig = {
   // the IPFS CID. Pin it so identical content produces an identical CID. Asset
   // chunks are content-hashed, so a constant id is safe across deploys.
   generateBuildId: () => 'ses-box',
-  transpilePackages: ['ethereum-identity-kit'],
 };
 
 export default nextConfig;

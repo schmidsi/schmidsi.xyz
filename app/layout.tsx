@@ -1,10 +1,6 @@
-'use client';
-
+import type { Metadata } from 'next';
 import { Figtree, Roboto_Mono } from 'next/font/google';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider } from 'wagmi';
-import { createConfig, http } from 'wagmi';
-import { mainnet } from 'wagmi/chains';
+import Link from 'next/link';
 import './globals.css';
 
 const figtree = Figtree({
@@ -17,20 +13,25 @@ const robotoMono = Roboto_Mono({
   variable: '--font-roboto-mono',
 });
 
-const wagmiConfig = createConfig({
-  chains: [mainnet],
-  transports: {
-    [mainnet.id]: http(),
+export const metadata: Metadata = {
+  title: 'Simon Emanuel Schmid',
+  description: 'Personal website and blog - Blogosphere 2.0',
+  robots: 'follow, index',
+  openGraph: {
+    siteName: 'Simon Emanuel Schmid',
+    title: 'Simon Emanuel Schmid',
+    description: 'Personal website and blog - Blogosphere 2.0',
   },
-});
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 60 * 1000,
+  twitter: {
+    card: 'summary',
+    site: '@schmid_si',
+  },
+  alternates: {
+    types: {
+      'application/rss+xml': '/rss.xml',
     },
   },
-});
+};
 
 export default function RootLayout({
   children,
@@ -39,23 +40,26 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${figtree.variable} ${robotoMono.variable}`}>
-      <head>
-        <title>Simon Emanuel Schmid</title>
-        <meta name="description" content="Personal website and blog - Blogosphere 2.0" />
-        <meta name="robots" content="follow, index" />
-        <meta property="og:site_name" content="Simon Emanuel Schmid" />
-        <meta property="og:title" content="Simon Emanuel Schmid" />
-        <meta property="og:description" content="Personal website and blog - Blogosphere 2.0" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@schmid_si" />
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss.xml" />
-      </head>
       <body className="font-sans">
-        <QueryClientProvider client={queryClient}>
-          <WagmiProvider config={wagmiConfig}>
-            {children}
-          </WagmiProvider>
-        </QueryClientProvider>
+        <div className="max-w-2xl mx-auto px-4 py-8">
+          {children}
+          <footer className="mt-16 text-sm text-gray-500">
+            <Link href="/" className="hover:underline">
+              Home
+            </Link>
+            {' · '}
+            <a href="/rss.xml" className="hover:underline">
+              RSS
+            </a>
+            {' · '}
+            <a
+              href="https://app.ens.domains/ses.eth"
+              className="hover:underline"
+            >
+              ses.eth
+            </a>
+          </footer>
+        </div>
       </body>
     </html>
   );
