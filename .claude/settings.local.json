@@ -27,7 +27,13 @@
       "Bash(cp public/rss.xml /tmp/a.xml)",
       "Bash(cp public/rss.xml /tmp/b.xml)",
       "Read(//tmp/**)",
-      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -m 'Display post date above the title *)"
+      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -m 'Display post date above the title *)",
+      "Bash(sed -i '' '/^# Hello world! The path to Blogosphere 2.0$/d' app/posts/hello-world.mdx)",
+      "Bash(sed -i '' 's/^author: You$/author: Simon Emanuel Schmid/' app/posts/hello-world.mdx app/posts/nouns.mdx)",
+      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -m 'Remove unused wagmi/viem/react-query/identity-kit, make layout static *)",
+      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -m 'Generate homepage post list from filesystem, isolate EFP stats island *)",
+      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -m 'Render post title and date from frontmatter *)",
+      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -m 'Clean up dead files and stale AGENTS.md notes *)"
     ]
   },
   "enableAllProjectMcpServers": true,

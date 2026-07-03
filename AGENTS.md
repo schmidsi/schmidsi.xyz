@@ -39,11 +39,12 @@ Before suggesting ANY new dependency:
 
 ## Architecture Notes
 
-- **Next.js 16 App Router** - Modern, server-first architecture
+- **Static export for IPFS** - `output: 'export'`, no server at runtime; interactivity is client-side JS only
+- **Next.js 16 App Router** - Server Components run at build time and prerender to static HTML
 - **MDX via @mdx-js/mdx** - Compiled inline in post page (no separate abstraction)
 - **Content colocated with routes** - MDX files in `app/posts/` alongside route handlers
-- **RSS as API Route** - `/api/rss` generates feed dynamically
-- **Server Components by default** - Client components only when needed ('use client')
+- **RSS at build time** - `scripts/generate-rss.mjs` writes `public/rss.xml` before `next build`
+- **Client components only when needed** - 'use client' islands (e.g. EFP stats fetch)
 - **Low dependency count** - Intentionally minimal for hackability and maintainability
 
 ## File Organization
@@ -64,7 +65,7 @@ Before suggesting ANY new dependency:
 ## When Making Changes
 
 - Never ask for confirmation before changing files - just do it. We have git.
-- But never commit without confirmation from user.
+- Commit autonomously and often. Use `git -c user.email="simon+agent@schmid.io" -c user.name="Simon Agent" -c commit.gpgsign=false commit` to bypass 1Password/GPG signing.
 - If git fails with "1Password: Could not connect to socket":
   1. Check if 1Password running: `ps aux | grep -i "1password" | grep -v grep | grep -v browser-helper`
   2. If not running: `open -a "1Password"`
