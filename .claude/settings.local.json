@@ -26,7 +26,8 @@
       "Bash(node scripts/generate-rss.mjs)",
       "Bash(cp public/rss.xml /tmp/a.xml)",
       "Bash(cp public/rss.xml /tmp/b.xml)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -m 'Display post date above the title *)"
     ]
   },
   "enableAllProjectMcpServers": true,

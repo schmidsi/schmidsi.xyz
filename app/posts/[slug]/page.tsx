@@ -65,6 +65,16 @@ export default async function PostPage({ params }: Props) {
         </header>
       </Link>
       <main className="prose mt-8 mb-8">
+        <time
+          dateTime={new Date(post.date).toISOString().split('T')[0]}
+          className="text-sm text-gray-400"
+        >
+          {new Date(post.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
+        </time>
         <MDXContent />
       </main>
     </div>
