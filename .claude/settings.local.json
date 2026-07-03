@@ -11,7 +11,8 @@
       "Bash(pnpm build:*)",
       "Bash(pnpm install:*)",
       "Bash(pnpm dev:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(npm run dev:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
