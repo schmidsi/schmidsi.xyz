@@ -28,6 +28,6 @@ jobs:
       - uses: 1password/install-cli-action@v1
 
       - name: Build + deploy with Omnipin
-        run: pnpm deploy
+        run: pnpm run deploy   # `pnpm deploy` is a reserved builtin; use `run`
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
