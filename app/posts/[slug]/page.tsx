@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getPost, getAllPostSlugs } from '@/lib/posts';
+import { getPost, getAllPostSlugs, formatDate } from '@/lib/posts';
 import { compile, run } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 import remarkGfm from 'remark-gfm';
@@ -56,7 +56,7 @@ export default async function PostPage({ params }: Props) {
   const { default: MDXContent } = await run(code, runtime);
 
   return (
-    <div className="my-8 mx-4">
+    <div>
       <Link href="/">
         <header className="text-xl font-bold text-gray-400 leading-negative">
           <span className="text-gray-900">S</span>imon <br />
@@ -65,15 +65,9 @@ export default async function PostPage({ params }: Props) {
         </header>
       </Link>
       <main className="prose mt-8 mb-8">
-        <time
-          dateTime={new Date(post.date).toISOString().split('T')[0]}
-          className="text-sm text-gray-400"
-        >
-          {new Date(post.date).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
+        <h1 className="mb-2">{post.title}</h1>
+        <time dateTime={post.date} className="text-sm text-gray-500">
+          {formatDate(post.date)}
         </time>
         <MDXContent />
       </main>
