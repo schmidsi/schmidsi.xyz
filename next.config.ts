@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   // No image optimization server on IPFS
   images: { unoptimized: true },
+  // Next uses a random build id by default, which changes every export and thus
+  // the IPFS CID. Pin it so identical content produces an identical CID. Asset
+  // chunks are content-hashed, so a constant id is safe across deploys.
+  generateBuildId: () => 'ses-box',
   transpilePackages: ['ethereum-identity-kit'],
 };
 

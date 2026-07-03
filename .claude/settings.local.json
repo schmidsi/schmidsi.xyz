@@ -22,7 +22,11 @@
       "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -q -m 'Enable static export for IPFS/eth.limo deployment *)",
       "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -q -m 'Simplify deploy to Filecoin-only *)",
       "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -q -m 'Update ENS manually, never expose ses.eth key *)",
-      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -q -m 'Fix reserved pnpm deploy builtin in CI \\(use pnpm run deploy\\) *)"
+      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -q -m 'Fix reserved pnpm deploy builtin in CI \\(use pnpm run deploy\\) *)",
+      "Bash(node scripts/generate-rss.mjs)",
+      "Bash(cp public/rss.xml /tmp/a.xml)",
+      "Bash(cp public/rss.xml /tmp/b.xml)",
+      "Read(//tmp/**)"
     ]
   },
   "enableAllProjectMcpServers": true,
