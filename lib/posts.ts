@@ -4,6 +4,24 @@ import matter from 'gray-matter';
 
 const postsDirectory = path.join(process.cwd(), 'app/posts');
 
+// gray-matter parses unquoted YAML dates as Date objects; normalize to YYYY-MM-DD
+function toIsoDate(date: string | Date): string {
+  return date instanceof Date
+    ? date.toISOString().split('T')[0]
+    : String(date);
+}
+
+// UTC keeps the baked-in date independent of the build machine's timezone,
+// which keeps the static export (and thus the IPFS CID) reproducible
+export function formatDate(isoDate: string): string {
+  return new Date(isoDate).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+}
+
 export interface Post {
   slug: string;
   title: string;
@@ -27,7 +45,7 @@ export function getPosts(): Post[] {
       return {
         slug,
         title: data.title,
-        date: data.date,
+        date: toIsoDate(data.date),
         description: data.description,
         tag: data.tag,
         author: data.author,
@@ -48,7 +66,7 @@ export async function getPost(slug: string): Promise<Post | null> {
     return {
       slug,
       title: data.title,
-      date: data.date,
+      date: toIsoDate(data.date),
       description: data.description,
       tag: data.tag,
       author: data.author,
