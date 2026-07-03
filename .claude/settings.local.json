@@ -20,7 +20,8 @@
       "Bash(grep -iE 'docs/|readme|\\\\.md$|example|template|\\\\.omnipin|config')",
       "Bash(grep -iE 'docs|readme|example|template|config|usage|\\\\.md$')",
       "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -q -m 'Enable static export for IPFS/eth.limo deployment *)",
-      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -q -m 'Simplify deploy to Filecoin-only *)"
+      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -q -m 'Simplify deploy to Filecoin-only *)",
+      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -q -m 'Update ENS manually, never expose ses.eth key *)"
     ]
   },
   "enableAllProjectMcpServers": true,

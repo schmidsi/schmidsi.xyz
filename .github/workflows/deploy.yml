@@ -1,9 +1,9 @@
 name: Deploy to ses.eth.limo
 
-# Manual trigger only. An EOA key that updates ENS on every push is risky, so
-# deployment is opt-in. Run from the Actions tab when you want to publish.
-# To auto-deploy on push, add `push: { branches: [main] }` here — but consider
-# a Safe delegate key instead of a raw EOA before doing that.
+# Pins the built site to Filecoin and prints the Root CID in the run log.
+# ENS is NOT updated here — no ses.eth key is ever exposed to CI. Copy the CID
+# from the log into the Content Hash record (ipfs://<CID>) on app.ens.domains.
+# Manual trigger only; run from the Actions tab when you want to publish.
 on:
   workflow_dispatch:
 
@@ -25,7 +25,6 @@ jobs:
       - run: pnpm build
 
       - name: Deploy with Omnipin
-        run: pnpm dlx omnipin@1.7.0 deploy out --providers Filecoin --ens ses.eth --strict
+        run: pnpm dlx omnipin@1.7.0 deploy out --providers Filecoin --strict
         env:
           OMNIPIN_FILECOIN_TOKEN: ${{ secrets.OMNIPIN_FILECOIN_TOKEN }}
-          OMNIPIN_PK: ${{ secrets.OMNIPIN_PK }}
