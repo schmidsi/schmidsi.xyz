@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${figtree.variable} ${robotoMono.variable}`}>
       <body className="font-sans">
-        <div className="max-w-2xl px-8 py-16">
+        <div className="max-w-2xl p-8">
           {children}
           <footer className="mt-16 text-sm text-gray-500">
             <Link href="/" className="hover:underline">
