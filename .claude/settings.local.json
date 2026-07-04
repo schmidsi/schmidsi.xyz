@@ -35,7 +35,10 @@
       "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -m 'Render post title and date from frontmatter *)",
       "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -m 'Clean up dead files and stale AGENTS.md notes *)",
       "Bash(pnpm outdated *)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(gh repo *)",
+      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -m 'Document browser-rpc idea for scriptable ENS contenthash updates *)",
+      "Bash(git -c user.email=simon+agent@schmid.io -c 'user.name=Simon Agent' -c commit.gpgsign=false commit -m 'Double the layout padding *)"
     ]
   },
   "enableAllProjectMcpServers": true,
