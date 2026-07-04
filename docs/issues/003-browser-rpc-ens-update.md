@@ -1,7 +1,8 @@
 # Issue 003: Scriptable ses.eth Contenthash Update via browser-rpc
 
-**Status:** 💡 IDEA
+**Status:** ✅ COMPLETE
 **Created:** 2026-07-04
+**Completed:** 2026-07-04 — `scripts/update-ens.sh`, first tx `0x0d0e3cbe…ba5b`
 **Priority:** Low
 
 ## Context
