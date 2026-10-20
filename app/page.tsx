@@ -18,7 +18,7 @@ export default function HomePage() {
       <h1 className="text-6xl font-bold text-gray-400 leading-negative">
         <span className="text-gray-900">S</span>imon <br />{' '}
         <span className="text-gray-900">E</span>manuel <br />{' '}
-        <span className="text-gray-900">S</span>chmid
+        ses.eth
       </h1>
 
       <div className="mt-6 mb-6 text-sm text-gray-600">
