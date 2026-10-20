@@ -36,3 +36,13 @@ export function getSkill(name: string): Skill {
 export function getSkills(): Skill[] {
   return getSkillNames().map(getSkill);
 }
+
+// Files next to SKILL.md (e.g. screenshots) that the skill links relatively.
+export function getSkillAssets(name: string): string[] {
+  const dir = path.join(skillsDirectory, name, 'assets');
+  return fs.existsSync(dir) ? fs.readdirSync(dir).sort() : [];
+}
+
+export function readSkillAsset(name: string, file: string): Buffer {
+  return fs.readFileSync(path.join(skillsDirectory, name, 'assets', file));
+}

@@ -13,6 +13,10 @@ For an IPFS site that means the file must be inside the content that the ENS con
 points to. Assume nothing else about the site: any static site generator, any pinning
 tool, any wallet.
 
+The goal, the profile showing the ENS domain as its handle:
+
+![Bluesky profile showing the handle @ses.eth.limo](assets/00-result.png)
+
 ## 1. Find the DID
 
 Ask the user for their current handle, then resolve it:
@@ -22,8 +26,8 @@ curl -s "https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle?han
 ```
 
 If the current handle is already broken (it shows as `handle.invalid`), the DID is in
-Bluesky under Settings > Account > Change Handle > "I have my own domain" > "No DNS Panel".
-It looks like `did:plc:…`.
+Bluesky under Settings > Account > Handle > "I have my own domain" > "No DNS Panel" (see the
+walkthrough below). It looks like `did:plc:…`.
 
 ## 2. Put the file in the build output
 
@@ -76,8 +80,8 @@ first says `no link named ".well-known"`, go back to step 3.
 
 ## 6. Switch the handle (user does this)
 
-In Bluesky: Settings > Account > Change Handle > "I have my own domain" > "No DNS Panel" >
-enter the domain > Verify Text File. Confirm afterwards:
+In Bluesky: Settings > Account > Handle > "I have my own domain" > "No DNS Panel" > enter the
+domain > Verify Text File. The walkthrough below shows each screen. Confirm afterwards:
 
 ```sh
 curl -s "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=<DID>" | grep -o '"handle":"[^"]*"'
@@ -89,3 +93,38 @@ Bluesky re-checks handles periodically. Every future deploy must still contain t
 and every contenthash update must point to a CID that has it. Leave a note in the project
 (README or agent instructions) that `.well-known/atproto-did` is load-bearing, so nobody
 deletes it as clutter.
+
+## Walkthrough: switching the handle in Bluesky
+
+Screenshots of bsky.app on the web (October 2026), with the next click boxed in red. The
+labels are the reliable part, screens change over time. Use them to guide a human, or as
+targets when driving a browser. If the UI no longer matches, follow the labels and
+tell the user the screenshots are outdated.
+
+1. Open **Settings** (gear icon in the left sidebar).
+
+   ![Bluesky home feed, the Settings gear in the left sidebar is boxed](assets/01-open-settings.png)
+
+2. Click **Account**.
+
+   ![Settings page, the Account row is boxed](assets/02-account.png)
+
+3. Click **Handle**.
+
+   ![Account page, the Handle row is boxed](assets/03-handle.png)
+
+4. In the Change Handle dialog, click **I have my own domain**.
+
+   ![Change Handle dialog, the "I have my own domain" button is boxed](assets/04-own-domain.png)
+
+5. Switch to the **No DNS Panel** tab. An ENS gateway domain has no DNS to edit.
+
+   ![Change Handle dialog on the DNS Panel tab, the No DNS Panel tab is boxed](assets/05-no-dns-panel.png)
+
+6. Enter the domain. The dialog now shows the exact URL and DID it will check. They must
+   match what "5. Verify the domain" returned. Click **Verify Text File**.
+
+   ![No DNS Panel tab with ses.eth.limo entered, the domain field and the Verify Text File button are boxed](assets/06-verify-text-file.png)
+
+On success the dialog closes and the profile shows the new handle, as in the image at the
+top.
