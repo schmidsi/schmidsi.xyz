@@ -1,0 +1,12 @@
+diff --git a/dist/index.js b/dist/index.js
+index 116b63fd03b37a10f8e41e82243840893e3d6f81..cde68dac729d11c8fa3d4019acfa95fe14cffd73 100755
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -17172,6 +17172,7 @@ let picomatch = __webpack_require__("./node_modules/picomatch/index.js"), isRead
+             '**/node_modules'
+         ],
+         onlyFiles: !0,
++        dot: !0,
+         absolute: !0
+     }))){
+         let size = (await promises_stat(absPath)).size, name = external_node_path_relative(dir, absPath);

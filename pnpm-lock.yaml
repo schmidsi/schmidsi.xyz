@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  omnipin@3.1.3:
+    hash: 72d6e0d23c798775f00e5270a27cd1e379376bdfe8805ba1625f00cbaa6b499a
+    path: patches/omnipin@3.1.3.patch
+
 importers:
 
   .:
@@ -50,7 +55,7 @@ importers:
         version: 19.2.3(@types/react@19.2.17)
       omnipin:
         specifier: 3.1.3
-        version: 3.1.3
+        version: 3.1.3(patch_hash=72d6e0d23c798775f00e5270a27cd1e379376bdfe8805ba1625f00cbaa6b499a)
       tailwindcss:
         specifier: ^4.3.2
         version: 4.3.2
@@ -2073,7 +2078,7 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  omnipin@3.1.3: {}
+  omnipin@3.1.3(patch_hash=72d6e0d23c798775f00e5270a27cd1e379376bdfe8805ba1625f00cbaa6b499a): {}
 
   parse-entities@4.0.2:
     dependencies:
