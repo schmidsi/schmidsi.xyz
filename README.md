@@ -82,7 +82,7 @@ public/                          # Static assets
 └── .well-known/
     └── atproto-did              # Bluesky verification
 
-docs/issues/                     # Project documentation
+docs/issues/                     # Kanban: backlog, prioritized, done, dropped
 ```
 
 ## Content Management

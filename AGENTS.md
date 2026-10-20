@@ -55,7 +55,7 @@ Before suggesting ANY new dependency:
 - `components/` - Reusable React components
 - `lib/` - Utility functions (posts)
 - `public/` - Static assets
-- `docs/issues/` - Project documentation and migration records
+- `docs/issues/` - Issues as a kanban board, one folder per column: `backlog/`, `prioritized/`, `done/`, `dropped/`. Move a file with `git mv` to change its status. Numbers are global and never reused.
 
 ## Context & Resources
 
