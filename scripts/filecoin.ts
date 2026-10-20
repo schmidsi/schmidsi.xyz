@@ -142,3 +142,38 @@ async function ping(serviceUrl: string): Promise<boolean> {
     return false;
   }
 }
+
+export function parseUsdfc(amount: string): bigint {
+  const match = amount.match(/^(\d+)(?:\.(\d{1,18}))?$/);
+  if (!match) throw new Error(`not a USDFC amount: ${amount}`);
+  const [, whole, fraction = ''] = match;
+  return BigInt(whole) * 10n ** 18n + BigInt(fraction.padEnd(18, '0'));
+}
+
+export const MIN_PAID_DAYS = 60;
+
+export function storageWarnings(status: {
+  paidDays: number;
+  healthy: boolean;
+  dataSet?: { pdpEndEpoch: bigint };
+}): string[] {
+  const warnings: string[] = [];
+  if (status.paidDays < MIN_PAID_DAYS) {
+    warnings.push(
+      `Filecoin storage is paid for ${Math.floor(status.paidDays)} more days. ` +
+        'Top up with `pnpm run storage topup`.',
+    );
+  }
+  if (!status.healthy) {
+    warnings.push(
+      'The storage provider is down (/pdp/ping failed). A deploy will likely ' +
+        'fail with "Failed to store piece data". Retry later.',
+    );
+  }
+  if (status.dataSet && status.dataSet.pdpEndEpoch !== 0n) {
+    warnings.push(
+      'The Filecoin data set is terminated. The provider may drop the site.',
+    );
+  }
+  return warnings;
+}
