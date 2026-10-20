@@ -48,6 +48,9 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.17)
+      omnipin:
+        specifier: 1.7.0
+        version: 1.7.0
       tailwindcss:
         specifier: ^4.3.2
         version: 4.3.2
@@ -866,6 +869,11 @@ packages:
         optional: true
       sass:
         optional: true
+
+  omnipin@1.7.0:
+    resolution: {integrity: sha512-2FbHS7CNVX6KSKB5qTellXjnlNhTRly0MfxzP7/NzUjpoXHSDSo0ReoaFUhNlQKj1ecKAaZLHMFTc9r0NxN6bw==}
+    engines: {node: ^20.10.0 || >=21.1.0}
+    hasBin: true
 
   parse-entities@4.0.2:
     resolution: {integrity: sha512-GG2AQYWoLgL877gQIKeRPGO1xF9+eG1ujIb5soS5gPvLQ1y2o8FL90w2QWNdf9I361Mpp7726c+lj3U0qK1uGw==}
@@ -2064,6 +2072,8 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+
+  omnipin@1.7.0: {}
 
   parse-entities@4.0.2:
     dependencies:
