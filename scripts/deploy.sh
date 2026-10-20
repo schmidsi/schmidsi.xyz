@@ -8,11 +8,11 @@ set -euo pipefail
 # Requires OP_SERVICE_ACCOUNT_TOKEN in the environment (see the
 # 1password-agent-secrets setup).
 #
-# ENS is NOT touched here: pass the printed CID to scripts/update-ens.sh and
-# sign the transaction from your own wallet.
+# ENS is NOT touched here. `pnpm run publish` runs this, then points ses.eth
+# at the printed CID.
 #
 # Pass extra Omnipin flags through, e.g:
-#   pnpm deploy --filecoin-chain=calibration   # free testnet dry run
+#   pnpm run deploy --filecoin-chain=calibration   # free testnet dry run
 
 pnpm build
 bash scripts/check-pack.sh   # fail before touching secrets if files went missing

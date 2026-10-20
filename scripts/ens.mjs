@@ -42,9 +42,16 @@ const word = (n) => n.toString(16).padStart(64, '0');
 // ABI encoding of setContenthash(bytes32 node, bytes hash)
 export function setContenthashCalldata(node, hash) {
   const bytes = unhex(hash);
-  const padded = Buffer.concat([bytes, Buffer.alloc((32 - (bytes.length % 32)) % 32)]);
+  const padded = Buffer.concat([
+    bytes,
+    Buffer.alloc((32 - (bytes.length % 32)) % 32),
+  ]);
   return (
-    '0x304e6ade' + node.slice(2) + word(0x40) + word(bytes.length) + padded.toString('hex')
+    '0x304e6ade' +
+    node.slice(2) +
+    word(0x40) +
+    word(bytes.length) +
+    padded.toString('hex')
   );
 }
 
@@ -61,14 +68,20 @@ export async function rpc(url, method, params = []) {
 
 // For view functions taking one bytes32 and returning an address.
 export async function callAddress(url, to, selector, node) {
-  const result = await rpc(url, 'eth_call', [{ to, data: selector + node.slice(2) }, 'latest']);
+  const result = await rpc(url, 'eth_call', [
+    { to, data: selector + node.slice(2) },
+    'latest',
+  ]);
   return '0x' + result.slice(-40);
 }
 
 // contenthash(bytes32) returns ABI-encoded bytes: offset, length, data.
 export async function currentContenthash(url, resolver, node) {
   const result = unhex(
-    await rpc(url, 'eth_call', [{ to: resolver, data: '0xbc1c58d1' + node.slice(2) }, 'latest']),
+    await rpc(url, 'eth_call', [
+      { to: resolver, data: '0xbc1c58d1' + node.slice(2) },
+      'latest',
+    ]),
   );
   if (result.length < 64) return '0x';
   const length = Number(BigInt(hex(result.subarray(32, 64))));

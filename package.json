@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "deploy": "bash scripts/deploy.sh",
+    "publish": "node scripts/publish.mjs",
     "test": "node --test scripts/"
   },
   "dependencies": {

@@ -23,7 +23,9 @@ Before suggesting ANY new dependency:
 - `pnpm dev` - Start development server at http://localhost:3000
 - `pnpm build` - Build for production (static generation + RSS)
 - `pnpm start` - Start production server
-- No test suite configured (keep it simple)
+- `pnpm test` - Run script tests (`node --test`, no test framework)
+- `pnpm run deploy` - Build, check, and pin to Filecoin/IPFS, prints the Root CID
+- `pnpm run publish [CID]` - Deploy, then point ses.eth at the CID (signed in the browser via browser-rpc, or with `ENS_SIGNER_KEY`). With a CID it only updates ENS. Always use `run`: bare `pnpm publish` and `pnpm deploy` are built-in pnpm commands
 
 ## Code Style
 
