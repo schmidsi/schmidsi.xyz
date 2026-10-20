@@ -22,4 +22,6 @@ export OMNIPIN_FILECOIN_TOKEN="0x${key#0x}"   # normalize to a single 0x prefix
 unset key
 
 # Local, patched omnipin (see patches/): upstream drops dot-paths like .well-known.
-exec pnpm exec omnipin deploy out --providers Filecoin --strict "$@"
+# No --strict: with several providers, one outage must not block the deploy.
+# omnipin still fails if every provider fails.
+exec pnpm exec omnipin deploy out --providers Filecoin "$@"
