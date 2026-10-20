@@ -1,6 +1,6 @@
 # Issue 004: `.well-known` Is Silently Dropped From Every IPFS Deploy
 
-**Status:** 🚧 IN PROGRESS (code done, deploy and upstream PR pending)
+**Status:** 🚧 IN PROGRESS (handle live, upstream PR pending)
 **Created:** 2026-08-06
 **Priority:** Medium
 **Goal:** Get `ses.eth.limo` verified as the Bluesky handle
@@ -150,3 +150,13 @@ Remaining, needs Simon:
    `scripts/publish.ts`, which deploys, starts browser-rpc itself, and updates ENS in one go.
 3. Verification steps 3 and 4: `curl` the file on `ses.eth.limo`, then verify in Bluesky.
 4. Move this file to `done/` with the PR link and tx hash.
+
+## Handle live (2026-10-20)
+
+Deployed `bafybeibhvkp4vjo4lqpafkf7tll5tjb5hicsevoqgtku7djaokezpmzk2i` and pointed ses.eth at it
+with `pnpm run publish`. `https://ses.eth.limo/.well-known/atproto-did` returns the DID with a
+200, Bluesky resolves `ses.eth.limo` to it, and the profile shows `@ses.eth.limo`. The general
+recipe is now the skill `app/skills/bluesky-handle-for-ens-site/`.
+
+Left: the upstream omnipin PR, and the `setContenthash` tx hash for the record. Then move to
+`done/`.
