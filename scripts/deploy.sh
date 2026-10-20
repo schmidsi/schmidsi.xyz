@@ -8,15 +8,18 @@ set -euo pipefail
 # Requires OP_SERVICE_ACCOUNT_TOKEN in the environment (see the
 # 1password-agent-secrets setup).
 #
-# ENS is NOT touched here: copy the printed `ipfs://<CID>` into the Content Hash
-# record for ses.eth on app.ens.domains and sign it from your own wallet.
+# ENS is NOT touched here: pass the printed CID to scripts/update-ens.sh and
+# sign the transaction from your own wallet.
 #
 # Pass extra Omnipin flags through, e.g:
 #   pnpm deploy --filecoin-chain=calibration   # free testnet dry run
+
+pnpm build
+bash scripts/check-pack.sh   # fail before touching secrets if files went missing
 
 key="$(op read 'op://Agents - Privileged/testoor.eth/private key' --no-newline)"
 export OMNIPIN_FILECOIN_TOKEN="0x${key#0x}"   # normalize to a single 0x prefix
 unset key
 
-pnpm build
-exec pnpm dlx omnipin@1.7.0 deploy out --providers Filecoin --strict "$@"
+# Local, patched omnipin (see patches/): upstream drops dot-paths like .well-known.
+exec pnpm exec omnipin deploy out --providers Filecoin --strict "$@"
