@@ -13,10 +13,10 @@ export const FILECOIN_RPC =
   process.env.FILECOIN_RPC_URL ?? 'https://api.node.glif.io/rpc/v1';
 // testoor.eth, the address of the 1Password key that scripts/deploy.sh uses.
 export const PAYER = '0xfa75ed868c65970bbfdfc238d82d6cfcfd7d9031';
-// Filecoin mainnet contracts, as configured in omnipin 1.7.0.
+// Filecoin mainnet contracts, as configured in omnipin 3.1.3 (FWSS v1.4).
 export const USDFC = '0x80B98d3aa09ffff255c3ba4A241111Ff1262F045';
 export const PAYMENTS = '0x23b1e018F08BB982348b15a86ee926eEBf7F4DAa';
-const STORAGE_VIEW = '0x9e4e6699d8F67dFc883d6b0A7344Bd56F7E80B46';
+const STORAGE_VIEW = '0xAD28BBF18A72f728Ed816D07F5a1d7Ec40D68b5e';
 const PROVIDER_REGISTRY = '0xf55dDbf63F1b55c3F1D4FA7e339a68AB7b64A5eB';
 
 export const EPOCHS_PER_DAY = 2880n; // 30 second epochs
@@ -32,6 +32,7 @@ export interface DataSet {
   providerId: bigint;
   dataSetId: bigint;
   pdpEndEpoch: bigint;
+  reserve: bigint; // lifecycleReserveBalance, held back per data set
 }
 
 const words = (hex: string) =>
@@ -70,13 +71,21 @@ export function runway(
   return { paidEpochs: free / lockupRate, lockupEpochs: lockup / lockupRate };
 }
 
-// getClientDataSets returns DataSetInfoView[]: 11 static words per entry.
+// getClientDataSets returns DataSetInfoView[]: 13 static words per entry
+// since FWSS v1.4 added pendingOneTimePayments and lifecycleReserveBalance.
+const DATA_SET_WORDS = 13;
+
 export function decodeDataSets(hex: string): DataSet[] {
   const w = words(hex);
   const count = Number(w[1]);
   return Array.from({ length: count }, (_, i) => {
-    const s = w.slice(2 + i * 11, 13 + i * 11);
-    return { pdpEndEpoch: s[8], providerId: s[9], dataSetId: s[10] };
+    const s = w.slice(2 + i * DATA_SET_WORDS, 2 + (i + 1) * DATA_SET_WORDS);
+    return {
+      pdpEndEpoch: s[8],
+      providerId: s[9],
+      reserve: s[11],
+      dataSetId: s[12],
+    };
   });
 }
 
