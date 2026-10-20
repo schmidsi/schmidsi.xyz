@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { SiteHeader } from '@/components/SiteHeader';
 import { notFound } from 'next/navigation';
 import { getPost, getAllPostSlugs, formatDate } from '@/lib/posts';
 import { compile, run } from '@mdx-js/mdx';
@@ -57,13 +57,7 @@ export default async function PostPage({ params }: Props) {
 
   return (
     <div>
-      <Link href="/">
-        <header className="text-xl font-bold text-gray-400 leading-negative">
-          <span className="text-gray-900">S</span>imon <br />
-          <span className="text-gray-900">E</span>manuel <br />
-          <span className="text-gray-900">S</span>chmid
-        </header>
-      </Link>
+      <SiteHeader />
       <main className="prose mt-8 mb-8">
         <h1 className="mb-2">{post.title}</h1>
         <time dateTime={post.date} className="text-sm text-gray-500">

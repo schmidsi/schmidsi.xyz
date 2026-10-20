@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { SiteHeader } from '@/components/SiteHeader';
 import { compile, run } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 import remarkGfm from 'remark-gfm';
@@ -35,13 +35,7 @@ export default async function SkillPage({ params }: Props) {
 
   return (
     <div>
-      <Link href="/">
-        <header className="text-xl font-bold text-gray-400 leading-negative">
-          <span className="text-gray-900">S</span>imon <br />
-          <span className="text-gray-900">E</span>manuel <br />
-          <span className="text-gray-900">S</span>chmid
-        </header>
-      </Link>
+      <SiteHeader />
       <main className="prose mt-8 mb-8">
         <p className="text-sm text-gray-500">
           Agent skill ·{' '}
