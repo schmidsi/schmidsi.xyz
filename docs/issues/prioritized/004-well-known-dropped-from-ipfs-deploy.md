@@ -146,6 +146,7 @@ leaks.
 Remaining, needs Simon:
 
 1. Upstream PR to `omnipin/omnipin` (step 3).
-2. `pnpm run deploy`, then `scripts/update-ens.sh <CID>` and sign (step 4).
+2. `pnpm run publish`, sign in the browser (step 4). `scripts/update-ens.sh` was replaced by
+   `scripts/publish.mjs`, which deploys, starts browser-rpc itself, and updates ENS in one go.
 3. Verification steps 3 and 4: `curl` the file on `ses.eth.limo`, then verify in Bluesky.
 4. Move this file to `done/` with the PR link and tx hash.

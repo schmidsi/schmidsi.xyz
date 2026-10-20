@@ -55,8 +55,8 @@ async function deploy() {
   });
   const code = await new Promise((resolve) => child.on('close', resolve));
   if (code !== 0) process.exit(code);
-  // Omnipin colors its output, strip ANSI codes before matching.
-  const match = output.replace(/\x1b\[[0-9;]*m/g, '').match(/Root CID: (\w+)/);
+  // stdout is a pipe, not a TTY, so omnipin prints the CID without colors.
+  const match = output.match(/Root CID: (\w+)/);
   if (!match) throw new Error('deploy finished but printed no Root CID');
   return match[1];
 }
