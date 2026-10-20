@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getPosts, formatDate } from '@/lib/posts';
+import { getSkills } from '@/lib/skills';
 import { EfpStats } from '@/components/EfpStats';
 
 const socialLinks = [
@@ -12,13 +13,13 @@ const socialLinks = [
 
 export default function HomePage() {
   const posts = getPosts();
+  const skills = getSkills();
 
   return (
     <div>
       <h1 className="text-6xl font-bold text-gray-400 leading-negative">
         <span className="text-gray-900">S</span>imon <br />{' '}
-        <span className="text-gray-900">E</span>manuel <br />{' '}
-        ses.eth
+        <span className="text-gray-900">E</span>manuel <br /> ses.eth
       </h1>
 
       <div className="mt-6 mb-6 text-sm text-gray-600">
@@ -56,6 +57,17 @@ export default function HomePage() {
             <span className="text-sm text-gray-500">
               {formatDate(post.date)}
             </span>
+          </li>
+        ))}
+      </ul>
+
+      <h2 className="text-lg font-semibold mt-6">Skills</h2>
+      <ul>
+        {skills.map((skill) => (
+          <li key={skill.name}>
+            <Link href={`/skills/${skill.name}`} className="underline">
+              {skill.name}
+            </Link>
           </li>
         ))}
       </ul>
