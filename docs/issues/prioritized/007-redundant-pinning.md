@@ -1,0 +1,70 @@
+# Issue 007: Redundant Pinning (No Single Storage Provider)
+
+**Status:** 🔜 TODO (needs Filebase and Pinata accounts)
+**Created:** 2026-10-20
+**Priority:** High
+**Goal:** The site, and with it the `ses.eth.limo` Bluesky handle, survives any one storage
+provider failing, and deploys succeed while any one provider works.
+
+## Context
+
+Every copy of the site lives with one Filecoin storage provider, ezpdpz-main (provider 1,
+data set 1336). On 2026-10-20 its PDP service went down (`/pdp/ping` 503), then flapped
+(uploads accepted, then connect timeouts while waiting for the piece). Deploys failed for
+hours. The live site kept working only because the provider's IPFS gateway stayed up. A
+worse outage, or the provider dropping the data, takes the site and the handle down.
+
+Filecoin Warm Storage stores one copy per data set, on one provider, in omnipin 1.7.0 and
+3.1.3 alike. Redundancy has to come from other providers.
+
+## Done
+
+- omnipin upgraded 1.7.0 → 3.1.3. The dot-path bug is still there, the patch is ported
+  (`patches/omnipin@3.1.3.patch`), `check-pack` caught it as designed.
+- `scripts/filecoin.ts` reads the FWSS v1.4 storage view (13-word data set layout).
+- `scripts/deploy.sh` no longer passes `--strict`, so one failing provider does not fail
+  the deploy. omnipin still fails if all providers fail.
+
+## Plan
+
+Use both Filebase and Pinata, three copies at three independent companies:
+
+```
+--providers Filebase,Filecoin,Pinata
+```
+
+Order matters: omnipin uploads the files to the first provider only. Filebase first
+uploads directly. Filecoin always uploads its own copy. Pinata, last, pins by CID and
+fetches from the other two over IPFS. With this order, a Filecoin outage like today's still
+deploys.
+
+Needed, in 1Password next to the Filecoin key:
+
+- Filebase: an IPFS bucket (`OMNIPIN_FILEBASE_BUCKET_NAME`) and its IPFS RPC API token
+  (`OMNIPIN_FILEBASE_TOKEN`, sent as a Bearer token to `rpc.filebase.io`).
+- Pinata: a JWT with pinning scopes (`OMNIPIN_PINATA_TOKEN`).
+
+Then `scripts/deploy.sh` reads them with `op read` like the Filecoin key, and
+`check-pack` stays as is (it checks the CAR before any provider sees it).
+
+## For the omnipin team
+
+1. **Dot-paths are dropped.** `fs_walk` globs without `dot: true`, so `.well-known/` never
+   reaches the CAR. Silent, no warning. Fix: one option. Patch:
+   `patches/omnipin@3.1.3.patch`.
+2. **CAR bytes are not deterministic.** Packing the same `out/` three times gives the same
+   Root CID but three different CAR hashes, so the Filecoin piece CID changes on every run.
+   Retries re-upload a new piece instead of finding the one already at the provider, and
+   `FILECOIN_PIECE_CID` cannot be reused across runs.
+3. **One connect timeout aborts the piece wait.** While polling the provider for the
+   piece, a single `ConnectTimeoutError` ends the deploy, even with
+   `OMNIPIN_FILECOIN_FINDPIECE_TIMEOUT_MS` set to 15 minutes. Polling should retry
+   transient network errors within the budget.
+
+## Verification
+
+1. `pnpm run deploy` lists all three providers and ends with "Deployed across all
+   providers".
+2. The new CID resolves from each provider's gateway, including
+   `.well-known/atproto-did`.
+3. With a bogus Filecoin key, the deploy still succeeds via Filebase and Pinata, and warns.
