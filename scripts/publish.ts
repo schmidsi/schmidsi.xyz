@@ -18,6 +18,7 @@ import {
   callAddress,
   currentContenthash,
 } from './ens.ts';
+import { getStorageStatus, storageWarnings } from './filecoin.ts';
 
 const NAME = 'ses.eth';
 const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
@@ -25,6 +26,7 @@ const NAME_WRAPPER = '0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401';
 const RPC = process.env.RPC_URL ?? 'https://ethereum-rpc.publicnode.com';
 const BROWSER_RPC = 'http://localhost:8545';
 
+if (!process.argv[2]) await warnAboutStorage();
 const cid = process.argv[2] ?? (await deploy());
 const node = namehash(NAME);
 const hash = contenthash(cid);
@@ -43,6 +45,17 @@ const key = process.env.ENS_SIGNER_KEY;
 const tx = key ? sendWithKey(key) : await sendWithBrowser();
 console.log(`tx: https://etherscan.io/tx/${tx}`);
 await waitForReceipt(tx);
+
+// Warns, without stopping, if Filecoin storage runs low or the provider is down.
+async function warnAboutStorage() {
+  try {
+    for (const warning of storageWarnings(await getStorageStatus())) {
+      console.warn(`⚠️  ${warning}`);
+    }
+  } catch (e) {
+    console.warn(`⚠️  Could not check Filecoin storage: ${e.message}`);
+  }
+}
 
 // Runs the deploy, echoing its output, and returns the Root CID it prints.
 async function deploy(): Promise<string> {
