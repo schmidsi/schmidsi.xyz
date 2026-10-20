@@ -3,12 +3,13 @@
 
 import { createHash } from 'node:crypto';
 
-const keccak = (bytes) => createHash('keccak-256').update(bytes).digest();
-const hex = (bytes) => '0x' + Buffer.from(bytes).toString('hex');
-const unhex = (s) => Buffer.from(s.replace(/^0x/, ''), 'hex');
+const keccak = (bytes: Buffer | string) =>
+  createHash('keccak-256').update(bytes).digest();
+const hex = (bytes: Uint8Array) => '0x' + Buffer.from(bytes).toString('hex');
+const unhex = (s: string) => Buffer.from(s.replace(/^0x/, ''), 'hex');
 
 // EIP-137
-export function namehash(name) {
+export function namehash(name: string): string {
   let node = Buffer.alloc(32);
   for (const label of name.split('.').filter(Boolean).reverse()) {
     node = keccak(Buffer.concat([node, keccak(label)]));
@@ -17,10 +18,10 @@ export function namehash(name) {
 }
 
 // EIP-1577: a base32 CIDv1 ('b…') is just bytes, prefixed with ipfs-ns (0xe301).
-export function contenthash(cid) {
+export function contenthash(cid: string): string {
   if (!cid.startsWith('b')) throw new Error(`not a base32 CIDv1: ${cid}`);
   const alphabet = 'abcdefghijklmnopqrstuvwxyz234567';
-  const bytes = [];
+  const bytes: number[] = [];
   let value = 0;
   let bits = 0;
   for (const c of cid.slice(1)) {
@@ -37,10 +38,10 @@ export function contenthash(cid) {
   return '0xe301' + Buffer.from(bytes).toString('hex');
 }
 
-const word = (n) => n.toString(16).padStart(64, '0');
+const word = (n: number) => n.toString(16).padStart(64, '0');
 
 // ABI encoding of setContenthash(bytes32 node, bytes hash)
-export function setContenthashCalldata(node, hash) {
+export function setContenthashCalldata(node: string, hash: string): string {
   const bytes = unhex(hash);
   const padded = Buffer.concat([
     bytes,
@@ -55,7 +56,11 @@ export function setContenthashCalldata(node, hash) {
   );
 }
 
-export async function rpc(url, method, params = []) {
+export async function rpc(
+  url: string,
+  method: string,
+  params: unknown[] = [],
+): Promise<any> {
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
@@ -67,7 +72,12 @@ export async function rpc(url, method, params = []) {
 }
 
 // For view functions taking one bytes32 and returning an address.
-export async function callAddress(url, to, selector, node) {
+export async function callAddress(
+  url: string,
+  to: string,
+  selector: string,
+  node: string,
+): Promise<string> {
   const result = await rpc(url, 'eth_call', [
     { to, data: selector + node.slice(2) },
     'latest',
@@ -76,7 +86,11 @@ export async function callAddress(url, to, selector, node) {
 }
 
 // contenthash(bytes32) returns ABI-encoded bytes: offset, length, data.
-export async function currentContenthash(url, resolver, node) {
+export async function currentContenthash(
+  url: string,
+  resolver: string,
+  node: string,
+): Promise<string> {
   const result = unhex(
     await rpc(url, 'eth_call', [
       { to: resolver, data: '0xbc1c58d1' + node.slice(2) },

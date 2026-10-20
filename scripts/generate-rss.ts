@@ -10,7 +10,17 @@ import RSS from 'rss';
 const SITE_URL = 'https://ses.eth.limo';
 const postsDirectory = path.join(process.cwd(), 'app/posts');
 
-function getPosts() {
+type Post = {
+  slug: string;
+  content: string;
+  title: string;
+  description: string;
+  date: string;
+  tag: string;
+  author: string;
+};
+
+function getPosts(): Post[] {
   return fs
     .readdirSync(postsDirectory)
     .filter((f) => f.endsWith('.mdx') && !f.startsWith('_')) // drafts start with _
@@ -19,7 +29,7 @@ function getPosts() {
       const { data, content } = matter(
         fs.readFileSync(path.join(postsDirectory, fileName), 'utf8'),
       );
-      return { slug, content, ...data };
+      return { slug, content, ...data } as Post;
     })
     .sort((a, b) => (a.date > b.date ? -1 : 1));
 }
@@ -51,10 +61,15 @@ for (const post of posts) {
 
 // The `rss` lib hardcodes <lastBuildDate> to now with no opt-out; pin it to the
 // same date as pubDate so the output (and thus the IPFS CID) stays stable.
-const pubDate = (posts.length ? new Date(posts[0].date) : new Date(0)).toUTCString();
+const pubDate = (
+  posts.length ? new Date(posts[0].date) : new Date(0)
+).toUTCString();
 const xml = feed
   .xml({ indent: true })
-  .replace(/<lastBuildDate>.*?<\/lastBuildDate>/, `<lastBuildDate>${pubDate}</lastBuildDate>`);
+  .replace(
+    /<lastBuildDate>.*?<\/lastBuildDate>/,
+    `<lastBuildDate>${pubDate}</lastBuildDate>`,
+  );
 
 fs.writeFileSync(path.join(process.cwd(), 'public/rss.xml'), xml);
 console.log('✓ Generated public/rss.xml');

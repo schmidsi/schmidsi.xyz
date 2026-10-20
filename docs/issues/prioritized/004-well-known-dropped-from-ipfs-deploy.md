@@ -49,7 +49,7 @@ silent: no warning, no error, and `--strict` does not catch it. Still unfixed on
 
 ## Decisions
 
-- The handle will be **`ses.eth.limo`**, matching `SITE_URL` in `scripts/generate-rss.mjs` and
+- The handle will be **`ses.eth.limo`**, matching `SITE_URL` in `scripts/generate-rss.ts` and
   the deploy workflow name. One canonical domain everywhere.
 - Fix omnipin locally with a pinned devDependency + `pnpm patch`, and open a one-line upstream
   PR so the patch can be dropped later.
@@ -147,6 +147,6 @@ Remaining, needs Simon:
 
 1. Upstream PR to `omnipin/omnipin` (step 3).
 2. `pnpm run publish`, sign in the browser (step 4). `scripts/update-ens.sh` was replaced by
-   `scripts/publish.mjs`, which deploys, starts browser-rpc itself, and updates ENS in one go.
+   `scripts/publish.ts`, which deploys, starts browser-rpc itself, and updates ENS in one go.
 3. Verification steps 3 and 4: `curl` the file on `ses.eth.limo`, then verify in Bluesky.
 4. Move this file to `done/` with the PR link and tx hash.

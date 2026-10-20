@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { namehash, contenthash, setContenthashCalldata } from './ens.mjs';
+import { namehash, contenthash, setContenthashCalldata } from './ens.ts';
 
 // Reference values from Foundry: `cast namehash`, `cast calldata`.
 const CID = 'bafybeibhvkp4vjo4lqpafkf7tll5tjb5hicsevoqgtku7djaokezpmzk2i';

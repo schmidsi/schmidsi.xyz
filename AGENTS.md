@@ -24,6 +24,7 @@ Before suggesting ANY new dependency:
 - `pnpm build` - Build for production (static generation + RSS)
 - `pnpm start` - Start production server
 - `pnpm test` - Run script tests (`node --test`, no test framework)
+- Scripts in `scripts/` are TypeScript run directly by Node (type stripping, no build step). Use erasable syntax only (no `enum`) and import with the `.ts` extension
 - `pnpm run deploy` - Build, check, and pin to Filecoin/IPFS, prints the Root CID
 - `pnpm run publish [CID]` - Deploy, then point ses.eth at the CID (signed in the browser via browser-rpc, or with `ENS_SIGNER_KEY`). With a CID it only updates ENS. Always use `run`: bare `pnpm publish` and `pnpm deploy` are built-in pnpm commands
 
@@ -45,7 +46,7 @@ Before suggesting ANY new dependency:
 - **Next.js 16 App Router** - Server Components run at build time and prerender to static HTML
 - **MDX via @mdx-js/mdx** - Compiled inline in post page (no separate abstraction)
 - **Content colocated with routes** - MDX files in `app/posts/` alongside route handlers
-- **RSS at build time** - `scripts/generate-rss.mjs` writes `public/rss.xml` before `next build`
+- **RSS at build time** - `scripts/generate-rss.ts` writes `public/rss.xml` before `next build`
 - **`public/.well-known/atproto-did` is load-bearing** - Bluesky verifies the `ses.eth.limo` handle with it. Omnipin is patched (`patches/`) to keep dot-paths, and `scripts/check-pack.sh` fails the deploy if it goes missing
 - **Client components only when needed** - 'use client' islands (e.g. EFP stats fetch)
 - **Low dependency count** - Intentionally minimal for hackability and maintainability

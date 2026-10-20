@@ -17,7 +17,7 @@ import {
   rpc,
   callAddress,
   currentContenthash,
-} from './ens.mjs';
+} from './ens.ts';
 
 const NAME = 'ses.eth';
 const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
@@ -39,12 +39,13 @@ if ((await currentContenthash(RPC, resolver, node)) === hash) {
   process.exit(0);
 }
 
-const tx = process.env.ENS_SIGNER_KEY ? sendWithKey() : await sendWithBrowser();
+const key = process.env.ENS_SIGNER_KEY;
+const tx = key ? sendWithKey(key) : await sendWithBrowser();
 console.log(`tx: https://etherscan.io/tx/${tx}`);
 await waitForReceipt(tx);
 
 // Runs the deploy, echoing its output, and returns the Root CID it prints.
-async function deploy() {
+async function deploy(): Promise<string> {
   const child = spawn('bash', ['scripts/deploy.sh'], {
     stdio: ['inherit', 'pipe', 'inherit'],
   });
@@ -53,7 +54,9 @@ async function deploy() {
     process.stdout.write(chunk);
     output += chunk;
   });
-  const code = await new Promise((resolve) => child.on('close', resolve));
+  const code = await new Promise<number>((resolve) =>
+    child.on('close', resolve),
+  );
   if (code !== 0) process.exit(code);
   // stdout is a pipe, not a TTY, so omnipin prints the CID without colors.
   const match = output.match(/Root CID: (\w+)/);
@@ -61,7 +64,7 @@ async function deploy() {
   return match[1];
 }
 
-function sendWithKey() {
+function sendWithKey(key: string): string {
   // cast takes the key only as a flag. Same exposure as an env var: both are
   // readable by this user's processes (ps -E), neither touches disk.
   const result = spawnSync(
@@ -73,7 +76,7 @@ function sendWithKey() {
       node,
       hash,
       '--private-key',
-      process.env.ENS_SIGNER_KEY,
+      key,
       '--rpc-url',
       RPC,
       '--json',
@@ -84,7 +87,7 @@ function sendWithKey() {
   return JSON.parse(result.stdout).transactionHash;
 }
 
-async function sendWithBrowser() {
+async function sendWithBrowser(): Promise<string> {
   // Reuse a browser-rpc that is already running, otherwise start one.
   let proxy;
   if (!(await isUp())) {
@@ -109,7 +112,7 @@ async function sendWithBrowser() {
   }
 }
 
-async function isUp() {
+async function isUp(): Promise<boolean> {
   try {
     await rpc(BROWSER_RPC, 'eth_chainId');
     return true;
@@ -118,7 +121,7 @@ async function isUp() {
   }
 }
 
-async function waitForReceipt(tx) {
+async function waitForReceipt(tx: string) {
   for (;;) {
     const receipt = await rpc(RPC, 'eth_getTransactionReceipt', [tx]);
     if (receipt) {
@@ -130,6 +133,6 @@ async function waitForReceipt(tx) {
   }
 }
 
-function sleep(ms) {
+function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
