@@ -47,15 +47,31 @@ test('runway with no rate is unlimited', () => {
   assert.equal(runway(account, 10n), null);
 });
 
-test('decodeDataSets reads static 11-word structs', () => {
+test('decodeDataSets reads static 13-word structs', () => {
+  // FWSS v1.4 layout: ..., pdpEndEpoch, providerId, pendingOneTimePayments,
+  // lifecycleReserveBalance, dataSetId
   const set = (providerId: number, dataSetId: number, endEpoch: number) =>
-    [2363, 0, 0, 0xaa, 0xbb, 0xcc, 0, 7, endEpoch, providerId, dataSetId]
+    [
+      2363,
+      0,
+      0,
+      0xaa,
+      0xbb,
+      0xcc,
+      0,
+      7,
+      endEpoch,
+      providerId,
+      0,
+      608,
+      dataSetId,
+    ]
       .map(word)
       .join('');
   const hex = '0x' + word(32) + word(2) + set(1, 1336, 0) + set(4, 99, 123);
   assert.deepEqual(decodeDataSets(hex), [
-    { providerId: 1n, dataSetId: 1336n, pdpEndEpoch: 0n },
-    { providerId: 4n, dataSetId: 99n, pdpEndEpoch: 123n },
+    { providerId: 1n, dataSetId: 1336n, pdpEndEpoch: 0n, reserve: 608n },
+    { providerId: 4n, dataSetId: 99n, pdpEndEpoch: 123n, reserve: 608n },
   ]);
   assert.deepEqual(decodeDataSets('0x' + word(32) + word(0)), []);
 });
