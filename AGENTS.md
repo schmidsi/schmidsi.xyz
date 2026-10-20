@@ -44,6 +44,7 @@ Before suggesting ANY new dependency:
 - **MDX via @mdx-js/mdx** - Compiled inline in post page (no separate abstraction)
 - **Content colocated with routes** - MDX files in `app/posts/` alongside route handlers
 - **RSS at build time** - `scripts/generate-rss.mjs` writes `public/rss.xml` before `next build`
+- **`public/.well-known/atproto-did` is load-bearing** - Bluesky verifies the `ses.eth.limo` handle with it. Omnipin is patched (`patches/`) to keep dot-paths, and `scripts/check-pack.sh` fails the deploy if it goes missing
 - **Client components only when needed** - 'use client' islands (e.g. EFP stats fetch)
 - **Low dependency count** - Intentionally minimal for hackability and maintainability
 

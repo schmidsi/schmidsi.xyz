@@ -1,6 +1,6 @@
 # Issue 004: `.well-known` Is Silently Dropped From Every IPFS Deploy
 
-**Status:** 🔜 TODO
+**Status:** 🚧 IN PROGRESS (code done, deploy and upstream PR pending)
 **Created:** 2026-08-06
 **Priority:** Medium
 **Goal:** Get `ses.eth.limo` verified as the Bluesky handle
@@ -122,3 +122,30 @@ ENS contenthash → IPFS pin → eth.limo gateway. Every future `pnpm run deploy
 and until `scripts/update-ens.sh` runs, ENS still points at the previous one, which is fine
 because that CID will also contain the file once step 1 lands. The real hazard is deploying a
 build where the file went missing again, which is what the step 2 guard prevents.
+
+## Progress (2026-10-20)
+
+Done, steps 1, 2 and the AGENTS.md note:
+
+- `omnipin` pinned as an exact devDependency (1.7.0). It has no runtime dependencies.
+- `patches/omnipin@1.7.0.patch` adds `dot: true` to the walker glob. The bundled 1.7.0
+  `dist/cli.js` differs from upstream `src/utils/fs.ts` (it globs `dir` with
+  `absolute: false`), but the fix is the same one token. pnpm 10 records the patch in
+  `pnpm-workspace.yaml`, not `package.json`.
+- `scripts/check-pack.sh` packs `out/` like a deploy and fails if `index.html`, `rss.xml` or
+  `.well-known/atproto-did` is missing. It is a standalone script so it runs without the
+  1Password token.
+- `scripts/deploy.sh` builds, runs the check, and only then reads the secret, then deploys
+  with `pnpm exec omnipin`.
+
+Verified locally: unpatched, the pack reproduces the live CID
+`bafybeicvzgfulf…hr2m` without `.well-known`, and the check fails. Patched, the check passes
+and `.well-known/atproto-did` is the only dot-path in the CAR, so nothing like `.DS_Store`
+leaks.
+
+Remaining, needs Simon:
+
+1. Upstream PR to `omnipin/omnipin` (step 3).
+2. `pnpm run deploy`, then `scripts/update-ens.sh <CID>` and sign (step 4).
+3. Verification steps 3 and 4: `curl` the file on `ses.eth.limo`, then verify in Bluesky.
+4. Move this file to `done/` with the PR link and tx hash.
