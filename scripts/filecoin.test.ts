@@ -6,6 +6,8 @@ import {
   extractServiceUrl,
   runway,
   EPOCHS_PER_DAY,
+  parseUsdfc,
+  storageWarnings,
 } from './filecoin.ts';
 
 const word = (n: bigint | number) => BigInt(n).toString(16).padStart(64, '0');
@@ -64,4 +66,19 @@ test('extractServiceUrl finds the URL in the ABI-encoded provider blob', () => {
   const hex =
     '0x' + word(1) + text.padEnd(64, '0') + word(23) + url.padEnd(64, '0');
   assert.equal(extractServiceUrl(hex), 'https://main.ezpdpz.net');
+});
+
+test('parseUsdfc turns a decimal string into 18-decimal units', () => {
+  assert.equal(parseUsdfc('1'), 10n ** 18n);
+  assert.equal(parseUsdfc('1.82'), 182n * 10n ** 16n);
+  assert.equal(parseUsdfc('0.000000000000000001'), 1n);
+  assert.throws(() => parseUsdfc('1.2.3'));
+  assert.throws(() => parseUsdfc('-1'));
+});
+
+test('storageWarnings flags low runway, a down provider and termination', () => {
+  const ok = { paidDays: 90, healthy: true, dataSet: { pdpEndEpoch: 0n } };
+  assert.deepEqual(storageWarnings(ok), []);
+  const bad = { paidDays: 10, healthy: false, dataSet: { pdpEndEpoch: 5n } };
+  assert.equal(storageWarnings(bad).length, 3);
 });
