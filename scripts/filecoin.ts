@@ -102,6 +102,14 @@ export function formatUsdfc(amount: bigint): string {
   return `${whole}.${cents.toString().padStart(2, '0')}`;
 }
 
+// How much USDFC Filecoin Pay may still pull from the wallet. Lets a top-up
+// that died after its approve skip straight to the deposit.
+export async function getAllowance(): Promise<bigint> {
+  return BigInt(
+    await call(USDFC, 'allowance(address,address)', PAYER, PAYMENTS),
+  );
+}
+
 export async function getStorageStatus() {
   const [walletHex, accountHex, setsHex, headHex] = await Promise.all([
     call(USDFC, 'balanceOf(address)', PAYER),

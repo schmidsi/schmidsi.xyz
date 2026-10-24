@@ -12,6 +12,7 @@ import {
   PAYMENTS,
   USDFC,
   formatUsdfc,
+  getAllowance,
   getStorageStatus,
   parseUsdfc,
   storageWarnings,
@@ -81,7 +82,11 @@ async function topup(amountArg?: string) {
       '--rpc-url',
       FILECOIN_RPC,
     ]);
-  send(USDFC, 'approve(address,uint256)', PAYMENTS, value.toString());
+  if ((await getAllowance()) < value) {
+    send(USDFC, 'approve(address,uint256)', PAYMENTS, value.toString());
+  } else {
+    console.log('Already approved, skipping straight to the deposit.');
+  }
   send(
     PAYMENTS,
     'deposit(address,address,uint256)',
