@@ -60,11 +60,22 @@ Then `scripts/deploy.sh` reads them with `op read` like the Filecoin key, and
    piece, a single `ConnectTimeoutError` ends the deploy, even with
    `OMNIPIN_FILECOIN_FINDPIECE_TIMEOUT_MS` set to 15 minutes. Polling should retry
    transient network errors within the budget.
-4. **Filebase bucket creation fails silently.** `createBucket` signs a virtual-hosted
-   `PUT https://<bucket>.s3.filebase.com/` and only returns a boolean, so a failure is
-   swallowed and the upload then dies with `NoSuchBucket`. The same credentials created
-   the bucket fine with a path-style `PUT https://s3.filebase.com/<bucket>` (curl
-   `--aws-sigv4`). It should at least surface the error.
+4. **Filebase bucket creation fails silently.** `createBucket` (in
+   `@stauro/filebase-upload`) returns a boolean nobody checks, so the upload later dies with
+   `NoSuchBucket`. The real cause is not path-style vs virtual-hosted: the signer sends
+   `x-amz-date` with a double `Z` (`…T103528ZZ`), so every CreateBucket gets `403
+   AccessDenied`. Both URL styles work once the date is fixed.
+
+Reported upstream (2026-10-24), from the fork in `~/Repos/@omnipin/`:
+
+- Bug 1: PR https://github.com/omnipin/omnipin/pull/203
+- Bug 2: issue https://github.com/omnipin/omnipin/issues/205 (cause: files are imported
+  50 in parallel, and blocks are written in completion order)
+- Bug 3: PR https://github.com/omnipin/omnipin/pull/204
+- Bug 4: PR https://github.com/omnipin/filebase-upload/pull/6 (omnipin then needs a
+  release and a dependency bump)
+
+Once 203 ships in a release, drop `patches/omnipin@3.1.3.patch`.
 
 ## Progress (2026-10-24)
 
