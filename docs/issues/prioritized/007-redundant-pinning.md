@@ -83,8 +83,8 @@ Left: point ses.eth at that CID (`pnpm run publish <CID>`), then verification st
 
 ## Verification
 
-1. `pnpm run deploy` lists all three providers and ends with "Deployed across all
-   providers".
-2. The new CID resolves from each provider's gateway, including
-   `.well-known/atproto-did`.
-3. With a bogus Filecoin key, the deploy still succeeds via Filebase and Pinata, and warns.
+1. `pnpm run deploy` lists Filebase and Filecoin and ends with "Deployed across all
+   providers". Done 2026-10-24.
+2. The new CID resolves from Filebase's gateway, including `.well-known/atproto-did`.
+   Done 2026-10-24.
+3. With a bogus Filecoin key, the deploy still succeeds via Filebase, and warns.
