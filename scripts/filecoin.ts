@@ -175,8 +175,8 @@ export function storageWarnings(status: {
   }
   if (!status.healthy) {
     warnings.push(
-      'The storage provider is down (/pdp/ping failed). A deploy will likely ' +
-        'fail with "Failed to store piece data". Retry later.',
+      'The Filecoin storage provider is down (/pdp/ping failed). Its copy ' +
+        'will likely fail, the deploy still goes through via Filebase.',
     );
   }
   if (status.dataSet && status.dataSet.pdpEndEpoch !== 0n) {

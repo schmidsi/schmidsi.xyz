@@ -25,7 +25,7 @@ Before suggesting ANY new dependency:
 - `pnpm start` - Start production server
 - `pnpm test` - Run script tests (`node --test`, no test framework)
 - Scripts in `scripts/` are TypeScript run directly by Node (type stripping, no build step). Use erasable syntax only (no `enum`) and import with the `.ts` extension
-- `pnpm run deploy` - Build, check, and pin to Filecoin/IPFS, prints the Root CID
+- `pnpm run deploy` - Build, check, and pin to IPFS via Filebase (uploads first) and Filecoin, prints the Root CID. Succeeds if at least one provider worked. `PROVIDERS=Filebase pnpm run deploy` overrides the list
 - `pnpm run publish [CID]` - Deploy, then point ses.eth at the CID (signed in the browser via browser-rpc, or with `ENS_SIGNER_KEY`). With a CID it only updates ENS. Always use `run`: bare `pnpm publish` and `pnpm deploy` are built-in pnpm commands
 - `pnpm run storage [topup [amount]]` - Filecoin storage runway (USDFC in Filecoin Pay, days left, provider health). `topup` deposits wallet USDFC (default: all of it). omnipin never tops up after the first deploy, so this drains unless topped up. `publish` warns below 60 days or when the provider is down
 

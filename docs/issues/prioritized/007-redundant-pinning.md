@@ -1,6 +1,6 @@
 # Issue 007: Redundant Pinning (No Single Storage Provider)
 
-**Status:** 🔜 TODO (needs Filebase and Pinata accounts)
+**Status:** 🚧 IN PROGRESS (Filebase + Filecoin live, ENS update pending)
 **Created:** 2026-10-20
 **Priority:** High
 **Goal:** The site, and with it the `ses.eth.limo` Bluesky handle, survives any one storage
@@ -60,6 +60,26 @@ Then `scripts/deploy.sh` reads them with `op read` like the Filecoin key, and
    piece, a single `ConnectTimeoutError` ends the deploy, even with
    `OMNIPIN_FILECOIN_FINDPIECE_TIMEOUT_MS` set to 15 minutes. Polling should retry
    transient network errors within the budget.
+4. **Filebase bucket creation fails silently.** `createBucket` signs a virtual-hosted
+   `PUT https://<bucket>.s3.filebase.com/` and only returns a boolean, so a failure is
+   swallowed and the upload then dies with `NoSuchBucket`. The same credentials created
+   the bucket fine with a path-style `PUT https://s3.filebase.com/<bucket>` (curl
+   `--aws-sigv4`). It should at least surface the error.
+
+## Progress (2026-10-24)
+
+Decided: Filebase + Filecoin (two independent operators, one free, one verifiable and
+paid). Pinata stays optional as a third copy.
+
+- Filebase key pair in 1Password (`Agents - Privileged/Filebase`, username = access key,
+  credential = secret). `deploy.sh` builds `OMNIPIN_FILEBASE_TOKEN` from both. Bucket
+  `ses-eth`, created by hand because of bug 4.
+- `deploy.sh` defaults to `PROVIDERS=Filebase,Filecoin`.
+- Deployed `bafybeig3pwhvkdjg667jd7bh2v2m7saytpbsqdk4hhd2aihwhpcyf3gn5y` to both
+  ("Deployed across all providers", Filecoin piece registered on chain). Filebase's
+  gateway serves it, including `.well-known/atproto-did` and the skill.
+
+Left: point ses.eth at that CID (`pnpm run publish <CID>`), then verification step 3.
 
 ## Verification
 
