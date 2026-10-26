@@ -1,6 +1,6 @@
 # Issue 007: Redundant Pinning (No Single Storage Provider)
 
-**Status:** 🚧 IN PROGRESS (live on Filebase + Filecoin, failover test open)
+**Status:** ✅ COMPLETE (follow-up: drop the patch once omnipin PR 203 ships)
 **Created:** 2026-10-20
 **Priority:** High
 **Goal:** The site, and with it the `ses.eth.limo` Bluesky handle, survives any one storage
@@ -94,8 +94,7 @@ paid). Pinata stays optional as a third copy.
   `0x569540e41c3f952aea495d6f130d62094118565cf8a5e556de2cd430e96d84e7` (2026-10-24).
 - Filecoin Pay topped up to 2.20 USDFC, paid until 2028-03.
 
-Left: verification step 3 (failover with Filecoin broken), then drop the patch once 203
-ships.
+Left: drop `patches/omnipin@3.1.3.patch` once 203 ships in a release.
 
 ## Verification
 
@@ -103,4 +102,6 @@ ships.
    providers". Done 2026-10-24.
 2. The new CID resolves from Filebase's gateway, including `.well-known/atproto-did`.
    Done 2026-10-24.
-3. With a bogus Filecoin key, the deploy still succeeds via Filebase, and warns.
+3. With a bogus Filecoin key, the deploy still succeeds via Filebase, and warns. Done
+   2026-10-26: "There were some problems with deploying", Filecoin "Not enough USDfc",
+   exit 0.
