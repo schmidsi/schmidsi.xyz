@@ -1,7 +1,8 @@
 # Issue 004: `.well-known` Is Silently Dropped From Every IPFS Deploy
 
-**Status:** 🚧 IN PROGRESS (handle live, upstream PR pending)
+**Status:** ✅ COMPLETE
 **Created:** 2026-08-06
+**Completed:** 2026-10-24, upstream PR https://github.com/omnipin/omnipin/pull/203, `setContenthash` tx `0xf381594392423627af5e3a12fedf7a3dddfc4b446c7c8c0f668a37d742b910ca`
 **Priority:** Medium
 **Goal:** Get `ses.eth.limo` verified as the Bluesky handle
 
@@ -160,3 +161,10 @@ recipe is now the skill `app/skills/bluesky-handle-for-ens-site/`.
 
 Left: the upstream omnipin PR, and the `setContenthash` tx hash for the record. Then move to
 `done/`.
+
+## Closed (2026-10-24)
+
+- `setContenthash` for the first deploy with the file: tx
+  `0xf381594392423627af5e3a12fedf7a3dddfc4b446c7c8c0f668a37d742b910ca` (2026-10-20).
+- Upstream fix: https://github.com/omnipin/omnipin/pull/203. The patch now lives at
+  `patches/omnipin@3.1.3.patch` (omnipin was upgraded, see issue 007). Drop it once 203 ships.
