@@ -10,6 +10,7 @@ const socialLinks = [
   { label: 'Mail', href: 'mailto:simon@schmid.io' },
   { label: 'X', href: 'https://x.com/schmidsi', hint: 'Twitter' },
   { label: 'Bluesky', href: 'https://bsky.app/profile/ses.eth.limo' },
+  { label: 'Substack', href: 'https://schmidsi.substack.com' },
 ];
 
 export default function HomePage() {
