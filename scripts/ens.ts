@@ -8,6 +8,8 @@ const keccak = (bytes: Buffer | string) =>
 const hex = (bytes: Uint8Array) => '0x' + Buffer.from(bytes).toString('hex');
 const unhex = (s: string) => Buffer.from(s.replace(/^0x/, ''), 'hex');
 
+export const labelhash = (label: string) => hex(keccak(label));
+
 // EIP-137
 export function namehash(name: string): string {
   let node = Buffer.alloc(32);
@@ -40,20 +42,52 @@ export function contenthash(cid: string): string {
 
 const word = (n: number) => n.toString(16).padStart(64, '0');
 
-// ABI encoding of setContenthash(bytes32 node, bytes hash)
-export function setContenthashCalldata(node: string, hash: string): string {
-  const bytes = unhex(hash);
-  const padded = Buffer.concat([
-    bytes,
-    Buffer.alloc((32 - (bytes.length % 32)) % 32),
-  ]);
+// DNS wire format, which ENSv2 resolvers and the Universal Resolver take
+// instead of a namehash: each label prefixed by its length, then a 0 byte.
+export function dnsEncode(name: string): string {
+  const labels = name.split('.').filter(Boolean);
+  const bytes = labels.map((label) => {
+    const b = Buffer.from(label);
+    return Buffer.concat([Buffer.from([b.length]), b]);
+  });
+  return hex(Buffer.concat([...bytes, Buffer.from([0])]));
+}
+
+// ABI encoding of f(bytes a, bytes b), the shape of both calls below.
+function encodeTwoBytes(selector: string, a: string, b: string): string {
+  const tail = (h: string) => {
+    const bytes = unhex(h);
+    const pad = Buffer.alloc((32 - (bytes.length % 32)) % 32);
+    return word(bytes.length) + Buffer.concat([bytes, pad]).toString('hex');
+  };
+  const first = tail(a);
   return (
-    '0x304e6ade' +
-    node.slice(2) +
-    word(0x40) +
-    word(bytes.length) +
-    padded.toString('hex')
+    selector + word(0x40) + word(0x40 + first.length / 2) + first + tail(b)
   );
+}
+
+// setContenthash(bytes name, bytes hash) on an ENSv2 PermissionedResolver
+export function setContenthashCalldata(name: string, hash: string): string {
+  return encodeTwoBytes('0xc5d7badd', dnsEncode(name), hash);
+}
+
+// resolve(bytes name, bytes data) on the Universal Resolver
+export function resolveCalldata(name: string, data: string): string {
+  return encodeTwoBytes('0x9061b923', dnsEncode(name), data);
+}
+
+// ABI-decodes the dynamic bytes whose offset sits in the first word.
+function firstBytes(buf: Buffer): Buffer {
+  const offset = Number(BigInt(hex(buf.subarray(0, 32))));
+  const length = Number(BigInt(hex(buf.subarray(offset, offset + 32))));
+  return buf.subarray(offset + 32, offset + 32 + length);
+}
+
+// resolve() returns (bytes answer, address resolver), and the answer is
+// itself the ABI-encoded `bytes` that contenthash() returns.
+export function decodeResolvedBytes(result: string): string {
+  const answer = firstBytes(unhex(result));
+  return answer.length ? hex(firstBytes(answer)) : '0x';
 }
 
 export async function rpc(
@@ -71,33 +105,16 @@ export async function rpc(
   return json.result;
 }
 
-// For view functions taking one bytes32 and returning an address.
-export async function callAddress(
+// For view functions taking one 32-byte argument and returning one word.
+export async function callWord(
   url: string,
   to: string,
   selector: string,
-  node: string,
+  arg: string,
 ): Promise<string> {
   const result = await rpc(url, 'eth_call', [
-    { to, data: selector + node.slice(2) },
+    { to, data: selector + arg.replace(/^0x/, '').padStart(64, '0') },
     'latest',
   ]);
-  return '0x' + result.slice(-40);
-}
-
-// contenthash(bytes32) returns ABI-encoded bytes: offset, length, data.
-export async function currentContenthash(
-  url: string,
-  resolver: string,
-  node: string,
-): Promise<string> {
-  const result = unhex(
-    await rpc(url, 'eth_call', [
-      { to: resolver, data: '0xbc1c58d1' + node.slice(2) },
-      'latest',
-    ]),
-  );
-  if (result.length < 64) return '0x';
-  const length = Number(BigInt(hex(result.subarray(32, 64))));
-  return hex(result.subarray(64, 64 + length));
+  return '0x' + result.slice(2, 66);
 }

@@ -12,17 +12,22 @@
 import { spawn, spawnSync } from 'node:child_process';
 import {
   namehash,
+  labelhash,
   contenthash,
+  dnsEncode,
   setContenthashCalldata,
+  resolveCalldata,
+  decodeResolvedBytes,
   rpc,
-  callAddress,
-  currentContenthash,
+  callWord,
 } from './ens.ts';
 import { getStorageStatus, storageWarnings } from './filecoin.ts';
 
 const NAME = 'ses.eth';
-const ENS_REGISTRY = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e';
-const NAME_WRAPPER = '0xD4416b13d2b3a9aBae7AcD5D6C2BbDBE25686401';
+// ENSv2 (https://docs.ens.domains/learn/deployments). ses.eth is migrated, so
+// the v1 registry and NameWrapper now report a zero resolver and owner.
+const UNIVERSAL_RESOLVER = '0xeEeEEEeE14D718C2B47D9923Deab1335E144EeEe';
+const ETH_REGISTRY = '0xf60aba43e1f7f3dab1186ff03b561401c9df85e2';
 const RPC = process.env.RPC_URL ?? 'https://ethereum-rpc.publicnode.com';
 const BROWSER_RPC = 'http://localhost:8545';
 
@@ -30,13 +35,33 @@ if (!process.argv[2]) await warnAboutStorage();
 const cid = process.argv[2] ?? (await deploy());
 const node = namehash(NAME);
 const hash = contenthash(cid);
-const resolver = await callAddress(RPC, ENS_REGISTRY, '0x0178b8bf', node);
-const owner = await callAddress(RPC, NAME_WRAPPER, '0x6352211e', node);
+// The Universal Resolver answers with the current contenthash and the
+// resolver it came from, looked up fresh as ENSv2 asks for writes.
+const resolved = await rpc(RPC, 'eth_call', [
+  {
+    to: UNIVERSAL_RESOLVER,
+    data: resolveCalldata(NAME, '0xbc1c58d1' + node.slice(2)),
+  },
+  'latest',
+]);
+const resolver = '0x' + resolved.slice(90, 130);
+// Token IDs change in ENSv2, so get the current one before asking its owner.
+const tokenId = await callWord(
+  RPC,
+  ETH_REGISTRY,
+  '0x14ff5ea3', // getTokenId(uint256)
+  labelhash(NAME.split('.')[0]),
+);
+const owner =
+  '0x' + (await callWord(RPC, ETH_REGISTRY, '0x6352211e', tokenId)).slice(-40);
 
 console.log(`\n${NAME} → ipfs://${cid}`);
 console.log(`resolver: ${resolver}\nowner:    ${owner}`);
+if (/^0x0+$/.test(resolver) || /^0x0+$/.test(owner)) {
+  throw new Error(`${NAME} has no ENSv2 resolver or owner, refusing to send`);
+}
 
-if ((await currentContenthash(RPC, resolver, node)) === hash) {
+if (decodeResolvedBytes(resolved) === hash) {
   console.log(`${NAME} already points at this CID, nothing to do.`);
   process.exit(0);
 }
@@ -85,8 +110,8 @@ function sendWithKey(key: string): string {
     [
       'send',
       resolver,
-      'setContenthash(bytes32,bytes)',
-      node,
+      'setContenthash(bytes,bytes)',
+      dnsEncode(NAME),
       hash,
       '--private-key',
       key,
@@ -117,7 +142,7 @@ async function sendWithBrowser(): Promise<string> {
   try {
     console.log('Approve setContenthash in the browser wallet…');
     return await rpc(BROWSER_RPC, 'eth_sendTransaction', [
-      { from: owner, to: resolver, data: setContenthashCalldata(node, hash) },
+      { from: owner, to: resolver, data: setContenthashCalldata(NAME, hash) },
     ]);
   } finally {
     // detached gives npx its own process group, so this also stops its child.
