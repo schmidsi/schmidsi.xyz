@@ -5,6 +5,17 @@ import { compile, run } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 import remarkGfm from 'remark-gfm';
 
+// Markdown links can't set a target, so external links get one here.
+// Readers keep their place in the post when following a reference.
+function PostLink(props: React.ComponentProps<'a'>) {
+  const external = /^https?:\/\//.test(props.href ?? '');
+  return external ? (
+    <a {...props} target="_blank" rel="noopener noreferrer" />
+  ) : (
+    <a {...props} />
+  );
+}
+
 interface Props {
   params: Promise<{ slug: string }>;
 }
@@ -63,7 +74,7 @@ export default async function PostPage({ params }: Props) {
         <time dateTime={post.date} className="text-sm text-gray-500">
           {formatDate(post.date)}
         </time>
-        <MDXContent />
+        <MDXContent components={{ a: PostLink }} />
       </main>
     </div>
   );
