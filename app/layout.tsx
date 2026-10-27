@@ -16,12 +16,12 @@ const robotoMono = Roboto_Mono({
 export const metadata: Metadata = {
   // Social cards need absolute image URLs, relative ones resolve against this
   metadataBase: new URL('https://ses.eth.limo'),
-  title: 'Simon Emanuel Schmid',
+  title: 'Simon Emanuel',
   description: 'Personal website and blog - Blogosphere 2.0',
   robots: 'follow, index',
   openGraph: {
-    siteName: 'Simon Emanuel Schmid',
-    title: 'Simon Emanuel Schmid',
+    siteName: 'Simon Emanuel',
+    title: 'Simon Emanuel',
     description: 'Personal website and blog - Blogosphere 2.0',
   },
   twitter: {

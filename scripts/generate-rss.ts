@@ -37,7 +37,7 @@ function getPosts(): Post[] {
 const posts = getPosts();
 
 const feed = new RSS({
-  title: 'Simon Emanuel Schmid',
+  title: 'Simon Emanuel',
   description: 'Personal blog - Blogosphere 2.0',
   site_url: SITE_URL,
   feed_url: `${SITE_URL}/rss.xml`,

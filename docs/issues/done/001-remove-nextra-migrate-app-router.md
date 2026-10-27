@@ -207,15 +207,15 @@ const robotoMono = Roboto_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.ses.box'),
   title: {
-    default: 'Simon Emanuel Schmid',
-    template: '%s | Simon Emanuel Schmid',
+    default: 'Simon Emanuel',
+    template: '%s | Simon Emanuel',
   },
   description: 'Personal website and blog - Blogosphere 2.0',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://www.ses.box',
-    siteName: 'Simon Emanuel Schmid',
+    siteName: 'Simon Emanuel',
     images: ['/og-default.png'],
   },
   twitter: {
@@ -604,7 +604,7 @@ export async function GET() {
   const posts = await getPosts();
 
   const feed = new RSS({
-    title: 'Simon Emanuel Schmid',
+    title: 'Simon Emanuel',
     description: 'Personal blog - Blogosphere 2.0',
     site_url: 'https://www.ses.box',
     feed_url: 'https://www.ses.box/api/rss',
