@@ -29,7 +29,7 @@ session folder first, which is fine.
 | Platform  | Text | Links | Handles |
 |-----------|------|-------|---------|
 | X         | Full text if the account can post long text (check the composer's limit), otherwise a teaser of 280 characters at most | Only the blog URL, at the end | Keep the @handles |
-| LinkedIn  | Full text | Only the blog URL, at the end | Remove them: "Greg (@gregskril)" becomes "Greg" |
+| LinkedIn  | Full text | Only the blog URL, at the end | Drop the X handles ("Greg (@gregskril)" becomes "Greg"), then tag each person or company as a LinkedIn mention in the composer. Only tag confident matches, report the rest |
 | Substack  | Full post, with title, subtitle (frontmatter description) and the image on top. Send it to subscribers by email | Keep the inline links, handles link to X | Keep them as links to x.com |
 | Bluesky   | Teaser plus the blog URL, 300 characters at most | Only the blog URL | Drop them, X handles don't exist there |
 | Farcaster | Teaser plus the blog URL | Blog URL, then one line `Engage: X <url> · LinkedIn <url> · Substack <url> · Bluesky <url>` | Drop them |
