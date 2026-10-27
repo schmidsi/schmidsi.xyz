@@ -29,6 +29,10 @@ Before suggesting ANY new dependency:
 - `pnpm run publish [CID]` - Deploy, then point ses.eth at the CID (signed in the browser via browser-rpc, or with `ENS_SIGNER_KEY`). With a CID it only updates ENS. Always use `run`: bare `pnpm publish` and `pnpm deploy` are built-in pnpm commands
 - `pnpm run storage [topup [amount]]` - Filecoin storage runway (USDFC in Filecoin Pay, days left, provider health). `topup` deposits wallet USDFC (default: all of it). omnipin never tops up after the first deploy, so this drains unless topped up. `publish` warns below 60 days or when the provider is down
 
+## Naming
+
+- The author is named only "Simon Emanuel" (titles, metadata, frontmatter, feeds). Never add "Schmid". Handles, URLs and email addresses stay as they are
+
 ## Code Style
 
 - **Formatting**: Prettier enforced - single quotes, semicolons, trailing commas, 80 char width
