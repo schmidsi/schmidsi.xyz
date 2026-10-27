@@ -40,11 +40,13 @@ export async function generateMetadata({ params }: Props) {
       type: 'article',
       publishedTime: post.date,
       authors: [post.author],
+      images: post.image,
     },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
       description: post.description,
+      images: post.image,
     },
   };
 }

@@ -29,6 +29,7 @@ export interface Post {
   description: string;
   tag: string;
   author: string;
+  image?: string;
   content: string;
 }
 
@@ -49,6 +50,7 @@ export function getPosts(): Post[] {
         description: data.description,
         tag: data.tag,
         author: data.author,
+        image: data.image,
         content,
       };
     });
@@ -70,6 +72,7 @@ export async function getPost(slug: string): Promise<Post | null> {
       description: data.description,
       tag: data.tag,
       author: data.author,
+      image: data.image,
       content,
     };
   } catch {
