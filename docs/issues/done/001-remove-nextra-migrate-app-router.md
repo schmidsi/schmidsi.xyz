@@ -220,8 +220,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@schmid_si',
-    creator: '@schmid_si',
+    site: '@schmidsi',
+    creator: '@schmidsi',
   },
   alternates: {
     types: {
@@ -359,7 +359,7 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="float-left m-0.5 p-1 bg-slate-200 hover:bg-transparent border">
-          <Link href="https://twitter.com/schmid_si">
+          <Link href="https://twitter.com/schmidsi">
             X <span className="text-gray-400 text-xs">Twitter</span>
           </Link>
         </div>

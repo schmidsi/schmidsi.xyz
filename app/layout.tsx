@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary',
-    site: '@schmid_si',
+    site: '@schmidsi',
   },
   alternates: {
     types: {
