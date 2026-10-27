@@ -32,7 +32,7 @@ session folder first, which is fine.
 | LinkedIn  | Full text | Only the blog URL, at the end | Drop the X handles ("Greg (@gregskril)" becomes "Greg"), then tag each person or company as a LinkedIn mention in the composer. Only tag confident matches, report the rest |
 | Substack  | Full post, with title, subtitle (frontmatter description) and the image on top. Send it to subscribers by email | Keep the inline links, handles link to X | Keep them as links to x.com |
 | Bluesky   | Teaser plus the blog URL. Posts are capped at 300 characters, and a thread of the full text reads worse than the link card | Only the blog URL | Drop them, X handles don't exist there |
-| Farcaster | Full text in one cast if the account allows long casts (Pro), otherwise a thread of casts up to 1024 bytes each | Blog URL in the last cast, then one line `Engage: X <url> · LinkedIn <url> · Substack <url> · Bluesky <url>` | Drop them |
+| Farcaster | Full text in one cast if the account allows long casts (Pro), otherwise a thread of casts up to 1024 bytes each | Only the blog URL, at the end as "Full post with links: <url>". The engage links live on the blog | Drop them |
 
 For every platform, turn markdown links into their plain link text, except
 on Substack. Attach the frontmatter `image` (in `public/`) where the
@@ -49,16 +49,17 @@ user to log in in Aside, then resume the session with
 session reports when it's done, so run them in the background and read
 their output.
 
-Draft Farcaster last, with placeholders for the other platforms' URLs.
 
 The user reviews and edits in the open composers. Wait for their go.
 
 ## 3. Post and collect links
 
-On go, resume the X, LinkedIn, Substack and Bluesky sessions with "post it and return
-the URL of the published post". Then fill the real URLs into the Farcaster
-draft, post it, and collect its URL. The user already approved that text,
-so filling in URLs needs no new review.
+The user usually posts from the reviewed composers themselves and sends the
+links. Otherwise resume each session with "post it and return the URL of the
+published post". Store canonical URLs without tracking parameters: resolve
+short links (lnkd.in), and for Substack take `canonical_url` from
+`https://<pub>.substack.com/api/v1/archive?sort=new&limit=3` instead of a
+note link.
 
 ## 4. Engage links on the blog
 
