@@ -19,8 +19,12 @@ Nothing gets posted until the user says go.
 
 ## 1. Write one version per platform
 
-Source: `app/posts/<slug>.mdx`. Write each version to
-`/tmp/syndicate/<slug>/<platform>.md` and show all of them to the user.
+Source: `app/posts/<slug>.mdx`. Write each version, plus the image as
+`image.png`, to `~/.aside/u/0/syndicate/<slug>/` and show all of them to the
+user. Aside sessions run in their own working folder and their default
+permission policy blocks reads outside `~/.aside`, so always give them
+absolute paths into that folder. For uploads they copy the file into their
+session folder first, which is fine.
 
 | Platform  | Text | Links | Handles |
 |-----------|------|-------|---------|
@@ -39,7 +43,10 @@ it.
 Run one `aside exec` per platform in parallel. Each one opens the composer,
 pastes the text, attaches the image and **stops before posting**. The
 prompt must say that explicitly. If a platform isn't logged in, ask the
-user to log in in Aside, then resume the session.
+user to log in in Aside, then resume the session with
+`aside session resume <id> "..."` (ids from `aside session list`). Each
+session reports when it's done, so run them in the background and read
+their output.
 
 Draft Farcaster last, with placeholders for the three engage URLs.
 
