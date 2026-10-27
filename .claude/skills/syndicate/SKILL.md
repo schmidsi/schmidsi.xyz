@@ -31,7 +31,7 @@ session folder first, which is fine.
 | X         | Full text if the account can post long text (check the composer's limit), otherwise a teaser of 280 characters at most | Only the blog URL, at the end | Keep the @handles |
 | LinkedIn  | Full text | Only the blog URL, at the end | Drop the X handles ("Greg (@gregskril)" becomes "Greg"), then tag each person or company as a LinkedIn mention in the composer. Only tag confident matches, report the rest |
 | Substack  | Full post, with title, subtitle (frontmatter description) and the image on top. Send it to subscribers by email | Keep the inline links, handles link to X | Keep them as links to x.com |
-| Bluesky   | Full text as a thread, 300 characters per post, split by hand at natural breaks and check every length | Only the blog URL, in the last post ("Full post: <url>") | Drop them, X handles don't exist there |
+| Bluesky   | Teaser plus the blog URL. Posts are capped at 300 characters, and a thread of the full text reads worse than the link card | Only the blog URL | Drop them, X handles don't exist there |
 | Farcaster | Full text in one cast if the account allows long casts (Pro), otherwise a thread of casts up to 1024 bytes each | Blog URL in the last cast, then one line `Engage: X <url> · LinkedIn <url> · Substack <url> · Bluesky <url>` | Drop them |
 
 For every platform, turn markdown links into their plain link text, except
