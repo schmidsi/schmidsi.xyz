@@ -28,7 +28,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const post = await getPost(slug);
-  
+
   if (!post) return {};
 
   return {
@@ -77,6 +77,17 @@ export default async function PostPage({ params }: Props) {
           {formatDate(post.date)}
         </time>
         <MDXContent components={{ a: PostLink }} />
+        {post.engage.length > 0 && (
+          <p>
+            <strong>Engage:</strong>{' '}
+            {post.engage.map(({ label, href }, i) => (
+              <span key={href}>
+                {i > 0 && ' · '}
+                <PostLink href={href}>{label}</PostLink>
+              </span>
+            ))}
+          </p>
+        )}
       </main>
     </div>
   );

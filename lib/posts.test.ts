@@ -8,9 +8,7 @@ const post = (frontmatter: string) =>
 test('parsePost keeps engage links in frontmatter order', () => {
   const parsed = parsePost(
     'p',
-    post(
-      'engage:\n  X: https://x.com/a\n  LinkedIn: https://linkedin.com/b\n',
-    ),
+    post('engage:\n  X: https://x.com/a\n  LinkedIn: https://linkedin.com/b\n'),
   );
   assert.deepEqual(parsed.engage, [
     { label: 'X', href: 'https://x.com/a' },
