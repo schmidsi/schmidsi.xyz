@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>anything?</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><text y='9' font-size='10' font-family='serif'>?</text></svg>">
+<style>
+  html { background: #fff; color: #000; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 6vw;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font: 16px/1.4 ui-monospace, Menlo, monospace;
+    cursor: help;
+  }
+  ::selection { background: #000; color: #fff; }
+  h1 {
+    margin: 0;
+    font: 400 clamp(48px, 12vw, 180px)/0.9 Georgia, 'Times New Roman', serif;
+    letter-spacing: -0.03em;
+  }
+  h1 small { display: block; font-size: 0.4em; font-style: italic; }
+  /* The question mark slowly loses its balance and falls over. */
+  .q {
+    display: inline-block;
+    transform-origin: 30% 92%;
+    animation: tip 9s cubic-bezier(.6, 0, .9, .4) infinite;
+  }
+  @keyframes tip {
+    0%, 55% { transform: rotate(0); }
+    58%     { transform: rotate(6deg); }
+    61%     { transform: rotate(-3deg); }
+    88%     { transform: rotate(0); }
+    94%     { transform: rotate(92deg); }
+    96%     { transform: rotate(84deg); }
+    100%    { transform: rotate(90deg); }
+  }
+  .strike { text-decoration: line-through; }
+  details { margin-top: 2em; max-width: 34em; }
+  summary {
+    cursor: pointer;
+    list-style: none;
+    display: inline-block;
+    border: 2px solid #000;
+    padding: .3em .8em;
+    box-shadow: 4px 4px 0 #000;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover { background: #000; color: #fff; }
+  summary:active { transform: translate(4px, 4px); box-shadow: none; }
+  details[open] summary { display: none; }
+  ol { padding-left: 1.4em; }
+  li::marker { content: '[ ] '; }
+  li:last-child::marker { content: '[x] '; }
+  footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1em;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1><small>is this just</small>anything<span class="q">?</span></h1>
+
+  <details>
+    <summary>find out</summary>
+    <p>We checked. It could be:</p>
+    <ol>
+      <li>a website</li>
+      <li>a sandwich</li>
+      <li>a cry for help</li>
+      <li>art</li>
+      <li class="strike">nothing</li>
+      <li>anything</li>
+    </ol>
+    <p>Mystery solved. You may close this tab, or not. Either is anything.</p>
+  </details>
+</main>
+
+<footer>
+  <span>testoor.eth &rarr; contenthash &rarr; this</span>
+  <span>made of 100% anything</span>
+</footer>
+</body>
+</html>
