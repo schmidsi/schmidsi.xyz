@@ -9,6 +9,7 @@ const socialLinks = [
   { label: 'GitHub', href: 'https://github.com/schmidsi' },
   { label: 'Mail', href: 'mailto:simon@schmid.io' },
   { label: 'X', href: 'https://x.com/schmidsi', hint: 'Twitter' },
+  { label: 'Bluesky', href: 'https://bsky.app/profile/ses.eth.limo' },
 ];
 
 export default function HomePage() {
