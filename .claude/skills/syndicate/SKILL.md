@@ -1,6 +1,6 @@
 ---
 name: syndicate
-description: Cross-post a published blog post from app/posts to X, LinkedIn, Substack and Farcaster through the Aside browser, then add the resulting post links as "Engage" links at the bottom of the blog post and republish. Use when the user wants to share, cross-post or syndicate a post.
+description: Cross-post a published blog post from app/posts to X, LinkedIn, Substack, Bluesky and Farcaster through the Aside browser, then add the resulting post links as "Engage" links at the bottom of the blog post and republish. Use when the user wants to share, cross-post or syndicate a post.
 ---
 
 # Syndicate a post
@@ -31,12 +31,13 @@ session folder first, which is fine.
 | X         | Full text if the account can post long text (check the composer's limit), otherwise a teaser of 280 characters at most | Only the blog URL, at the end | Keep the @handles |
 | LinkedIn  | Full text | Only the blog URL, at the end | Remove them: "Greg (@gregskril)" becomes "Greg" |
 | Substack  | Full post, with title, subtitle (frontmatter description) and the image on top. Send it to subscribers by email | Keep the inline links, handles link to X | Keep them as links to x.com |
-| Farcaster | Teaser plus the blog URL | Blog URL, then one line `Engage: X <url> · LinkedIn <url> · Substack <url>` | Drop them |
+| Bluesky   | Teaser plus the blog URL, 300 characters at most | Only the blog URL | Drop them, X handles don't exist there |
+| Farcaster | Teaser plus the blog URL | Blog URL, then one line `Engage: X <url> · LinkedIn <url> · Substack <url> · Bluesky <url>` | Drop them |
 
 For every platform, turn markdown links into their plain link text, except
 on Substack. Attach the frontmatter `image` (in `public/`) where the
-composer allows it. Leave it off Farcaster, where the blog link card shows
-it.
+composer allows it. Leave it off Bluesky and Farcaster, where the blog link
+card shows it.
 
 ## 2. Draft and stop
 
@@ -48,13 +49,13 @@ user to log in in Aside, then resume the session with
 session reports when it's done, so run them in the background and read
 their output.
 
-Draft Farcaster last, with placeholders for the three engage URLs.
+Draft Farcaster last, with placeholders for the other platforms' URLs.
 
 The user reviews and edits in the open composers. Wait for their go.
 
 ## 3. Post and collect links
 
-On go, resume the X, LinkedIn and Substack sessions with "post it and return
+On go, resume the X, LinkedIn, Substack and Bluesky sessions with "post it and return
 the URL of the published post". Then fill the real URLs into the Farcaster
 draft, post it, and collect its URL. The user already approved that text,
 so filling in URLs needs no new review.
@@ -68,6 +69,7 @@ engage:
   X: https://x.com/...
   LinkedIn: https://www.linkedin.com/...
   Substack: https://....substack.com/p/...
+  Bluesky: https://bsky.app/profile/.../post/...
   Farcaster: https://farcaster.xyz/...
 ```
 
