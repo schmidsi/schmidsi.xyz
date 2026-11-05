@@ -7,6 +7,7 @@ import {
   setContenthashCalldata,
   resolveCalldata,
   decodeResolvedBytes,
+  publishTarget,
 } from './ens.ts';
 
 // Reference values from Foundry: `cast namehash`, `cast calldata`,
@@ -86,4 +87,27 @@ test('decodeResolvedBytes unwraps a Universal Resolver contenthash answer', () =
     ),
     '0x',
   );
+});
+
+test('publishTarget: no site means ses.eth, with an optional CID', () => {
+  assert.deepEqual(publishTarget([]), { name: 'ses.eth' });
+  assert.deepEqual(publishTarget([CID]), { name: 'ses.eth', cid: CID });
+});
+
+test('publishTarget: --site maps a label to its folder and subname', () => {
+  assert.deepEqual(publishTarget(['--site', 'ethglobal-stats']), {
+    name: 'ethglobal-stats.ses.eth',
+    dir: 'sites/ethglobal-stats',
+  });
+  assert.deepEqual(publishTarget(['--site', 'ethglobal-stats', CID]), {
+    name: 'ethglobal-stats.ses.eth',
+    dir: 'sites/ethglobal-stats',
+    cid: CID,
+  });
+});
+
+test('publishTarget: rejects what cannot be a single DNS label', () => {
+  for (const label of [undefined, '', 'a.b', '../x', 'Upper', '-a', 'a-']) {
+    assert.throws(() => publishTarget(['--site', label]));
+  }
 });
