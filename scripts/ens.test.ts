@@ -90,7 +90,7 @@ test('decodeResolvedBytes unwraps a Universal Resolver contenthash answer', () =
 });
 
 test('publishTarget: no site means ses.eth, with an optional CID', () => {
-  assert.deepEqual(publishTarget([]), { name: 'ses.eth' });
+  assert.deepEqual(publishTarget([]), { name: 'ses.eth', cid: undefined });
   assert.deepEqual(publishTarget([CID]), { name: 'ses.eth', cid: CID });
 });
 
@@ -98,6 +98,7 @@ test('publishTarget: --site maps a label to its folder and subname', () => {
   assert.deepEqual(publishTarget(['--site', 'ethglobal-stats']), {
     name: 'ethglobal-stats.ses.eth',
     dir: 'sites/ethglobal-stats',
+    cid: undefined,
   });
   assert.deepEqual(publishTarget(['--site', 'ethglobal-stats', CID]), {
     name: 'ethglobal-stats.ses.eth',
@@ -107,7 +108,8 @@ test('publishTarget: --site maps a label to its folder and subname', () => {
 });
 
 test('publishTarget: rejects what cannot be a single DNS label', () => {
-  for (const label of [undefined, '', 'a.b', '../x', 'Upper', '-a', 'a-']) {
+  for (const label of ['', 'a.b', '../x', 'Upper', '-a', 'a-']) {
     assert.throws(() => publishTarget(['--site', label]));
   }
+  assert.throws(() => publishTarget(['--site']));
 });

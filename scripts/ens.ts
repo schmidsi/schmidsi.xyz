@@ -47,17 +47,13 @@ export function publishTarget(argv: string[]): {
   cid?: string;
 } {
   if (argv[0] !== '--site') {
-    return { name: 'ses.eth', ...(argv[0] && { cid: argv[0] }) };
+    return { name: 'ses.eth', cid: argv[0] };
   }
   const label = argv[1];
   if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(label ?? '')) {
     throw new Error(`not a subdomain label: ${label}`);
   }
-  return {
-    name: `${label}.ses.eth`,
-    dir: `sites/${label}`,
-    ...(argv[2] && { cid: argv[2] }),
-  };
+  return { name: `${label}.ses.eth`, dir: `sites/${label}`, cid: argv[2] };
 }
 
 const word = (n: number) => n.toString(16).padStart(64, '0');
