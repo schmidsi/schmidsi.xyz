@@ -12,11 +12,16 @@ set -euo pipefail
 # ENS is NOT touched here. `pnpm run publish` runs this, then points ses.eth
 # at the printed CID.
 #
+# SITE_DIR=sites/<label> pins that folder as is instead of building the blog
+# (`pnpm run site <label>` sets it).
+#
 # Pass extra Omnipin flags through, e.g:
 #   pnpm run deploy --filecoin-chain=calibration   # free testnet dry run
 
-pnpm build
-bash scripts/check-pack.sh   # fail before touching secrets if files went missing
+if [ -z "${SITE_DIR:-}" ]; then
+  pnpm build
+  bash scripts/check-pack.sh   # fail before touching secrets if files went missing
+fi
 
 key="$(op read 'op://Agents - Privileged/testoor.eth/private key' --no-newline)"
 export OMNIPIN_FILECOIN_TOKEN="0x${key#0x}"   # normalize to a single 0x prefix
@@ -38,4 +43,4 @@ PROVIDERS="${PROVIDERS:-Filebase,Filecoin}"
 # Local, patched omnipin (see patches/): upstream drops dot-paths like .well-known.
 # No --strict: with several providers, one outage must not block the deploy.
 # omnipin still fails if every provider fails.
-exec pnpm exec omnipin deploy out --providers "$PROVIDERS" "$@"
+exec pnpm exec omnipin deploy "${SITE_DIR:-out}" --providers "$PROVIDERS" "$@"

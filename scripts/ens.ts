@@ -40,6 +40,26 @@ export function contenthash(cid: string): string {
   return '0xe301' + Buffer.from(bytes).toString('hex');
 }
 
+// What `pnpm run publish [CID]` and `pnpm run site <label> [CID]` act on.
+export function publishTarget(argv: string[]): {
+  name: string;
+  dir?: string;
+  cid?: string;
+} {
+  if (argv[0] !== '--site') {
+    return { name: 'ses.eth', ...(argv[0] && { cid: argv[0] }) };
+  }
+  const label = argv[1];
+  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(label ?? '')) {
+    throw new Error(`not a subdomain label: ${label}`);
+  }
+  return {
+    name: `${label}.ses.eth`,
+    dir: `sites/${label}`,
+    ...(argv[2] && { cid: argv[2] }),
+  };
+}
+
 const word = (n: number) => n.toString(16).padStart(64, '0');
 
 // DNS wire format, which ENSv2 resolvers and the Universal Resolver take

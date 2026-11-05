@@ -3,6 +3,13 @@
 // Pins the site (scripts/deploy.sh) and points ses.eth at the new CID.
 // Pass a CID to skip the deploy and only update ENS.
 //
+// pnpm run site <label> [CID]
+//
+// Same, but pins sites/<label> as is (no build) and points <label>.ses.eth at
+// it. The subname needs no registration: ses.eth's resolver holds records for
+// full names and the Universal Resolver finds them through wildcard resolution,
+// so a new subdomain is one transaction, like any update.
+//
 // Signing: by default the transaction goes through browser-rpc
 // (https://github.com/gskril/browser-rpc), so the ses.eth key stays in the
 // browser wallet and never touches this machine. Set ENS_SIGNER_KEY to sign
@@ -10,6 +17,7 @@
 //   ENS_SIGNER_KEY="$(op read 'op://…')" pnpm run publish
 
 import { spawn, spawnSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import {
   namehash,
   labelhash,
@@ -20,10 +28,11 @@ import {
   decodeResolvedBytes,
   rpc,
   callWord,
+  publishTarget,
 } from './ens.ts';
 import { getStorageStatus, storageWarnings } from './filecoin.ts';
 
-const NAME = 'ses.eth';
+const { name: NAME, dir, cid: givenCid } = publishTarget(process.argv.slice(2));
 // ENSv2 (https://docs.ens.domains/learn/deployments). ses.eth is migrated, so
 // the v1 registry and NameWrapper now report a zero resolver and owner.
 const UNIVERSAL_RESOLVER = '0xeEeEEEeE14D718C2B47D9923Deab1335E144EeEe';
@@ -31,8 +40,11 @@ const ETH_REGISTRY = '0xf60aba43e1f7f3dab1186ff03b561401c9df85e2';
 const RPC = process.env.RPC_URL ?? 'https://ethereum-rpc.publicnode.com';
 const BROWSER_RPC = 'http://localhost:8545';
 
-if (!process.argv[2]) await warnAboutStorage();
-const cid = process.argv[2] ?? (await deploy());
+if (dir && !existsSync(`${dir}/index.html`)) {
+  throw new Error(`${dir}/index.html does not exist`);
+}
+if (!givenCid) await warnAboutStorage();
+const cid = givenCid ?? (await deploy());
 const node = namehash(NAME);
 const hash = contenthash(cid);
 // The Universal Resolver answers with the current contenthash and the
@@ -46,11 +58,12 @@ const resolved = await rpc(RPC, 'eth_call', [
 ]);
 const resolver = '0x' + resolved.slice(90, 130);
 // Token IDs change in ENSv2, so get the current one before asking its owner.
+// Subnames have no token of their own: whoever owns ses.eth signs for them.
 const tokenId = await callWord(
   RPC,
   ETH_REGISTRY,
   '0x14ff5ea3', // getTokenId(uint256)
-  labelhash(NAME.split('.')[0]),
+  labelhash('ses'),
 );
 const owner =
   '0x' + (await callWord(RPC, ETH_REGISTRY, '0x6352211e', tokenId)).slice(-40);
@@ -70,6 +83,7 @@ const key = process.env.ENS_SIGNER_KEY;
 const tx = key ? sendWithKey(key) : await sendWithBrowser();
 console.log(`tx: https://etherscan.io/tx/${tx}`);
 await waitForReceipt(tx);
+console.log(`https://${NAME}.limo`);
 
 // Warns, without stopping, if Filecoin storage runs low or the provider is down.
 async function warnAboutStorage() {
@@ -85,6 +99,7 @@ async function warnAboutStorage() {
 // Runs the deploy, echoing its output, and returns the Root CID it prints.
 async function deploy(): Promise<string> {
   const child = spawn('bash', ['scripts/deploy.sh'], {
+    env: { ...process.env, SITE_DIR: dir },
     stdio: ['inherit', 'pipe', 'inherit'],
   });
   let output = '';
