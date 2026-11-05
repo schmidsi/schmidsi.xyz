@@ -27,6 +27,7 @@ Before suggesting ANY new dependency:
 - Scripts in `scripts/` are TypeScript run directly by Node (type stripping, no build step). Use erasable syntax only (no `enum`) and import with the `.ts` extension
 - `pnpm run deploy` - Build, check, and pin to IPFS via Filebase (uploads first) and Filecoin, prints the Root CID. Succeeds if at least one provider worked. `PROVIDERS=Filebase pnpm run deploy` overrides the list
 - `pnpm run publish [CID]` - Deploy, then point ses.eth at the CID (signed in the browser via browser-rpc, or with `ENS_SIGNER_KEY`). With a CID it only updates ENS. Always use `run`: bare `pnpm publish` and `pnpm deploy` are built-in pnpm commands
+- `pnpm run site <label> [CID]` - Pin `sites/<label>` as is (no build) and point `<label>.ses.eth` at it, live at `https://<label>.ses.eth.limo`. One wallet signature, also for a new subdomain: no subname registration, the record for the full name lives on the ses.eth resolver (wildcard resolution)
 - `pnpm run storage [topup [amount]]` - Filecoin storage runway (USDFC in Filecoin Pay, days left, provider health). `topup` deposits wallet USDFC (default: all of it). omnipin never tops up after the first deploy, so this drains unless topped up. `publish` warns below 60 days or when the provider is down
 
 ## Naming
@@ -62,6 +63,7 @@ Before suggesting ANY new dependency:
   - `app/posts/*.mdx` - Blog posts colocated with routes (underscore prefix = draft)
   - `app/posts/[slug]/page.tsx` - Post route handler with inline MDX compilation
   - `app/skills/<name>/SKILL.md` - Agent skills (plain directories, copyable as-is), listed on the home page, rendered at `/skills/<name>/` and served raw at `/skills/<name>/SKILL.md`. Keep them generic: no assumptions about this app
+- `sites/<label>/` - Standalone static sites, each with an `index.html`, separate from the Next.js app. Published with `pnpm run site <label>`
 - `components/` - Reusable React components
 - `lib/` - Utility functions (posts)
 - `public/` - Static assets
