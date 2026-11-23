@@ -25,6 +25,30 @@ The debug port gives full control over that Chrome: every tab, cookie and login 
 profile. Always use a dedicated profile directory, never the daily one, and never expose
 the port beyond loopback or a tunnel.
 
+## The three working modes
+
+Click a diagram to open it full size. The same parts in every mode: the agent, its MCP server, Chrome with the debug port, and
+the app under test. What changes is which machine or sandbox each part runs in, and what
+bridges the gaps.
+
+**Simple: agent on the laptop.** Everything is on one machine and talks over loopback.
+
+[![Deployment diagram, local mode: on one laptop, Claude Code talks over stdio to the chrome-devtools MCP, which speaks CDP to Chrome on 127.0.0.1:9222; Chrome opens the dev server on localhost:5173; the dev server tees its output into logs/ which the agent reads](assets/mode-1-local.svg)](assets/mode-1-local.svg)
+
+**Medium: agent in a container on the laptop.** Chrome stays on the host. A forwarder on
+the host (socat or the proxy) exposes the debug port to the container, which addresses
+the host by IP. The dev server inside the container publishes its port so Chrome can
+reach it.
+
+[![Deployment diagram, container mode: inside the laptop a container holds Claude Code, the MCP and the dev server; the MCP connects to the host's IP on port 9223 where socat forwards to Chrome on 127.0.0.1:9222; Chrome opens localhost:5173, a published port into the container's dev server](assets/mode-2-container.svg)](assets/mode-2-container.svg)
+
+**Complex: agent on a remote server, browser on the laptop.** One SSH connection carries
+two tunnels. A reverse tunnel makes the laptop's Chrome appear on the server's loopback
+port 9222, so the MCP config is identical to the simple mode. A forward tunnel makes the
+server's dev server appear on the laptop's localhost, so Chrome can open it.
+
+[![Deployment diagram, remote mode: the laptop runs the SSH client and Chrome, the server runs sshd, Claude Code, the MCP and the dev server; a reverse tunnel carries CDP from the server's 127.0.0.1:9222 to the laptop's Chrome, a forward tunnel carries HTTP from the laptop's localhost:5173 to the server's dev server](assets/mode-3-remote.svg)](assets/mode-3-remote.svg)
+
 ## 1. Launch Chrome on the host
 
 A small script in the project, run on the machine with the display (macOS shown):
