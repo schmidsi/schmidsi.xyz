@@ -27,27 +27,73 @@ the port beyond loopback or a tunnel.
 
 ## The three working modes
 
-Click a diagram to open it full size. The same parts in every mode: the agent, its MCP server, Chrome with the debug port, and
-the app under test. What changes is which machine or sandbox each part runs in, and what
-bridges the gaps.
+The same four parts in every mode: the agent, its MCP server, Chrome with the debug port,
+and the app under test. What changes is where each part runs and what bridges the gaps.
 
-**Simple: agent on the laptop.** Everything is on one machine and talks over loopback.
+**Simple: agent on the laptop.** Everything on one machine, all over loopback.
 
-[![Deployment diagram, local mode: on one laptop, Claude Code talks over stdio to the chrome-devtools MCP, which speaks CDP to Chrome on 127.0.0.1:9222; Chrome opens the dev server on localhost:5173; the dev server tees its output into logs/ which the agent reads](assets/mode-1-local.svg)](assets/mode-1-local.svg)
+```mermaid
+flowchart LR
+  subgraph laptop["Laptop"]
+    agent["Claude Code<br/>(agent CLI)"]
+    mcp["chrome-devtools MCP<br/>--browser-url http://127.0.0.1:9222"]
+    chrome["Chrome, debug profile<br/>--remote-debugging-port=9222"]
+    app["App under test<br/>http://localhost:5173"]
+  end
+  agent -- stdio --> mcp
+  mcp -- "CDP (HTTP + WebSocket)" --> chrome
+  chrome -- HTTP --> app
+```
 
-**Medium: agent in a container on the laptop.** Chrome stays on the host. A forwarder on
-the host (socat or the proxy) exposes the debug port to the container, which addresses
-the host by IP. The dev server inside the container publishes its port so Chrome can
-reach it.
+**Medium: agent in a container on the laptop.** Chrome stays on the host. A forwarder
+on the host exposes the debug port, the container addresses the host by IP, and the app
+inside the container publishes its port so Chrome can reach it.
 
-[![Deployment diagram, container mode: inside the laptop a container holds Claude Code, the MCP and the dev server; the MCP connects to the host's IP on port 9223 where socat forwards to Chrome on 127.0.0.1:9222; Chrome opens localhost:5173, a published port into the container's dev server](assets/mode-2-container.svg)](assets/mode-2-container.svg)
+```mermaid
+flowchart TB
+  subgraph host["Laptop (host)"]
+    chrome["Chrome, debug profile<br/>listens on 127.0.0.1:9222 only"]
+    fwd["socat or CDP proxy<br/>0.0.0.0:9223 to 127.0.0.1:9222"]
+    pub["Published port<br/>127.0.0.1:5173 to container:5173"]
+    subgraph box["Container: Docker, devcontainer or Apple container"]
+      agent["Claude Code"]
+      mcp["chrome-devtools MCP<br/>--browser-url http://192.168.64.1:9223"]
+      app["App under test<br/>0.0.0.0:5173"]
+    end
+  end
+  agent -- stdio --> mcp
+  mcp -- "CDP to the host's IP<br/>(Host header is an IP, accepted)" --> fwd
+  fwd --> chrome
+  chrome -- "http://localhost:5173" --> pub
+  pub --> app
+```
+
+`192.168.64.1` stands for the host as seen from inside: the Apple container gateway, or
+the IP behind `host.docker.internal` for Docker.
 
 **Complex: agent on a remote server, browser on the laptop.** One SSH connection carries
-two tunnels. A reverse tunnel makes the laptop's Chrome appear on the server's loopback
-port 9222, so the MCP config is identical to the simple mode. A forward tunnel makes the
-server's dev server appear on the laptop's localhost, so Chrome can open it.
+two tunnels (dashed). A reverse tunnel puts the laptop's Chrome on the server's loopback
+port 9222, so the MCP config is the same as in the simple mode. A forward tunnel puts the
+server's app on the laptop's localhost, so Chrome can open it.
 
-[![Deployment diagram, remote mode: the laptop runs the SSH client and Chrome, the server runs sshd, Claude Code, the MCP and the dev server; a reverse tunnel carries CDP from the server's 127.0.0.1:9222 to the laptop's Chrome, a forward tunnel carries HTTP from the laptop's localhost:5173 to the server's dev server](assets/mode-3-remote.svg)](assets/mode-3-remote.svg)
+```mermaid
+flowchart TB
+  subgraph laptop["Laptop"]
+    chrome["Chrome, debug profile<br/>127.0.0.1:9222"]
+    l5173["127.0.0.1:5173<br/>forward tunnel entrance (-L)"]
+  end
+  subgraph server["Dev server (the agent runs here)"]
+    agent["Claude Code<br/>in your SSH session"]
+    mcp["chrome-devtools MCP<br/>--browser-url http://127.0.0.1:9222"]
+    r9222["127.0.0.1:9222<br/>reverse tunnel entrance (-R)"]
+    app["App under test<br/>127.0.0.1:5173"]
+  end
+  agent -- stdio --> mcp
+  mcp -- CDP --> r9222
+  r9222 -. "ssh -R 9222:127.0.0.1:9222" .-> chrome
+  chrome -- "http://localhost:5173" --> l5173
+  l5173 -. "ssh -L 5173:127.0.0.1:5173" .-> app
+```
 
 ## 1. Launch Chrome on the host
 

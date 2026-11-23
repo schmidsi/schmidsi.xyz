@@ -1,3 +1,4 @@
+import { Mermaid } from '@/components/Mermaid';
 import { SiteHeader } from '@/components/SiteHeader';
 import { compile, run } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
@@ -16,6 +17,15 @@ export async function generateMetadata({ params }: Props) {
   const { name } = await params;
   const skill = getSkill(name);
   return { title: skill.name, description: skill.description };
+}
+
+// ```mermaid blocks render as diagrams; every other code block stays a <pre>.
+function Pre(props: React.ComponentProps<'pre'>) {
+  const code = props.children as React.ReactElement<{ className?: string; children?: React.ReactNode }> | undefined;
+  if (code?.props?.className === 'language-mermaid') {
+    return <Mermaid chart={String(code.props.children).trim()} />;
+  }
+  return <pre {...props} />;
 }
 
 export default async function SkillPage({ params }: Props) {
@@ -43,7 +53,7 @@ export default async function SkillPage({ params }: Props) {
             Download SKILL.md
           </a>
         </p>
-        <Content />
+        <Content components={{ pre: Pre }} />
       </main>
     </div>
   );
