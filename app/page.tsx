@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { getPosts, formatDate } from '@/lib/posts';
 import { getSkills, skillDate } from '@/lib/skills';
 import { talks, featuredTalks } from '@/app/speaking/talks';
-import { EfpStats } from '@/components/EfpStats';
 
 const socialLinks = [
   { label: 'Telegram', href: 'https://t.me/schmidsi' },
@@ -22,19 +21,14 @@ export default function HomePage() {
     <div>
       <h1 className="text-6xl font-bold text-gray-400 leading-negative">
         <span className="text-gray-900">S</span>imon <br />{' '}
-        <span className="text-gray-900">E</span>manuel <br /> ses.eth
-      </h1>
-
-      <div className="mt-6 mb-6 text-sm text-gray-600">
+        <span className="text-gray-900">E</span>manuel <br />{' '}
         <Link
           href="https://app.ens.domains/ses.eth"
           className="hover:underline"
         >
           ses.eth
         </Link>
-        {' · '}
-        <EfpStats />
-      </div>
+      </h1>
 
       <div className="mt-6 flex flex-wrap gap-1">
         {socialLinks.map(({ label, href, hint }) => (

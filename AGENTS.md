@@ -57,7 +57,7 @@ Before suggesting ANY new dependency:
 - **RSS at build time** - `scripts/generate-rss.ts` writes `public/rss.xml` before `next build`
 - **`public/.well-known/atproto-did` is load-bearing** - Bluesky verifies the `ses.eth.limo` handle with it. Omnipin is patched (`patches/`) to keep dot-paths, and `scripts/check-pack.sh` fails the deploy if it goes missing
 - **Agentation toolbar in dev only** - `components/DevAnnotations.tsx` renders the Agentation feedback toolbar under `pnpm dev`. Annotations go to `agentation-mcp` on :4747, started by the `agentation` server in `.mcp.json`, and the agent reads them over MCP. Production drops it, `scripts/check-pack.sh` fails the deploy if it leaks into `out/`
-- **Client components only when needed** - 'use client' islands (e.g. EFP stats fetch)
+- **Client components only when needed** - 'use client' islands (e.g. Mermaid diagrams)
 - **Low dependency count** - Intentionally minimal for hackability and maintainability
 
 ## File Organization
@@ -76,7 +76,6 @@ Before suggesting ANY new dependency:
 ## Context & Resources
 
 - Ethereum Identity Kit library on Context7: `/ethereumidentitykit/docs`
-- EFP API: https://api.ethfollow.xyz
 
 ## When Making Changes
 

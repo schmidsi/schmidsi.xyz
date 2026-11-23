@@ -21,7 +21,7 @@ Next.js 16 + App Router blog with Web3 integration. Features:
 
 - Personal blog posts in MDX
 - Dynamic OG images per page (planned)
-- Web3 identity (ENS, EFP, Bluesky/ATProto)
+- Web3 identity (ENS, Bluesky/ATProto)
 - Auto-generated RSS feeds
 - Ethereum wallet connectivity
 
@@ -53,7 +53,6 @@ pnpm start      # Start production server
 
 **Web3:**
 - wagmi + viem (Ethereum)
-- ethereum-identity-kit (ENS, EFP)
 
 **State:**
 - TanStack React Query
@@ -117,7 +116,6 @@ Prefix filename with underscore: `_my-draft.mdx` - won't be published or include
 ### Identity Protocols
 
 - **ENS**: ses.eth resolution and display
-- **EFP** (Ethereum Follow Protocol): Follower/following stats and social graph
 - **Bluesky/ATProto**: Domain verification via DID
 - **Lens Protocol**: Social profile integration
 - **Farcaster**: Decentralized social presence
@@ -126,7 +124,6 @@ Prefix filename with underscore: `_my-draft.mdx` - won't be published or include
 
 The site uses Wagmi for Ethereum wallet connectivity:
 - MetaMask support
-- Follow button integration (pending EFP implementation)
 - Mainnet RPC via public providers
 
 ## Build System
@@ -165,7 +162,7 @@ If unsure, implement it yourself. Code you control > code you don't.
 - **next.config.ts**: Clean Next.js configuration
 - **tailwind.config.js**: Custom theme with Figtree/Roboto Mono fonts
 - **tsconfig.json**: TypeScript with path aliases (@/*)
-- **.mcp.json**: Model Context Protocol (ethid-mcp)
+- **.mcp.json**: Model Context Protocol (agentation)
 - **AGENTS.md**: Instructions for AI coding assistants
 
 ## Development
@@ -180,7 +177,6 @@ If unsure, implement it yourself. Code you control > code you don't.
 
 **Homepage** - Client component (`app/page.tsx`) featuring:
 - ENS identity display (ses.eth)
-- EFP follower/following stats (live API fetch)
 - Social links across platforms
 - Blog post index
 
@@ -212,5 +208,4 @@ Perfect playground for testing ideas without framework overhead.
 ## Notes
 
 - Font: https://fonts.google.com/specimen/Figtree
-- EFP API: https://api.ethfollow.xyz
 - Ethereum Identity Kit docs: /ethereumidentitykit/docs (Context7)
