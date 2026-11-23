@@ -65,6 +65,7 @@ Before suggesting ANY new dependency:
   - `app/posts/*.mdx` - Blog posts colocated with routes (underscore prefix = draft)
   - `app/posts/[slug]/page.tsx` - Post route handler with inline MDX compilation
   - `app/skills/<name>/SKILL.md` - Agent skills (plain directories, copyable as-is), listed on the home page, rendered at `/skills/<name>/` and served raw at `/skills/<name>/SKILL.md`. Keep them generic: no assumptions about this app
+  - `app/speaking/talks.ts` - Recorded talks as plain data, newest first, rendered at `/speaking/`. `featured` talks lead the page and are listed on the home page
 - `sites/<label>/` - Standalone static sites, each with an `index.html`, separate from the Next.js app. Published with `pnpm run site <label>`
 - `components/` - Reusable React components
 - `lib/` - Utility functions (posts)

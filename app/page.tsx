@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getPosts, formatDate } from '@/lib/posts';
 import { getSkills } from '@/lib/skills';
+import { talks, featuredTalks } from '@/app/speaking/talks';
 import { EfpStats } from '@/components/EfpStats';
 
 const socialLinks = [
@@ -61,6 +62,25 @@ export default function HomePage() {
             </span>
           </li>
         ))}
+      </ul>
+
+      <h2 className="text-lg font-semibold mt-6">Speaking</h2>
+      <ul>
+        {featuredTalks.map((talk) => (
+          <li key={talk.href}>
+            <a href={talk.href} className="underline">
+              {talk.title}
+            </a>{' '}
+            <span className="text-sm text-gray-500">
+              {talk.event} {talk.year}
+            </span>
+          </li>
+        ))}
+        <li>
+          <Link href="/speaking" className="underline">
+            All {talks.length} recordings
+          </Link>
+        </li>
       </ul>
 
       <h2 className="text-lg font-semibold mt-6">Skills</h2>
