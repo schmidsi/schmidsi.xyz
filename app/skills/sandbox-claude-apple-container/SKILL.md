@@ -1,36 +1,49 @@
 ---
-title: Sandbox Claude Code on Mac Without Docker Overhead
-date: 2026-02-20
-description: Using Apple Container to run Claude Code in a lightweight micro-VM sandbox on Apple Silicon
-tag: claude, macos, containers
-author: Claude Code
+name: sandbox-claude-apple-container
+description: Run Claude Code with --dangerously-skip-permissions inside an Apple container micro-VM on a Mac with Apple Silicon and macOS 26 (Tahoe) or later, so it can act without permission prompts but only sees the project folder. Covers installing Apple container, a minimal Dockerfile, the launch script, and the workaround when `container build` fails with HTTP 403 errors. Use when the user wants a lightweight sandbox for Claude Code on a Mac without Docker Desktop, or wants to stop approving every tool call.
 ---
 
-> This blog post was entirely written by Claude Code to summarize what we discovered together today. I proofread it and think it also makes sense to read as a human.
+# Sandbox Claude Code in an Apple container
 
-I use Claude Code daily for non-dev tasks — organizing a relocation, managing documents, drafting emails. The problem: Claude's built-in permission system is cumbersome. It asks the same questions over and over, and it's not real isolation. I once approved an inline Python script without fully reading it, and it modified files outside my project folder.
+Claude Code's permission prompts are tedious and are not real isolation: an
+approved inline script can still touch files outside the project. The fix is
+`--dangerously-skip-permissions` inside a sandbox, so the agent can do anything
+but only to what the sandbox exposes.
 
-So you need `--dangerously-skip-permissions`. But running that on your bare machine is... dangerous.
+[Apple container](https://github.com/apple/container) runs each Linux container
+in its own lightweight micro-VM. Compared with Docker Desktop there is no shared
+VM and no daemon idling in the background, and containers start in under a
+second.
 
-The standard answer is Docker and DevContainers. It works, but it's slow. Docker Desktop boots a full Linux VM, eats 2–4 GB of RAM idle, and takes 10–30 seconds to start. For running a CLI tool in a sandbox, that's overkill.
+| | Docker Desktop | OrbStack | Colima | Apple container |
+|---|---|---|---|---|
+| Startup | ~10-30s | ~1s | ~5-10s | under a second |
+| Idle RAM | 2-4 GB | 300-500 MB | ~400 MB | no daemon |
+| Isolation | shared VM | shared VM | shared VM | VM per container |
+| Open source | no | no | yes | yes (Apache 2.0) |
 
-## Apple Container: per-container micro-VMs
+Choose something else when the setup also has to run on Linux or Windows (use
+Docker or a devcontainer) or when you need Docker Compose. Apple container is
+for a single, hard-isolated container on Apple Silicon.
 
-Since September 2025, macOS Tahoe ships with support for [Apple Container](https://github.com/apple/container) — Apple's open-source tool for running Linux containers using lightweight virtual machines, written in Swift and optimized for Apple Silicon.
+## Requirements
 
-The key difference from Docker: **each container gets its own micro-VM**. Docker on Mac runs one shared Linux VM and puts all your containers inside it. Apple Container spins up a dedicated lightweight VM per container. Better isolation, no shared daemon, sub-second startup.
+- Apple Silicon Mac with macOS 26 (Tahoe) or later
+- Apple container, installed from the `.pkg` on the
+  [releases page](https://github.com/apple/container/releases)
+- Docker (or any OCI builder), only if `container build` fails, see below
 
-First released at WWDC in June 2025, it's now at v0.9.0 (February 2026). Still pre-1.0, but the runtime is solid.
-
-## The setup
-
-Install Apple Container from [GitHub releases](https://github.com/apple/container/releases) (it's a `.pkg` — double-click to install). Then start the service:
+Check the install and start the service:
 
 ```bash
+container --version
 container system start
 ```
 
-Here's the Dockerfile — deliberately minimal since we're just sandboxing a CLI tool:
+## 1. Dockerfile
+
+Put it in `.devcontainer/Dockerfile` in the project. It is deliberately minimal:
+the image only has to run a CLI.
 
 ```dockerfile
 FROM debian:bookworm-slim
@@ -49,7 +62,34 @@ USER root
 WORKDIR /workspace
 ```
 
-And the launch script:
+Add whatever tools the user's tasks need (`python3`, `nodejs`, ...) to the
+`apt-get install` line.
+
+## 2. Build the image
+
+```bash
+container build -t claude-sandbox .devcontainer/
+```
+
+If network requests during the build fail with HTTP 403 (a
+[known bug](https://github.com/apple/container/issues/656), seen in v0.9.0),
+build with Docker and move the image over through a throwaway local registry:
+
+```bash
+docker build -t claude-sandbox .devcontainer/
+docker run -d --rm --name registry -p 5555:5000 registry:2
+docker tag claude-sandbox localhost:5555/claude-sandbox
+docker push localhost:5555/claude-sandbox
+container image pull --scheme http localhost:5555/claude-sandbox
+container image tag localhost:5555/claude-sandbox claude-sandbox
+docker stop registry
+```
+
+Rebuild only when the Dockerfile changes.
+
+## 3. Launch script
+
+Save as `start.sh` in the project root and `chmod +x start.sh`:
 
 ```bash
 #!/bin/bash
@@ -71,40 +111,41 @@ exec container run -it --rm \
   claude --dangerously-skip-permissions "$@"
 ```
 
-That's it. Claude runs fully unleashed inside a micro-VM. It can read and write your project files (bind-mounted), access Downloads read-only, and reach the internet for the Claude API. It cannot touch anything else on your Mac.
+What the sandbox can reach:
 
-## The comparison
+- `/workspace`: the project folder, read-write
+- `~/Downloads`: read-only (drop the `--mount` line if not needed)
+- `~/.claude`: Claude Code login, settings and history, read-write
+- the internet, for the Claude API
 
-| | Docker Desktop | OrbStack | Colima | Apple Container |
-|---|---|---|---|---|
-| **Startup** | ~10–30s | ~1s | ~5–10s | Sub-second |
-| **Idle RAM** | 2–4 GB | 300–500 MB | ~400 MB | No daemon |
-| **Isolation** | Shared VM | Shared VM | Shared VM | Per-container VM |
-| **Cost** | Free (small co) | $8/mo commercial | Free (MIT) | Free |
-| **Open source** | No | No | Yes | Yes (Apache 2.0) |
+Nothing else on the Mac is visible. Arguments pass through to `claude`, e.g.
+`./start.sh -c` to continue the last session.
 
-Docker Compose remains the gold standard for interoperability — if you need your setup to work on Linux and Windows too, stick with Docker. OrbStack is the best drop-in Docker replacement on Mac today if you want that compatibility with less overhead. Colima is the open-source alternative.
+Caveat: `~/.claude` is shared with the host, so the sandboxed agent can change
+settings and hooks that the host's Claude Code later runs unsandboxed. If that
+matters, mount a separate directory (e.g. `$WORKSPACE/.claude-home`) and log in
+once inside the container, or use only `ANTHROPIC_API_KEY`.
 
-But if you're on Apple Silicon and just need hard isolation for a single container — Apple Container is the lightest option that exists.
-
-## One gotcha: building images
-
-As of v0.9.0, `container build` has a [known networking bug](https://github.com/apple/container/issues/656) — HTTP requests during builds get 403 errors. The workaround: build with Docker, push to a local registry, pull into Apple Container.
+## 4. Verify
 
 ```bash
-docker build -t claude-sandbox .devcontainer/
-docker run -d --rm --name registry -p 5555:5000 registry:2
-docker tag claude-sandbox localhost:5555/claude-sandbox
-docker push localhost:5555/claude-sandbox
-container image pull --scheme http localhost:5555/claude-sandbox
-container image tag localhost:5555/claude-sandbox claude-sandbox
-docker stop registry
+./start.sh -p "run: ls / && ls ~ && touch /workspace/.sandbox-ok"
 ```
 
-You only need to do this once (or when you update the Dockerfile). Day-to-day, it's just `./start.sh` and you're in.
+The listing should show the container's Linux filesystem, not the Mac's, and
+`.sandbox-ok` should appear in the project folder on the host. Delete it after.
 
-## Who this is for
+## Troubleshooting
 
-If you use Claude Code for daily tasks — not heavy development, just the kind of work where you want to say "go do it" without babysitting permissions — and you're on a Mac with Apple Silicon running macOS 26+, this is the thinnest possible sandbox. No daemon eating RAM in the background, no VM you forgot to stop, no license fees. Just a micro-VM that starts in under a second and dies when you're done.
+- `container: command not found`: the `.pkg` is not installed, or the shell
+  needs a restart to pick up `/usr/local/bin`.
+- `container run` hangs or errors on the first run: `container system start`
+  was not run, or the default kernel download was declined. Run it again and
+  accept.
+- 403 errors during `container build`: use the Docker and local registry
+  workaround above.
+- Claude asks to log in on every start: `~/.claude` is not mounted, or the
+  mount target does not match the container user's home (`/home/node`).
 
-The whole stack (macOS Tahoe + Apple Container) has only existed since late 2025. It's very new, still pre-1.0, and has rough edges. But for this use case, it works today.
+Apple container is pre-1.0 and changes fast. Check its release notes when a flag
+or subcommand above does not behave as described.
