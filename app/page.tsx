@@ -90,6 +90,12 @@ export default function HomePage() {
             <Link href={`/skills/${skill.name}`} className="underline">
               {skill.name}
             </Link>
+            {skill.history && (
+              <span className="text-sm text-gray-500">
+                {' '}
+                updated {formatDate(skill.history.updated)}
+              </span>
+            )}
           </li>
         ))}
       </ul>

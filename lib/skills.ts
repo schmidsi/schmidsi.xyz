@@ -1,3 +1,4 @@
+import { execFileSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
@@ -6,11 +7,57 @@ import matter from 'gray-matter';
 // frontmatter. Kept as plain directories so a skill can be copied out as-is.
 const skillsDirectory = path.join(process.cwd(), 'app/skills');
 
+export const repoUrl = 'https://github.com/schmidsi/schmidsi.xyz';
+
+export interface SkillHistory {
+  created: string;
+  updated: string;
+  commit: string;
+}
+
 export interface Skill {
   name: string;
   description: string;
   raw: string;
   content: string;
+  history?: SkillHistory;
+}
+
+// Dates come from git, not frontmatter: the Agent Skills spec allows only a
+// fixed set of frontmatter keys, and git can't drift from the actual edits.
+// Input is `git log --format='%H %cI'` output, newest commit first.
+export function parseHistory(log: string): SkillHistory | undefined {
+  const lines = log.trim().split('\n').filter(Boolean);
+  if (lines.length === 0) return undefined;
+  const [commit, updated] = lines[0].split(' ');
+  const created = lines[lines.length - 1].split(' ')[1];
+  return {
+    created: created.slice(0, 10),
+    updated: updated.slice(0, 10),
+    commit,
+  };
+}
+
+function getHistory(name: string): SkillHistory | undefined {
+  try {
+    // --follow keeps the history of skills that started as something else
+    // (e.g. a blog post moved here with git mv).
+    const log = execFileSync(
+      'git',
+      [
+        'log',
+        '--follow',
+        '--format=%H %cI',
+        '--',
+        path.join('app/skills', name, 'SKILL.md'),
+      ],
+      { encoding: 'utf8' },
+    );
+    return parseHistory(log);
+  } catch (error) {
+    console.error(`No git history for skill ${name}`, error);
+    return undefined;
+  }
 }
 
 export function getSkillNames(): string[] {
@@ -30,7 +77,13 @@ export function getSkill(name: string): Skill {
     'utf8',
   );
   const { data, content } = matter(raw);
-  return { name, description: data.description, raw, content };
+  return {
+    name,
+    description: data.description,
+    raw,
+    content,
+    history: getHistory(name),
+  };
 }
 
 export function getSkills(): Skill[] {

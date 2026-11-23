@@ -3,7 +3,8 @@ import { SiteHeader } from '@/components/SiteHeader';
 import { compile, run } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 import remarkGfm from 'remark-gfm';
-import { getSkill, getSkillNames } from '@/lib/skills';
+import { formatDate } from '@/lib/posts';
+import { getSkill, getSkillNames, repoUrl } from '@/lib/skills';
 
 interface Props {
   params: Promise<{ name: string }>;
@@ -31,6 +32,7 @@ function Pre(props: React.ComponentProps<'pre'>) {
 export default async function SkillPage({ params }: Props) {
   const { name } = await params;
   const skill = getSkill(name);
+  const { history } = skill;
 
   // format: 'md' because skills are plain Markdown, not MDX (no JSX parsing
   // of things like <domain> placeholders).
@@ -49,11 +51,37 @@ export default async function SkillPage({ params }: Props) {
       <main className="prose mt-8 mb-8">
         <p className="text-sm text-gray-500">
           Agent skill ·{' '}
+          {history && (
+            <>
+              <time dateTime={history.created}>
+                {formatDate(history.created)}
+              </time>{' '}
+              ·{' '}
+            </>
+          )}
           <a href={`/skills/${skill.name}/SKILL.md`} download="SKILL.md">
             Download SKILL.md
           </a>
         </p>
         <Content components={{ pre: Pre }} />
+        {history && (
+          <>
+            <h2>Last edit</h2>
+            <p>
+              <time dateTime={history.updated}>
+                {formatDate(history.updated)}
+              </time>{' '}
+              in commit{' '}
+              <a href={`${repoUrl}/commit/${history.commit}`}>
+                <code>{history.commit.slice(0, 7)}</code>
+              </a>{' '}
+              (<a href={`${repoUrl}/commits/main/app/skills/${skill.name}`}>
+                full history
+              </a>
+              )
+            </p>
+          </>
+        )}
       </main>
     </div>
   );
