@@ -53,6 +53,7 @@ Before suggesting ANY new dependency:
 - **Next.js 16 App Router** - Server Components run at build time and prerender to static HTML
 - **MDX via @mdx-js/mdx** - Compiled inline in post page (no separate abstraction)
 - **Content colocated with routes** - MDX files in `app/posts/` alongside route handlers
+- **Redirects in `redirects.json`** - `{ "/old/path/": "/new/path/" }`. No server means no HTTP redirects, so after `next build` `scripts/redirects.ts` writes a meta-refresh `index.html` for each old path into `out/`. Add an entry whenever a page moves. The build fails if a redirect would overwrite a real page
 - **RSS at build time** - `scripts/generate-rss.ts` writes `public/rss.xml` before `next build`
 - **`public/.well-known/atproto-did` is load-bearing** - Bluesky verifies the `ses.eth.limo` handle with it. Omnipin is patched (`patches/`) to keep dot-paths, and `scripts/check-pack.sh` fails the deploy if it goes missing
 - **Agentation toolbar in dev only** - `components/DevAnnotations.tsx` renders the Agentation feedback toolbar under `pnpm dev`. Annotations go to `agentation-mcp` on :4747, started by the `agentation` server in `.mcp.json`, and the agent reads them over MCP. Production drops it, `scripts/check-pack.sh` fails the deploy if it leaks into `out/`

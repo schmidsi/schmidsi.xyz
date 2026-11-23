@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "next dev",
     "chrome": "sh scripts/chrome-debug.sh",
-    "build": "node scripts/generate-rss.ts && next build",
+    "build": "node scripts/generate-rss.ts && next build && node scripts/redirects.ts",
     "start": "next start",
     "lint": "next lint",
     "deploy": "bash scripts/deploy.sh",
