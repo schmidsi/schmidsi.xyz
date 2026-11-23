@@ -24,6 +24,8 @@ export default function HomePage() {
         <span className="text-gray-900">E</span>manuel <br />{' '}
         <Link
           href="https://app.ens.domains/ses.eth"
+          target="_blank"
+          rel="noopener noreferrer"
           className="hover:underline"
         >
           ses.eth
