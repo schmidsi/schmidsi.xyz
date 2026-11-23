@@ -38,6 +38,17 @@ export function parseHistory(log: string): SkillHistory | undefined {
   };
 }
 
+// The original date is what a reader orients by; an edit is only worth
+// mentioning when it happened on a later day.
+export function skillDate(
+  history: SkillHistory,
+  formatDate: (date: string) => string,
+): string {
+  const created = formatDate(history.created);
+  if (history.updated === history.created) return created;
+  return `${created} (updated ${formatDate(history.updated)})`;
+}
+
 function getHistory(name: string): SkillHistory | undefined {
   try {
     // --follow keeps the history of skills that started as something else

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getPosts, formatDate } from '@/lib/posts';
-import { getSkills } from '@/lib/skills';
+import { getSkills, skillDate } from '@/lib/skills';
 import { talks, featuredTalks } from '@/app/speaking/talks';
 import { EfpStats } from '@/components/EfpStats';
 
@@ -93,7 +93,7 @@ export default function HomePage() {
             {skill.history && (
               <span className="text-sm text-gray-500">
                 {' '}
-                updated {formatDate(skill.history.updated)}
+                {skillDate(skill.history, formatDate)}
               </span>
             )}
           </li>
