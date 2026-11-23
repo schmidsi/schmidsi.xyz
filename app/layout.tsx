@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Figtree, Roboto_Mono } from 'next/font/google';
 import Link from 'next/link';
+import { DevAnnotations } from '@/components/DevAnnotations';
 import './globals.css';
 
 const figtree = Figtree({
@@ -62,6 +63,7 @@ export default function RootLayout({
             </a>
           </footer>
         </div>
+        <DevAnnotations />
       </body>
     </html>
   );

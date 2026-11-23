@@ -21,6 +21,7 @@ Before suggesting ANY new dependency:
 ## Commands
 
 - `pnpm dev` - Start development server at http://localhost:3000
+- `pnpm chrome [url]` - Open a separate-profile Chrome with remote debugging on :9222, where the global chrome-devtools MCP connects, so the agent can see and drive the dev server
 - `pnpm build` - Build for production (static generation + RSS)
 - `pnpm start` - Start production server
 - `pnpm test` - Run script tests (`node --test`, no test framework)
@@ -54,6 +55,7 @@ Before suggesting ANY new dependency:
 - **Content colocated with routes** - MDX files in `app/posts/` alongside route handlers
 - **RSS at build time** - `scripts/generate-rss.ts` writes `public/rss.xml` before `next build`
 - **`public/.well-known/atproto-did` is load-bearing** - Bluesky verifies the `ses.eth.limo` handle with it. Omnipin is patched (`patches/`) to keep dot-paths, and `scripts/check-pack.sh` fails the deploy if it goes missing
+- **Agentation toolbar in dev only** - `components/DevAnnotations.tsx` renders the Agentation feedback toolbar under `pnpm dev`. Annotations go to `agentation-mcp` on :4747, started by the `agentation` server in `.mcp.json`, and the agent reads them over MCP. Production drops it, `scripts/check-pack.sh` fails the deploy if it leaks into `out/`
 - **Client components only when needed** - 'use client' islands (e.g. EFP stats fetch)
 - **Low dependency count** - Intentionally minimal for hackability and maintainability
 

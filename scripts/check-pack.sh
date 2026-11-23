@@ -28,6 +28,12 @@ for file in "${required[@]}"; do
   fi
 done
 
+# The Agentation toolbar is for local dev only (components/DevAnnotations.tsx)
+if grep -rqi agentation out; then
+  echo "check-pack: the dev-only Agentation toolbar leaked into out/" >&2
+  missing=1
+fi
+
 if [ "$missing" -ne 0 ]; then
   exit 1
 fi
