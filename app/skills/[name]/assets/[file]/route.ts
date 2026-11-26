@@ -10,6 +10,7 @@ const contentTypes: Record<string, string> = {
   '.jpg': 'image/jpeg',
   '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
+  '.js': 'text/javascript; charset=utf-8',
 };
 
 export function generateStaticParams() {
