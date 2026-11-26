@@ -10,6 +10,7 @@
     "chrome": "sh scripts/chrome-debug.sh",
     "build": "node scripts/generate-rss.ts && next build && node scripts/redirects.ts",
     "start": "next start",
+    "new-post": "node scripts/new-post.ts",
     "lint": "next lint",
     "deploy": "bash scripts/deploy.sh",
     "publish": "node scripts/publish.ts",
