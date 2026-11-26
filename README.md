@@ -2,6 +2,16 @@
 
 Personal website and blog for ses.eth - a hackable Next.js playground embracing "Blogosphere 2.0".
 
+## Quick Start
+
+```bash
+pnpm install    # Install dependencies
+pnpm dev        # Start dev server at http://localhost:3000
+pnpm dev-chrome # Dev server plus a Chrome the agent can drive (CDP on :9222)
+pnpm build      # Build for production (generates RSS + builds Next.js)
+pnpm start      # Start production server
+```
+
 ## 🎯 Philosophy: Low Dependencies, High Hackability
 
 This site is intentionally built with **minimal dependencies** to maximize:
@@ -24,15 +34,6 @@ Next.js 16 + App Router blog with Web3 integration. Features:
 - Web3 identity (ENS, Bluesky/ATProto)
 - Auto-generated RSS feeds
 - Ethereum wallet connectivity
-
-## Quick Start
-
-```bash
-pnpm install    # Install dependencies
-pnpm dev        # Start dev server at http://localhost:3000
-pnpm build      # Build for production (generates RSS + builds Next.js)
-pnpm start      # Start production server
-```
 
 ## Architecture
 

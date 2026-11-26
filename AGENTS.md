@@ -21,6 +21,7 @@ Before suggesting ANY new dependency:
 ## Commands
 
 - `pnpm dev` - Start development server at http://localhost:3000
+- `pnpm dev-chrome` - `pnpm dev` plus `pnpm chrome` once the server answers, in one command
 - `pnpm chrome [url]` - Open a separate-profile Chrome with remote debugging on :9222, where the global chrome-devtools MCP connects, so the agent can see and drive the dev server
 - `pnpm build` - Build for production (static generation + RSS)
 - `pnpm start` - Start production server
