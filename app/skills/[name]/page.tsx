@@ -11,6 +11,7 @@ import {
   getSkill,
   getSkillAssets,
   getSkillNames,
+  isPhoneScreenshot,
   repoUrl,
 } from '@/lib/skills';
 
@@ -49,6 +50,19 @@ function A(props: React.ComponentProps<'a'>) {
   const href = props.href ?? '';
   if (!href.startsWith('assets/')) return <a {...props} />;
   return <a {...props} download={href.split('/').pop()} />;
+}
+
+function Img(props: React.ComponentProps<'img'>) {
+  if (typeof props.src !== 'string' || !isPhoneScreenshot(props.src)) {
+    return <img {...props} />;
+  }
+  return (
+    <img
+      {...props}
+      src={props.src.replace(/#phone$/, '')}
+      style={{ maxWidth: '300px' }}
+    />
+  );
 }
 
 export default async function SkillPage({ params }: Props) {
@@ -95,7 +109,7 @@ export default async function SkillPage({ params }: Props) {
             </span>
           ))}
         </p>
-        <Content components={{ pre: Pre, a: A }} />
+        <Content components={{ pre: Pre, a: A, img: Img }} />
         {history && (
           <>
             <h2>Last edit</h2>

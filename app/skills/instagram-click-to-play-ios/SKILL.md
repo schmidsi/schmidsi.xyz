@@ -58,7 +58,7 @@ Check: a reel in the feed shows a paused frame with a play control and starts on
   the icon and add it again with Share > Add to Home Screen, turning **off "Open as Web
   App"** before tapping Add. The mode is fixed at creation.
 
-  ![Safari's Add to Home Screen sheet for instagram.com, with "Open as Web App" turned off](assets/add-to-home-screen.png)
+  ![Safari's Add to Home Screen sheet for instagram.com, with "Open as Web App" turned off](assets/add-to-home-screen.png#phone)
 
   If that icon lands in another
   browser or in the Instagram app, make a Shortcut with one "Open URLs" action for

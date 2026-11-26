@@ -125,3 +125,9 @@ export function readSkillAsset(name: string, file: string): Buffer {
 export function downloadableAssets(files: string[]): string[] {
   return files.filter((file) => !/\.(png|jpe?g|gif|webp|svg)$/i.test(file));
 }
+
+// A phone screenshot at full prose width is huge, so skills mark them with a
+// #phone fragment on the image url (plain Markdown, ignored everywhere else).
+export function isPhoneScreenshot(src: string | undefined): boolean {
+  return src?.endsWith('#phone') ?? false;
+}
