@@ -25,6 +25,7 @@ Before suggesting ANY new dependency:
 - `pnpm chrome [url]` - Open a separate-profile Chrome with remote debugging on :9222, where the global chrome-devtools MCP connects, so the agent can see and drive the dev server
 - `pnpm build` - Build for production (static generation + RSS)
 - `pnpm start` - Start production server
+- `pnpm new-post "Title"` - Scaffold a draft post at `app/posts/_<slug>.mdx` with today's date. Drop the underscore to publish
 - `pnpm test` - Run script tests (`node --test`, no test framework)
 - Scripts in `scripts/` are TypeScript run directly by Node (type stripping, no build step). Use erasable syntax only (no `enum`) and import with the `.ts` extension
 - `pnpm run deploy` - Build, check, and pin to IPFS via Filebase (uploads first) and Filecoin, prints the Root CID. Succeeds if at least one provider worked. `PROVIDERS=Filebase pnpm run deploy` overrides the list
