@@ -13,6 +13,7 @@ const socialLinks = [
   { label: 'Mail', href: 'mailto:simon@schmid.io' },
   { label: 'X', href: 'https://x.com/schmidsi', hint: 'Twitter' },
   { label: 'Bluesky', href: 'https://bsky.app/profile/ses.eth.limo' },
+  { label: 'Farcaster', href: 'https://farcaster.xyz/ses.eth' },
   { label: 'Substack', href: 'https://schmidsi.substack.com' },
   { label: 'YouTube', href: 'https://www.youtube.com/@schmid_si' },
   { label: 'Instagram', href: 'https://www.instagram.com/simonkwe/' },
