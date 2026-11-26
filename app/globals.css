@@ -18,3 +18,13 @@
   display: block;
   overflow-x: auto;
 }
+
+/* A black underline makes every link shout. Light grey keeps links
+   recognizable, hover brings the full weight back. Unlayered, so it also beats
+   the typography plugin's text-decoration shorthand in prose. */
+a {
+  text-decoration-color: --theme(--color-gray-300);
+}
+a:hover {
+  text-decoration-color: currentColor;
+}

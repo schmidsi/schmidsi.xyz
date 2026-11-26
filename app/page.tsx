@@ -72,7 +72,7 @@ export default function HomePage() {
           </span>
           <span className="mt-2 block text-gray-700">
             {spotlight.description}{' '}
-            <span className="font-semibold text-gray-900 underline">
+            <span className="font-semibold text-gray-900 underline decoration-gray-300">
               {spotlight.kind === 'Post' ? 'Read' : 'Get the skill'}
             </span>
           </span>
