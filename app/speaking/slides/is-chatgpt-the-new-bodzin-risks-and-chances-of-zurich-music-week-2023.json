@@ -1,0 +1,194 @@
+[
+  {
+    "alt": "Is ChatGPT the new Bodzin? Risks and chances of music production with AI Zurich Music Week 2023 Simon Emanuel Schmid Developer Relations Manager",
+    "notes": "https://twitter.com/schmid_si"
+  },
+  {
+    "alt": "",
+    "notes": "What happened just now? Eminem bro.\nhttps://www.voicify.ai"
+  },
+  {
+    "alt": "Simon Emanuel Schmid About Me - Software Engineer - Former DJ, producer and small label owner - Co-founder of a startup in the music industry - Since 2017 in blockchain - “Technology consultant”",
+    "notes": "Why do I have something to say about this topic?\n\nThe goal of this talk is to have a high level overview over the tech, and I'll also drop some opinion here and there."
+  },
+  {
+    "alt": "",
+    "notes": ""
+  },
+  {
+    "alt": "Simonai Echoes Holly Plus Me",
+    "notes": "Let’s see what is already possible:\n- I create a new alter ego. The name was suggested by ChatGPT (https://chat.openai.com/)\n- I took the fake Eminem line from the beginning and used Holly+ voice algorithm (https://holly.plus/)\n- I used that output to create a song on https://boomy.com/\n- Paid for AI mastering\n- Created a cover image with Midjourney (https://www.midjourney.com/app/)\n- Created an NFT that shares profit from sales with Holly, the creator of the voice algorithm\n\nhttps://holly.plus/"
+  },
+  {
+    "alt": "What is Artificial Intelligence?",
+    "notes": "- https://en.wikipedia.org/wiki/Timeline_of_artificial_intelligence"
+  },
+  {
+    "alt": "Antiquity Now Future?",
+    "notes": "It seems that the idea of artificial intelligence is very old:\n\n- Antiquity: Talos, like an autonomous robot that protected Crete\n- 1818: Frankenstein: Well known novel about a human-like sentient creation\n- 1950: \"Computing Machinery and Intelligence\" by Alan Turing invented the Turing Test. Today known as Captchas.\n- 1968: HAL 9000 from Stanley Kubricks \"2001: A Space Odyssey\"\n- 1997: Microsoft Office Assistant alias Clippy\n- 2010: Apple Siri\n- 2022: ChatGPT, Stable Diffusion and Midjourney were released which kicked off the latest AI hype\n\n- https://en.wikipedia.org/wiki/Timeline_of_artificial_intelligence"
+  },
+  {
+    "alt": "Artificial Neural Networks",
+    "notes": "- Modelled after the human brain\n- The trick is: Load a huge amount of data into the model and hope the model finds patterns\n- Similar with ChatGPT or so called LLMs: Large language models. They \"just\" predict the next possible word.\n- Stable Diffusion does another trick: It trains the neural network on images with caption and then"
+  },
+  {
+    "alt": "",
+    "notes": "- Large language models\n- It costs Open AI $700'000 per day (https://www.businessinsider.com/how-much-chatgpt-costs-openai-to-run-estimate-report-2023-4?r=US&IR=T)\n- Analysts and technologists estimate that the critical process of training a large language model such as GPT-3 could cost over $4 million.\n- https://www.cnbc.com/2023/03/13/chatgpt-and-generative-ai-are-booming-but-at-a-very-expensive-price.html\n- https://www.wired.com/story/openai-ceo-sam-altman-the-age-of-giant-ai-models-is-already-over/ - The process cost over $100 million."
+  },
+  {
+    "alt": "",
+    "notes": "- https://en.wikipedia.org/wiki/Stable_Diffusion"
+  },
+  {
+    "alt": "",
+    "notes": "- https://news.mit.edu/2021/robust-artificial-intelligence-tools-predict-future-cancer-0128"
+  },
+  {
+    "alt": "Artificial Intelligence in Music",
+    "notes": ""
+  },
+  {
+    "alt": "Effects Generators",
+    "notes": "- On a high level, we can create two groups of AI tools in music: Effects and generators\n- Effects are processing audio, audio in and audio out\n- Generators are creating audio. Input can be text but also images or other audio.\n- Think of synthesiser vs reverb\n- There is also a third class of AI tools that converts audio to text or audio to images"
+  },
+  {
+    "alt": "Effects",
+    "notes": ""
+  },
+  {
+    "alt": "",
+    "notes": "- https://www.landr.com/online-audio-mastering/"
+  },
+  {
+    "alt": "",
+    "notes": "- https://neutone.space/\n\nTimbre Transfer"
+  },
+  {
+    "alt": "",
+    "notes": "- https://serato.com/dj/pro/stems"
+  },
+  {
+    "alt": "Generators",
+    "notes": ""
+  },
+  {
+    "alt": "",
+    "notes": "- https://boomy.com/library"
+  },
+  {
+    "alt": "",
+    "notes": "- https://www.aiva.ai/"
+  },
+  {
+    "alt": "",
+    "notes": "- https://huggingface.co/spaces/facebook/MusicGen\n- https://github.com/facebookresearch/audiocraft\n\n- Published on 8. June: https://huggingface.co/papers/2306.05284\n- Open Source model\n- Only trained with data that they have rights"
+  },
+  {
+    "alt": "",
+    "notes": "- https://felixkreuk.github.io/audiogen/"
+  },
+  {
+    "alt": "",
+    "notes": ""
+  },
+  {
+    "alt": "",
+    "notes": "- https://www.riffusion.com/?&prompt=Soulful+afro+house&denoising=0.75&seedImageId=og_beat"
+  },
+  {
+    "alt": "Limits of Artificial Intelligence",
+    "notes": ""
+  },
+  {
+    "alt": "Good from far",
+    "notes": ""
+  },
+  {
+    "alt": "Far from good",
+    "notes": ""
+  },
+  {
+    "alt": "",
+    "notes": ""
+  },
+  {
+    "alt": "",
+    "notes": "- https://arc-editor.lab42.global/\n\nAlthough humans typically achieve an 80% success rate in solving ARC tasks, existing algorithms have only managed to reach 30.5%,"
+  },
+  {
+    "alt": "Challenges & Risks",
+    "notes": ""
+  },
+  {
+    "alt": "",
+    "notes": "- https://en.wikipedia.org/wiki/Instrumental_convergence#Paperclip_maximizer"
+  },
+  {
+    "alt": "",
+    "notes": "- Impersonators, fake news, etc.\n- Lawers already busy. https://drayk.it/ was taken offline. But the model is probably still available.\n- https://www.reuters.com/legal/transactional/lawsuits-accuse-ai-content-creators-misusing-copyrighted-work-2023-01-17/\n- Intellectual property rights\n- Used without consent to train model"
+  },
+  {
+    "alt": "",
+    "notes": "- A \"computer\" was once a job description. These were people that just computed calculations by hand. The rise of the machines as we know them today basically killed that job.\n-"
+  },
+  {
+    "alt": "",
+    "notes": ""
+  },
+  {
+    "alt": "",
+    "notes": "- Opinion"
+  },
+  {
+    "alt": "Blockchain to the rescue?",
+    "notes": ""
+  },
+  {
+    "alt": "",
+    "notes": "- Cryptography and blockchain technology very good at:\n- Storing data forever and immutable\n- As long private key is private -> Authorship is proven\n- Hash-functions (think fingerprints) to reduce size"
+  },
+  {
+    "alt": "",
+    "notes": "- https://www.republik.ch/2023/08/04/auge-um-auge\n- Sam Altman from OpenAI co-founded\n- Thesis: AI makes a lot work obsolete which will increase joblessness so we need an universal basic income\n- With the power of AI it is harder to distinguish a human from a machine, so we need proof-of-personhood"
+  },
+  {
+    "alt": "",
+    "notes": "- https://joincircles.net/\n- https://vitalik.eth.limo/general/2023/07/24/biometric.html\n-"
+  },
+  {
+    "alt": "",
+    "notes": "- https://auction.holly.plus/\n- Her voice as plugin"
+  },
+  {
+    "alt": "",
+    "notes": "- https://beta.catalog.works/about\n- Generally the idea of a shared catalog of intellectual property rights"
+  },
+  {
+    "alt": "",
+    "notes": "- https://ethglobal.com/showcase/zk-microphone-8161v"
+  },
+  {
+    "alt": "Conclusion",
+    "notes": ""
+  },
+  {
+    "alt": "",
+    "notes": "- It's exciting new tech and it's developing super fast!\n- MusicGen from Meta (Facebook) is just two months old\n- MusicML from Google is expected to ship soon\n- Soo much more\n- Technological progress is unstoppable, wether you like it or not\n- Let's not overhype or daemonise\n- It's impossible to predict the future. The only thing we know for sure is the present state. And playing around with these technologies with an open mind is the best way to understand it and leverage it."
+  },
+  {
+    "alt": "",
+    "notes": "- I'm organising an underground rave"
+  },
+  {
+    "alt": "Thank you Simon Emanuel Schmid Developer Relations Manager",
+    "notes": "- https://twitter.com/schmid_si\n- https://www.linkedin.com/in/schmidsi/\n- https://t.me/schmidsi"
+  },
+  {
+    "alt": "",
+    "notes": ""
+  },
+  {
+    "alt": "",
+    "notes": ""
+  }
+]

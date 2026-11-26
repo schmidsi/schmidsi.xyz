@@ -195,6 +195,18 @@ export const talks: Talk[] = [
   },
   {
     title:
+      'Is ChatGPT the new Bodzin? Risks and Chances of Music Producing with AI',
+    kind: 'Talk',
+    event: 'Zurich Music Week',
+    location: 'Zurich',
+    year: 2023,
+    href: 'https://2023.zmw.ch/program/conferences',
+    note: 'No recording, slides only',
+    description:
+      'A talk in the conference program of Zurich Music Week 2023, on 11 August 2023 from 17:30 to 19:00 at the Kraftwerk in Zurich. The topic: the risks and chances of music producing with AI. There is no recording. The slides with my speaker notes are below.',
+  },
+  {
+    title:
       'New Use Cases & Benefits Derived from Transforming Subgraphs into Read-Oriented Rollups',
     kind: 'Talk',
     event: 'Blockchain Oracle Summit',
@@ -488,6 +500,7 @@ export function sourceLabel(talk: Talk): string {
   if (host.endsWith('youtube.com')) return 'Watch on YouTube';
   if (host.endsWith('slideshare.net')) return 'View the slides on SlideShare';
   if (host.endsWith('gitnation.com')) return 'Watch on GitNation';
+  if (host.endsWith('zmw.ch')) return 'Zurich Music Week 2023 program';
   if (host.endsWith('panter.ch')) return "Panter's page about the talk";
   return 'Open the original';
 }

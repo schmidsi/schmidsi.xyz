@@ -13,6 +13,12 @@ import {
   youtubeRef,
 } from '@/app/speaking/talks';
 import { getTranscript } from '@/app/speaking/transcript';
+import {
+  getSlides,
+  parseNotes,
+  slideImagePath,
+  splitUrls,
+} from '@/app/speaking/slides';
 import { alternates, SITE_URL } from '@/lib/site';
 
 interface Props {
@@ -52,6 +58,19 @@ function isoDuration(seconds: number): string {
   return `PT${h ? `${h}H` : ''}${m ? `${m}M` : ''}${s || !(h || m) ? `${s}S` : ''}`;
 }
 
+// Speaker notes mostly point to sources, so urls become links
+function NoteText({ text }: { text: string }) {
+  return splitUrls(text).map((part, i) =>
+    part.url ? (
+      <ExternalLink key={i} href={part.text}>
+        {part.text}
+      </ExternalLink>
+    ) : (
+      <Fragment key={i}>{part.text}</Fragment>
+    ),
+  );
+}
+
 export default async function TalkPage({ params }: Props) {
   const { slug } = await params;
   const talk = getTalk(slug);
@@ -59,6 +78,7 @@ export default async function TalkPage({ params }: Props) {
 
   const video = youtubeRef(talk);
   const transcript = getTranscript(slug);
+  const slides = getSlides(slug);
 
   // Lets search engines index the video and its transcript text
   const jsonLd = video &&
@@ -112,6 +132,48 @@ export default async function TalkPage({ params }: Props) {
         <p>
           <ExternalLink href={talk.href}>{sourceLabel(talk)}</ExternalLink>
         </p>
+
+        {slides && (
+          <>
+            <h2>Slides</h2>
+            {slides.map((slide, i) => (
+              <figure key={i} className="mb-10">
+                {/* Plain img: static export without image optimization */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={slideImagePath(slug, i)}
+                  alt={slide.alt || `Slide ${i + 1}`}
+                  width={1257}
+                  height={707}
+                  loading="lazy"
+                  className="not-prose w-full border border-gray-200"
+                />
+                <figcaption className="not-prose mt-1 text-sm text-gray-500">
+                  Slide {i + 1} of {slides.length}
+                </figcaption>
+                {slide.notes && (
+                  <div className="mt-2">
+                    {parseNotes(slide.notes).map((block, j) =>
+                      block.kind === 'list' ? (
+                        <ul key={j}>
+                          {block.items.map((item, k) => (
+                            <li key={k}>
+                              <NoteText text={item} />
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p key={j} className="whitespace-pre-line">
+                          <NoteText text={block.text} />
+                        </p>
+                      ),
+                    )}
+                  </div>
+                )}
+              </figure>
+            ))}
+          </>
+        )}
 
         {transcript && (
           <>
