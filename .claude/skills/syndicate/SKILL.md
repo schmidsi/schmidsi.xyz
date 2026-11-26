@@ -29,9 +29,9 @@ session folder first, which is fine.
 | Platform  | Text | Links | Handles |
 |-----------|------|-------|---------|
 | X         | Full text if the account can post long text (check the composer's limit), otherwise a thread of posts up to 280 characters each | None, not even the blog URL: X reaches fewer people with posts that link off the platform | Keep the @handles |
-| LinkedIn  | Full text | Only the blog URL, at the end | Drop the X handles ("Greg (@gregskril)" becomes "Greg"), then tag each person or company as a LinkedIn mention in the composer. Only tag confident matches, report the rest |
+| LinkedIn  | Full text | None in the post. Add the blog URL as the first comment right after posting: LinkedIn reportedly shows posts with outside links to fewer people | Drop the X handles ("Greg (@gregskril)" becomes "Greg"), then tag each person or company as a LinkedIn mention in the composer. Only tag confident matches, report the rest |
 | Substack  | Full post, with title, subtitle (frontmatter description) and the image on top. Send it to subscribers by email | Keep the inline links, handles link to X | Keep them as links to x.com |
-| Bluesky   | Teaser plus the blog URL. Posts are capped at 300 characters, and a thread of the full text reads worse than the link card | Only the blog URL | Drop them, X handles don't exist there |
+| Bluesky   | The frontmatter description as the teaser (or one the user wrote, never write your own), plus the blog URL. Posts are capped at 300 characters, and a thread of the full text reads worse than the link card | Only the blog URL | Drop them, X handles don't exist there |
 | Farcaster | Full text in one cast if the account allows long casts (Pro), otherwise a thread of casts up to 1024 bytes each | Only the blog URL, at the end as "Full post with links: <url>". The engage links live on the blog | Drop them |
 
 For every platform, turn markdown links into their plain link text, except
