@@ -1,4 +1,4 @@
-// Scaffold a draft post: pnpm new-post "My Title"
+// Scaffold a draft post: pnpm post:new "My Title"
 // The underscore prefix keeps it a draft; rename to <slug>.mdx to publish.
 import fs from 'fs';
 import path from 'path';
@@ -29,7 +29,7 @@ export function newPost(dir: string, title: string, date: string): string {
 if (import.meta.main) {
   const title = process.argv.slice(2).join(' ').trim();
   if (!title) {
-    console.error('Usage: pnpm new-post "Post title"');
+    console.error('Usage: pnpm post:new "Post title"');
     process.exit(1);
   }
   const today = new Date().toISOString().split('T')[0];

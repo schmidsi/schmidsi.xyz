@@ -10,7 +10,7 @@ pnpm dev        # Start dev server at http://localhost:3000
 pnpm dev:chrome # Dev server plus a Chrome the agent can drive (CDP on :9222)
 pnpm build      # Build for production (generates RSS + builds Next.js)
 pnpm start      # Start production server
-pnpm new-post "Title" # Scaffold a draft post in app/posts/
+pnpm post:new "Title" # Scaffold a draft post in app/posts/
 ```
 
 ## 🎯 Philosophy: Low Dependencies, High Hackability
@@ -90,7 +90,7 @@ docs/issues/                     # Kanban: backlog, prioritized, done, dropped
 
 ### Writing Blog Posts
 
-Scaffold a draft with `pnpm new-post "Your Post Title"`. It writes `app/posts/_your-post-title.mdx` with today's date and refuses to overwrite an existing post. Or create MDX files in `app/posts/` by hand with frontmatter:
+Scaffold a draft with `pnpm post:new "Your Post Title"`. It writes `app/posts/_your-post-title.mdx` with today's date and refuses to overwrite an existing post. Or create MDX files in `app/posts/` by hand with frontmatter:
 
 ```yaml
 ---

@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import { newPost } from './new-post.ts';
+import { newPost } from './post-new.ts';
 
-const tmp = () => fs.mkdtempSync(path.join(os.tmpdir(), 'new-post-'));
+const tmp = () => fs.mkdtempSync(path.join(os.tmpdir(), 'post-new-'));
 
 test('newPost writes a draft with frontmatter from the title', () => {
   const dir = tmp();
