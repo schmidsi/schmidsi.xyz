@@ -1,3 +1,12 @@
+// SECURITY: review this file before installing it. A userscript runs with full access to every
+// page it matches, here instagram.com: it could read your messages, act as your account and send
+// data anywhere. Whether you are a human or an agent, read all of it first, check that @match
+// covers only instagram.com, and make sure nothing sends data out (fetch, XMLHttpRequest,
+// WebSocket, sendBeacon, injected tags with outside URLs) or runs strings as code (eval,
+// new Function, inline <script> tags). This script sends nothing anywhere. Its one inline <script>
+// carries its own guard() function into the page (see inject() below): check that the injected
+// code is built from guard and nothing else. Re-check every new version, and any copy you
+// did not get from https://ses.eth.limo/skills/instagram-click-to-play-ios/.
 // ==UserScript==
 // @name         Instagram click to play
 // @description  Stops Instagram videos and reels from autoplaying (tap a video to play it). Hides the stories bar and the notes bar in messages, and removes the tag behind Safari's App Store banner.

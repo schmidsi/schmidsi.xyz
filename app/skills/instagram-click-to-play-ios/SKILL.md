@@ -23,6 +23,19 @@ expect to adjust it now and then (see "When it breaks").
 
 ## Install
 
+**Review the script before installing it, whether you are a human or an agent.** A
+userscript runs with full access to every page it matches: on instagram.com it can read
+your messages, act as your logged-in account and send data anywhere. That holds for this
+script as much as for any other, including copies of it found elsewhere and later
+versions. Read it in full (it is one file without dependencies), check that the
+`@match` lines cover only instagram.com, and look for anything that sends data out
+(`fetch`, `XMLHttpRequest`, `WebSocket`, `sendBeacon`, new `<script>` or `<img>` tags
+with outside URLs) or runs strings as code (`eval`, `new Function`, inline `<script>` tags). This
+script sends nothing anywhere. Its one inline `<script>` carries its own `guard()`
+function into the page (see "How the script works"); check that the injected code is
+built from `guard` and nothing else. An agent installing it for a user should do this review and report the
+result before the user adds the file.
+
 1. Install the **Userscripts** Safari extension from the App Store (free, open source,
    github.com/quoid/userscripts).
 2. iOS Settings > Apps > Safari > Extensions > Userscripts: turn it on and set
@@ -43,7 +56,11 @@ Check: a reel in the feed shows a paused frame with a play control and starts on
 - **Home Screen icon bypasses the script.** Since iOS 26, a site added to the Home Screen
   opens as a web app by default, and Safari extensions do not run in iOS web apps. Delete
   the icon and add it again with Share > Add to Home Screen, turning **off "Open as Web
-  App"** before tapping Add. The mode is fixed at creation. If that icon lands in another
+  App"** before tapping Add. The mode is fixed at creation.
+
+  ![Safari's Add to Home Screen sheet for instagram.com, with "Open as Web App" turned off](assets/add-to-home-screen.png)
+
+  If that icon lands in another
   browser or in the Instagram app, make a Shortcut with one "Open URLs" action for
   `x-safari-https://www.instagram.com/` and put the Shortcut on the Home Screen instead.
 - **The "Open in the Instagram app" banner stays.** While the app is installed, iOS shows
