@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getPosts, formatDate } from '@/lib/posts';
 import { alternates } from '@/lib/site';
 import { getSkills, skillDate } from '@/lib/skills';
+import { pickSpotlight } from '@/lib/spotlight';
 import { talks, featuredTalks, talkSlug } from '@/app/speaking/talks';
 
 export const metadata = { alternates: alternates('/') };
@@ -22,6 +23,7 @@ const socialLinks = [
 export default function HomePage() {
   const posts = getPosts();
   const skills = getSkills();
+  const spotlight = pickSpotlight(posts, skills);
 
   return (
     <div>
@@ -57,13 +59,34 @@ export default function HomePage() {
         ))}
       </div>
 
-      <h2 className="text-lg font-semibold mt-6">Writing</h2>
-      <ul>
+      {spotlight && (
+        <Link
+          href={spotlight.href}
+          className="mt-12 block border-l-4 border-gray-900 bg-slate-100 p-5 hover:bg-slate-200"
+        >
+          <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            New {spotlight.kind.toLowerCase()} · {formatDate(spotlight.date)}
+          </span>
+          <span className="mt-1 block text-2xl font-bold">
+            {spotlight.title}
+          </span>
+          <span className="mt-2 block text-gray-700">
+            {spotlight.description}
+          </span>
+          <span className="mt-3 block text-sm font-semibold underline">
+            {spotlight.kind === 'Post' ? 'Read' : 'Get the skill'}
+          </span>
+        </Link>
+      )}
+
+      <h2 className="text-lg font-semibold mt-12 mb-3">Writing</h2>
+      <ul className="space-y-3">
         {posts.map((post) => (
           <li key={post.slug}>
             <Link href={`/posts/${post.slug}`} className="underline">
               {post.title}
-            </Link>{' '}
+            </Link>
+            <br />
             <span className="text-sm text-gray-500">
               {formatDate(post.date)}
               {post.publisher && ` · repost from ${post.publisher}`}
@@ -72,13 +95,14 @@ export default function HomePage() {
         ))}
       </ul>
 
-      <h2 className="text-lg font-semibold mt-6">Speaking</h2>
-      <ul>
+      <h2 className="text-lg font-semibold mt-12 mb-3">Speaking</h2>
+      <ul className="space-y-3">
         {featuredTalks.map((talk) => (
           <li key={talk.href}>
             <Link href={`/speaking/${talkSlug(talk)}/`} className="underline">
               {talk.title}
-            </Link>{' '}
+            </Link>
+            <br />
             <span className="text-sm text-gray-500">
               {talk.event} {talk.year}
             </span>
@@ -91,16 +115,15 @@ export default function HomePage() {
         </li>
       </ul>
 
-      <h2 className="text-lg font-semibold mt-6">Skills</h2>
-      <ul>
+      <h2 className="text-lg font-semibold mt-12 mb-3">Skills</h2>
+      <ul className="space-y-3">
         {skills.map((skill) => (
           <li key={skill.name}>
             <Link href={`/skills/${skill.name}`} className="underline">
               {skill.name}
             </Link>
             {skill.history && (
-              <span className="text-sm text-gray-500">
-                {' '}
+              <span className="block text-sm text-gray-500">
                 {skillDate(skill.history, formatDate)}
               </span>
             )}
