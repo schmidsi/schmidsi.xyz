@@ -12,6 +12,8 @@ const socialLinks = [
   { label: 'X', href: 'https://x.com/schmidsi', hint: 'Twitter' },
   { label: 'Bluesky', href: 'https://bsky.app/profile/ses.eth.limo' },
   { label: 'Substack', href: 'https://schmidsi.substack.com' },
+  { label: 'YouTube', href: 'https://www.youtube.com/@schmid_si' },
+  { label: 'Instagram', href: 'https://www.instagram.com/simonkwe/' },
 ];
 
 export default function HomePage() {
@@ -38,13 +40,14 @@ export default function HomePage() {
             key={label}
             className="p-1 bg-slate-200 hover:bg-transparent border border-gray-200"
           >
+            {/* No external link icon: a social profile obviously leaves the site */}
             {href.startsWith('mailto:') ? (
               <Link href={href}>{label}</Link>
             ) : (
-              <ExternalLink href={href}>
+              <a href={href} target="_blank" rel="noopener noreferrer">
                 {label}
                 {hint && <span className="text-gray-500 text-xs"> {hint}</span>}
-              </ExternalLink>
+              </a>
             )}
           </div>
         ))}
