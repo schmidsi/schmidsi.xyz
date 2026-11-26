@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { Figtree, Roboto_Mono } from 'next/font/google';
 import Link from 'next/link';
 import { DevAnnotations } from '@/components/DevAnnotations';
-import { ExternalLink } from '@/components/ExternalLink';
 import './globals.css';
 
 const figtree = Figtree({
@@ -56,12 +55,14 @@ export default function RootLayout({
               RSS
             </a>
             {' · '}
-            <ExternalLink
+            <a
               href="https://app.ens.domains/ses.eth"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hover:underline"
             >
               ses.eth
-            </ExternalLink>
+            </a>
           </footer>
         </div>
         <DevAnnotations />

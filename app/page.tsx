@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { ExternalLink } from '@/components/ExternalLink';
 import { getPosts, formatDate } from '@/lib/posts';
 import { getSkills, skillDate } from '@/lib/skills';
 import { talks, featuredTalks, talkSlug } from '@/app/speaking/talks';
@@ -25,13 +24,14 @@ export default function HomePage() {
       <h1 className="text-6xl font-bold text-gray-400 leading-negative">
         <span className="text-gray-900">S</span>imon <br />{' '}
         <span className="text-gray-900">E</span>manuel <br />{' '}
-        <ExternalLink
+        <a
           href="https://app.ens.domains/ses.eth"
+          target="_blank"
+          rel="noopener noreferrer"
           className="hover:underline"
-          iconClassName="ml-2 inline-block h-[0.3em] w-[0.3em] align-top"
         >
           ses.eth
-        </ExternalLink>
+        </a>
       </h1>
 
       <div className="mt-6 flex flex-wrap gap-1">

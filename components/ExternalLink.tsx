@@ -1,14 +1,7 @@
 import type { ComponentProps } from 'react';
 
 // Marks links that leave the site, so readers know a click opens another page
-const defaultIconClass =
-  'ml-[0.25em] inline-block h-[0.75em] w-[0.75em] align-baseline';
-
-export function ExternalLink({
-  children,
-  iconClassName = defaultIconClass,
-  ...props
-}: ComponentProps<'a'> & { iconClassName?: string }) {
+export function ExternalLink({ children, ...props }: ComponentProps<'a'>) {
   return (
     <a target="_blank" rel="noopener noreferrer" {...props}>
       {children}
@@ -20,7 +13,7 @@ export function ExternalLink({
         strokeLinecap="round"
         strokeLinejoin="round"
         aria-hidden="true"
-        className={iconClassName}
+        className="ml-[0.25em] inline-block h-[0.75em] w-[0.75em] align-baseline"
       >
         <path d="M15 3h6v6" />
         <path d="M10 14 21 3" />
