@@ -10,11 +10,13 @@ import {
   talkSlug,
 } from '@/app/speaking/talks';
 import type { Talk } from '@/app/speaking/talks';
+import { alternates } from '@/lib/site';
 
 export const metadata = {
   title: 'Speaking',
   description:
     'Recordings and transcripts of conference talks, workshops, panels, interviews and podcasts by Simon Emanuel',
+  alternates: alternates('/speaking/'),
 };
 
 function TalkList({ talks }: { talks: Talk[] }) {

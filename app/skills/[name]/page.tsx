@@ -1,6 +1,7 @@
 import { ExternalLink } from '@/components/ExternalLink';
 import { Mermaid } from '@/components/Mermaid';
 import { SiteHeader } from '@/components/SiteHeader';
+import { alternates } from '@/lib/site';
 import { compile, run } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 import remarkGfm from 'remark-gfm';
@@ -18,7 +19,11 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { name } = await params;
   const skill = getSkill(name);
-  return { title: skill.name, description: skill.description };
+  return {
+    title: skill.name,
+    description: skill.description,
+    alternates: alternates(`/skills/${name}/`),
+  };
 }
 
 // ```mermaid blocks render as diagrams; every other code block stays a <pre>.

@@ -6,8 +6,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import RSS from 'rss';
 
-// ses.eth via the eth.limo gateway — the ses.box domain is lost, don't use it
-const SITE_URL = 'https://ses.eth.limo';
+import { SITE_URL } from '../lib/site.ts';
 const postsDirectory = path.join(process.cwd(), 'app/posts');
 
 type Post = {
@@ -55,7 +54,7 @@ for (const post of posts) {
   feed.item({
     title: post.title,
     description: post.description,
-    url: `${SITE_URL}/posts/${post.slug}`,
+    url: `${SITE_URL}/posts/${post.slug}/`,
     date: new Date(post.date),
     categories: post.tag.split(',').map((t) => t.trim()),
     author: post.author,

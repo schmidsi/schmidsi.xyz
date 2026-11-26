@@ -17,7 +17,7 @@
 //   ENS_SIGNER_KEY="$(op read 'op://…')" pnpm run publish
 
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import {
   namehash,
   labelhash,
@@ -31,6 +31,8 @@ import {
   publishTarget,
 } from './ens.ts';
 import { getStorageStatus, storageWarnings } from './filecoin.ts';
+import { changedUrls, submitToIndexNow } from './indexnow.ts';
+import { SITE_URL } from '../lib/site.ts';
 
 const { name: NAME, dir, cid: givenCid } = publishTarget(process.argv.slice(2));
 // ENSv2 (https://docs.ens.domains/learn/deployments). ses.eth is migrated, so
@@ -44,6 +46,9 @@ if (dir && !existsSync(`${dir}/index.html`)) {
   throw new Error(`${dir}/index.html does not exist`);
 }
 if (!givenCid) await warnAboutStorage();
+// Fetched before the deploy: once ENS points at the new CID, the live sitemap
+// is the new one and there is nothing left to compare against
+const liveSitemap = !dir && !givenCid ? await fetchLiveSitemap() : undefined;
 const cid = givenCid ?? (await deploy());
 const node = namehash(NAME);
 const hash = contenthash(cid);
@@ -84,6 +89,7 @@ const tx = key ? sendWithKey(key) : await sendWithBrowser();
 console.log(`tx: https://etherscan.io/tx/${tx}`);
 await waitForReceipt(tx);
 console.log(`https://${NAME}.limo`);
+if (liveSitemap !== undefined) await pingIndexNow(liveSitemap);
 
 // Warns, without stopping, if Filecoin storage runs low or the provider is down.
 async function warnAboutStorage() {
@@ -93,6 +99,27 @@ async function warnAboutStorage() {
     }
   } catch (e) {
     console.warn(`⚠️  Could not check Filecoin storage: ${e.message}`);
+  }
+}
+
+async function fetchLiveSitemap(): Promise<string> {
+  try {
+    const response = await fetch(`${SITE_URL}/sitemap.xml`);
+    return response.ok ? await response.text() : '';
+  } catch {
+    return ''; // no old sitemap, so every page counts as new
+  }
+}
+
+// Warns, without stopping: the site is live either way, crawlers just come later
+async function pingIndexNow(liveSitemap: string) {
+  const urls = changedUrls(liveSitemap, readFileSync('out/sitemap.xml', 'utf8'));
+  if (urls.length === 0) return;
+  try {
+    await submitToIndexNow(urls);
+    console.log(`IndexNow: submitted ${urls.length} changed page(s)`);
+  } catch (e) {
+    console.warn(`⚠️  IndexNow ping failed: ${e.message}`);
   }
 }
 

@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import { getPosts, formatDate } from '@/lib/posts';
+import { alternates } from '@/lib/site';
 import { getSkills, skillDate } from '@/lib/skills';
 import { talks, featuredTalks, talkSlug } from '@/app/speaking/talks';
+
+export const metadata = { alternates: alternates('/') };
 
 const socialLinks = [
   { label: 'Telegram', href: 'https://t.me/schmidsi' },

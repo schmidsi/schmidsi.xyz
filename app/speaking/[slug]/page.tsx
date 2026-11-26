@@ -13,9 +13,7 @@ import {
   youtubeRef,
 } from '@/app/speaking/talks';
 import { getTranscript } from '@/app/speaking/transcript';
-
-// ses.eth via the eth.limo gateway, same as the RSS feed
-const SITE_URL = 'https://ses.eth.limo';
+import { alternates, SITE_URL } from '@/lib/site';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -33,6 +31,7 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: talk.title,
     description,
+    alternates: alternates(`/speaking/${slug}/`),
     openGraph: {
       title: talk.title,
       description,

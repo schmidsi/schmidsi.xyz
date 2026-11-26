@@ -12,6 +12,11 @@ set -euo pipefail
 required=(
   index.html
   rss.xml
+  sitemap.xml
+  robots.txt
+  llms.txt
+  # IndexNow key, see scripts/indexnow.ts
+  d4de7b7939858e420af1bd44296bcabe.txt
   .well-known/atproto-did
 )
 

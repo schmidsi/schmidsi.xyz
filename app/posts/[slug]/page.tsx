@@ -2,6 +2,7 @@ import { ExternalLink } from '@/components/ExternalLink';
 import { SiteHeader } from '@/components/SiteHeader';
 import { notFound } from 'next/navigation';
 import { getPost, getAllPostSlugs, formatDate } from '@/lib/posts';
+import { alternates } from '@/lib/site';
 import { compile, run } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 import remarkGfm from 'remark-gfm';
@@ -32,7 +33,10 @@ export async function generateMetadata({ params }: Props) {
     title: post.title,
     description: post.description,
     // Reposts credit the original so search engines rank it, not this copy
-    alternates: post.canonical ? { canonical: post.canonical } : undefined,
+    alternates: {
+      ...alternates(`/posts/${post.slug}/`),
+      ...(post.canonical && { canonical: post.canonical }),
+    },
     openGraph: {
       title: post.title,
       description: post.description,
