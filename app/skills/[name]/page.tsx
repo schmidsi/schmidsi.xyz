@@ -60,7 +60,7 @@ function Img(props: React.ComponentProps<'img'>) {
     <img
       {...props}
       src={props.src.replace(/#phone$/, '')}
-      style={{ maxWidth: '300px' }}
+      style={{ maxWidth: 'min(300px, 100%)' }}
     />
   );
 }

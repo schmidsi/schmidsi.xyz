@@ -6,3 +6,15 @@
   --font-mono: var(--font-roboto-mono);
   --leading-negative: 0.8;
 }
+
+/* Long identifiers in inline code (API names, paths, urls) have no break
+   points and would push the page wider than a phone screen. */
+.prose :not(pre) > code {
+  overflow-wrap: anywhere;
+}
+
+/* Wide tables scroll sideways instead of widening the page. */
+.prose table {
+  display: block;
+  overflow-x: auto;
+}
