@@ -5,6 +5,8 @@ description: Stop Instagram videos and reels from autoplaying on iPhone by using
 
 # Instagram without autoplay on iPhone
 
+**Download the script:** [instagram-click-to-play.user.js](assets/instagram-click-to-play.user.js) (v2.3)
+
 The Instagram app has no setting that stops video autoplay, and iOS has none either
 (Settings > Accessibility > Motion > Auto-Play Video Previews only covers Apple's apps).
 What works is instagram.com in Safari with a userscript. The script in
@@ -27,10 +29,11 @@ expect to adjust it now and then (see "When it breaks").
    github.com/quoid/userscripts).
 2. iOS Settings > Apps > Safari > Extensions > Userscripts: turn it on and set
    instagram.com (or All Websites) to Allow.
-3. Save the script file into the Userscripts folder in the Files app (On My iPhone >
-   Userscripts; the folder icon in the extension's popup opens that location). The popup
-   may have no "+" button, so the file route is the reliable one. If iOS saves it as
-   `.js.txt`, rename it to end in `.user.js`.
+3. Download the script in Safari on the iPhone (link above; it lands in Files >
+   Downloads), then move it into the Userscripts folder (On My iPhone > Userscripts; the
+   folder icon in the extension's popup opens that location). The popup may have no "+"
+   button, so the file route is the reliable one. If iOS saves it as `.js.txt`, rename it
+   to end in `.user.js`.
 4. Open instagram.com in Safari, open the Userscripts popup (the puzzle or AA icon) once,
    then reload. **Changed or new files are only picked up after the popup has been opened**,
    so do this after every update.

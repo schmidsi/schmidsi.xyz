@@ -32,6 +32,14 @@ function Pre(props: React.ComponentProps<'pre'>) {
   return <pre {...props} />;
 }
 
+// Links to a skill's own files (assets/...) download instead of opening, so a
+// script or config can be saved straight to disk, also on a phone.
+function A(props: React.ComponentProps<'a'>) {
+  const href = props.href ?? '';
+  if (!href.startsWith('assets/')) return <a {...props} />;
+  return <a {...props} download={href.split('/').pop()} />;
+}
+
 export default async function SkillPage({ params }: Props) {
   const { name } = await params;
   const skill = getSkill(name);
@@ -66,7 +74,7 @@ export default async function SkillPage({ params }: Props) {
             Download SKILL.md
           </a>
         </p>
-        <Content components={{ pre: Pre }} />
+        <Content components={{ pre: Pre, a: A }} />
         {history && (
           <>
             <h2>Last edit</h2>
