@@ -1,11 +1,20 @@
+import { Fragment } from 'react';
+import Link from 'next/link';
+import { ExternalLink } from '@/components/ExternalLink';
 import { SiteHeader } from '@/components/SiteHeader';
-import { featuredTalks, otherTalks, talkContext } from '@/app/speaking/talks';
+import {
+  featuredTalks,
+  interviews,
+  otherTalks,
+  talkContext,
+  talkSlug,
+} from '@/app/speaking/talks';
 import type { Talk } from '@/app/speaking/talks';
 
 export const metadata = {
   title: 'Speaking',
   description:
-    'Recordings of conference talks, workshops and panels by Simon Emanuel',
+    'Recordings and transcripts of conference talks, workshops, panels, interviews and podcasts by Simon Emanuel',
 };
 
 function TalkList({ talks }: { talks: Talk[] }) {
@@ -13,11 +22,28 @@ function TalkList({ talks }: { talks: Talk[] }) {
     <ul>
       {talks.map((talk) => (
         <li key={talk.href}>
-          <a href={talk.href} target="_blank" rel="noopener noreferrer">
-            {talk.title}
-          </a>
+          <Link href={`/speaking/${talkSlug(talk)}/`}>{talk.title}</Link>
           <br />
-          <span className="text-sm text-gray-500">{talkContext(talk)}</span>
+          <span className="text-sm text-gray-500">
+            {talkContext(talk)}
+            {talk.with && (
+              <>
+                {' · with '}
+                {talk.with.map((person, i) => (
+                  <Fragment key={person.href}>
+                    {/* nowrap keeps the comma next to the icon */}
+                    <span className="whitespace-nowrap">
+                      <ExternalLink href={person.href}>
+                        {person.name}
+                      </ExternalLink>
+                      {i < talk.with!.length - 1 && ','}
+                    </span>
+                    {i < talk.with!.length - 1 && ' '}
+                  </Fragment>
+                ))}
+              </>
+            )}
+          </span>
         </li>
       ))}
     </ul>
@@ -30,7 +56,10 @@ export default function SpeakingPage() {
       <SiteHeader />
       <main className="prose mt-8 mb-8">
         <h1>Speaking</h1>
-        <p>Recordings of my conference talks, workshops and panels.</p>
+        <p>
+          Recordings and transcripts of my conference talks, workshops, panels,
+          interviews and podcasts.
+        </p>
 
         {/* Curated on top: whoever reviews a talk application skims */}
         <h2>Start here</h2>
@@ -38,6 +67,9 @@ export default function SpeakingPage() {
 
         <h2>More recordings</h2>
         <TalkList talks={otherTalks} />
+
+        <h2>Interviews and podcasts</h2>
+        <TalkList talks={interviews} />
       </main>
     </div>
   );

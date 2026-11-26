@@ -1,7 +1,8 @@
 import Link from 'next/link';
+import { ExternalLink } from '@/components/ExternalLink';
 import { getPosts, formatDate } from '@/lib/posts';
 import { getSkills, skillDate } from '@/lib/skills';
-import { talks, featuredTalks } from '@/app/speaking/talks';
+import { talks, featuredTalks, talkSlug } from '@/app/speaking/talks';
 
 const socialLinks = [
   { label: 'Telegram', href: 'https://t.me/schmidsi' },
@@ -22,14 +23,13 @@ export default function HomePage() {
       <h1 className="text-6xl font-bold text-gray-400 leading-negative">
         <span className="text-gray-900">S</span>imon <br />{' '}
         <span className="text-gray-900">E</span>manuel <br />{' '}
-        <Link
+        <ExternalLink
           href="https://app.ens.domains/ses.eth"
-          target="_blank"
-          rel="noopener noreferrer"
           className="hover:underline"
+          iconClassName="ml-2 inline-block h-[0.3em] w-[0.3em] align-top"
         >
           ses.eth
-        </Link>
+        </ExternalLink>
       </h1>
 
       <div className="mt-6 flex flex-wrap gap-1">
@@ -38,10 +38,14 @@ export default function HomePage() {
             key={label}
             className="p-1 bg-slate-200 hover:bg-transparent border border-gray-200"
           >
-            <Link href={href}>
-              {label}
-              {hint && <span className="text-gray-500 text-xs"> {hint}</span>}
-            </Link>
+            {href.startsWith('mailto:') ? (
+              <Link href={href}>{label}</Link>
+            ) : (
+              <ExternalLink href={href}>
+                {label}
+                {hint && <span className="text-gray-500 text-xs"> {hint}</span>}
+              </ExternalLink>
+            )}
           </div>
         ))}
       </div>
@@ -55,6 +59,7 @@ export default function HomePage() {
             </Link>{' '}
             <span className="text-sm text-gray-500">
               {formatDate(post.date)}
+              {post.publisher && ` · repost from ${post.publisher}`}
             </span>
           </li>
         ))}
@@ -64,9 +69,9 @@ export default function HomePage() {
       <ul>
         {featuredTalks.map((talk) => (
           <li key={talk.href}>
-            <a href={talk.href} className="underline">
+            <Link href={`/speaking/${talkSlug(talk)}/`} className="underline">
               {talk.title}
-            </a>{' '}
+            </Link>{' '}
             <span className="text-sm text-gray-500">
               {talk.event} {talk.year}
             </span>
