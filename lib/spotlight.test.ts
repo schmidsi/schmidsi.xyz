@@ -12,7 +12,7 @@ const post = (slug: string, date: string, canonical?: string) => ({
 const skill = (name: string, created?: string) => ({
   name,
   description: `about ${name}`,
-  history: created && { created, updated: created, commit: 'a' },
+  history: created ? { created, updated: created, commit: 'a' } : undefined,
 });
 
 test('pickSpotlight takes the newest post', () => {

@@ -26,15 +26,19 @@ export function pickSpotlight(
         date: post.date,
         description: post.description,
       })),
-    ...skills
-      .filter((skill) => skill.history)
-      .map((skill) => ({
-        kind: 'Skill' as const,
-        title: skill.name,
-        href: `/skills/${skill.name}`,
-        date: skill.history.created,
-        description: skill.description,
-      })),
+    ...skills.flatMap((skill) =>
+      skill.history
+        ? [
+            {
+              kind: 'Skill' as const,
+              title: skill.name,
+              href: `/skills/${skill.name}`,
+              date: skill.history.created,
+              description: skill.description,
+            },
+          ]
+        : [],
+    ),
   ];
   return candidates.sort((a, b) => b.date.localeCompare(a.date))[0];
 }
