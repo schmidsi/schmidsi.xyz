@@ -59,6 +59,9 @@ Before suggesting ANY new dependency:
 - **RSS at build time** - `scripts/generate-rss.ts` writes `public/rss.xml` before `next build`
 - **`public/.well-known/atproto-did` is load-bearing** - Bluesky verifies the `ses.eth.limo` handle with it. Omnipin is patched (`patches/`) to keep dot-paths, and `scripts/check-pack.sh` fails the deploy if it goes missing
 - **Agentation toolbar in dev only** - `components/DevAnnotations.tsx` renders the Agentation feedback toolbar under `pnpm dev`. Annotations go to `agentation-mcp` on :4747, started by the `agentation` server in `.mcp.json`, and the agent reads them over MCP. Production drops it, `scripts/check-pack.sh` fails the deploy if it leaks into `out/`
+- **Archive pages for external appearances** - every entry in `app/speaking/talks.ts` gets `/speaking/<slug>/` with a click-to-play YouTube embed (`components/YouTubeEmbed.tsx`, nothing loads from YouTube before the click) and the transcript from `app/speaking/transcripts/<slug>.md` (YouTube auto captions, paragraphs start with `[mm:ss]`). A new YouTube talk needs its transcript file, a test fails without it
+- **Reposts** - external posts live in `app/posts/` like any post, with `canonical: <original url>` and `publisher` in the frontmatter. The page shows a repost notice and sets `<link rel="canonical">` to the original. Reposts stay out of the RSS feed. Images are copied to `public/images/`
+- **Sitemap and robots** - `app/sitemap.ts` and `app/robots.ts` are static, they list talks, posts and skills automatically
 - **Client components only when needed** - 'use client' islands (e.g. Mermaid diagrams)
 - **Low dependency count** - Intentionally minimal for hackability and maintainability
 
