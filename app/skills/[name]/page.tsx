@@ -1,3 +1,4 @@
+import { ExternalLink } from '@/components/ExternalLink';
 import { Mermaid } from '@/components/Mermaid';
 import { SiteHeader } from '@/components/SiteHeader';
 import { compile, run } from '@mdx-js/mdx';
@@ -22,7 +23,9 @@ export async function generateMetadata({ params }: Props) {
 
 // ```mermaid blocks render as diagrams; every other code block stays a <pre>.
 function Pre(props: React.ComponentProps<'pre'>) {
-  const code = props.children as React.ReactElement<{ className?: string; children?: React.ReactNode }> | undefined;
+  const code = props.children as
+    | React.ReactElement<{ className?: string; children?: React.ReactNode }>
+    | undefined;
   if (code?.props?.className === 'language-mermaid') {
     return <Mermaid chart={String(code.props.children).trim()} />;
   }
@@ -72,12 +75,15 @@ export default async function SkillPage({ params }: Props) {
                 {formatDate(history.updated)}
               </time>{' '}
               in commit{' '}
-              <a href={`${repoUrl}/commit/${history.commit}`}>
+              <ExternalLink href={`${repoUrl}/commit/${history.commit}`}>
                 <code>{history.commit.slice(0, 7)}</code>
-              </a>{' '}
-              (<a href={`${repoUrl}/commits/main/app/skills/${skill.name}`}>
+              </ExternalLink>{' '}
+              (
+              <ExternalLink
+                href={`${repoUrl}/commits/main/app/skills/${skill.name}`}
+              >
                 full history
-              </a>
+              </ExternalLink>
               )
             </p>
           </>
