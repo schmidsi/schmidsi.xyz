@@ -42,7 +42,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${figtree.variable} ${robotoMono.variable}`}>
+    // Browser extensions add attributes to <html> before React hydrates (seen:
+    // data-ube-extension). This silences the mismatch for this element only.
+    <html
+      lang="en"
+      className={`${figtree.variable} ${robotoMono.variable}`}
+      suppressHydrationWarning
+    >
       <body className="font-sans">
         <div className="max-w-2xl p-8">
           {children}
