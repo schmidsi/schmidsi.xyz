@@ -5,7 +5,7 @@
     "node": ">=22.18.0"
   },
   "scripts": {
-    "dev": "next dev",
+    "dev": "sh scripts/dev.sh",
     "dev:chrome": "sh scripts/dev-chrome.sh",
     "chrome": "sh scripts/chrome-debug.sh",
     "build": "node scripts/generate-rss.ts && next build && node scripts/redirects.ts",

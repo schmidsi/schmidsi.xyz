@@ -20,7 +20,7 @@ Before suggesting ANY new dependency:
 
 ## Commands
 
-- `pnpm dev` - Start development server at http://localhost:3000
+- `pnpm dev` - Start development server at http://localhost:3000, plus the Agentation annotation server on :4747
 - `pnpm dev:chrome` - `pnpm dev` plus `pnpm chrome` once the server answers, in one command
 - `pnpm chrome [url]` - Open a separate-profile Chrome with remote debugging on :9222, where the global chrome-devtools MCP connects, so the agent can see and drive the dev server
 - `pnpm build` - Build for production (static generation + RSS)
@@ -58,7 +58,7 @@ Before suggesting ANY new dependency:
 - **Redirects in `redirects.json`** - `{ "/old/path/": "/new/path/" }`. No server means no HTTP redirects, so after `next build` `scripts/redirects.ts` writes a meta-refresh `index.html` for each old path into `out/`. Add an entry whenever a page moves. The build fails if a redirect would overwrite a real page
 - **RSS at build time** - `scripts/generate-rss.ts` writes `public/rss.xml` before `next build`
 - **`public/.well-known/atproto-did` is load-bearing** - Bluesky verifies the `ses.eth.limo` handle with it. Omnipin is patched (`patches/`) to keep dot-paths, and `scripts/check-pack.sh` fails the deploy if it goes missing
-- **Agentation toolbar in dev only** - `components/DevAnnotations.tsx` renders the Agentation feedback toolbar under `pnpm dev`. Annotations go to `agentation-mcp` on :4747, started by the `agentation` server in `.mcp.json`, and the agent reads them over MCP. Production drops it, `scripts/check-pack.sh` fails the deploy if it leaks into `out/`
+- **Agentation toolbar in dev only** - `components/DevAnnotations.tsx` renders the Agentation feedback toolbar under `pnpm dev`. Annotations go to `agentation-mcp` on :4747, which `scripts/dev.sh` starts and stops with the dev server. The `agentation` server in `.mcp.json` runs `--mcp-only` and proxies to it, so the agent reads them over MCP. A session must not own the port: it dies with the session and no other session takes over. If the MCP call fails, the annotations are still in the page's `localStorage` under `feedback-annotations-<path>`. Production drops it, `scripts/check-pack.sh` fails the deploy if it leaks into `out/`
 - **Archive pages for external appearances** - every entry in `app/speaking/talks.ts` gets `/speaking/<slug>/` with a click-to-play YouTube embed (`components/YouTubeEmbed.tsx`, nothing loads from YouTube before the click) and the transcript from `app/speaking/transcripts/<slug>.md` (YouTube auto captions, paragraphs start with `[mm:ss]`). A new YouTube talk needs its transcript file, a test fails without it
 - **Reposts** - external posts live in `app/posts/` like any post, with `canonical: <original url>` and `publisher` in the frontmatter. The page shows a repost notice and sets `<link rel="canonical">` to the original. Reposts stay out of the RSS feed. Images are copied to `public/images/`
 - **Search engines and AI crawlers** - every page sets its canonical url on `ses.eth.limo` via `alternates()` from `lib/site.ts` (the same CID is served on many gateways). `lib/sitemap.ts` lists talks, posts and skills with `lastmod` from git, reposts stay out. `/llms.txt` comes from `lib/llms.ts`. `pnpm run publish` pings IndexNow with new and changed pages (key file in `public/`, see `scripts/indexnow.ts`). Google has no ping, it reads the sitemap via Search Console
@@ -83,6 +83,8 @@ Before suggesting ANY new dependency:
 - Ethereum Identity Kit library on Context7: `/ethereumidentitykit/docs`
 
 ## When Making Changes
+
+- Errors and warnings in the dev console or `.next/dev/logs/next-development.log` are bugs to fix, even when they are unrelated to the task. Fix them, or name them in the reply if the fix is out of scope. Never skip past them silently
 
 - Never ask for confirmation before changing files - just do it. We have git.
 - Commit autonomously and often. Use `git -c user.email="simon+agent@schmid.io" -c user.name="Simon Agent" -c commit.gpgsign=false commit` to bypass 1Password/GPG signing.

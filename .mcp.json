@@ -6,7 +6,8 @@
       "args": [
         "-y",
         "agentation-mcp@1",
-        "server"
+        "server",
+        "--mcp-only"
       ]
     }
   }
