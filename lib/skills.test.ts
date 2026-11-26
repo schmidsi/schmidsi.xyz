@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {
   byLastEdit,
   downloadableAssets,
+  isPortraitPng,
   parseHistory,
   skillDate,
 } from './skills.ts';
@@ -58,4 +59,17 @@ test('downloadableAssets skips images, which the skill only shows inline', () =>
     downloadableAssets(['a.user.js', 'shot.png', 'b.JPG', 'conf.json', 'c.svg']),
     ['a.user.js', 'conf.json'],
   );
+});
+
+test('isPortraitPng reads the size from the PNG header', () => {
+  const png = (width: number, height: number) => {
+    const buf = Buffer.alloc(24);
+    buf.write('\x89PNG\r\n\x1a\n', 0, 'latin1');
+    buf.writeUInt32BE(width, 16);
+    buf.writeUInt32BE(height, 20);
+    return buf;
+  };
+  assert.equal(isPortraitPng(png(720, 690)), false);
+  assert.equal(isPortraitPng(png(721, 1568)), true);
+  assert.equal(isPortraitPng(Buffer.from('not a png, but long enough')), false);
 });
