@@ -6,7 +6,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "dev-chrome": "sh scripts/dev-chrome.sh",
+    "dev:chrome": "sh scripts/dev-chrome.sh",
     "chrome": "sh scripts/chrome-debug.sh",
     "build": "node scripts/generate-rss.ts && next build && node scripts/redirects.ts",
     "start": "next start",

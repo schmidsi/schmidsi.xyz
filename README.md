@@ -7,7 +7,7 @@ Personal website and blog for ses.eth - a hackable Next.js playground embracing 
 ```bash
 pnpm install    # Install dependencies
 pnpm dev        # Start dev server at http://localhost:3000
-pnpm dev-chrome # Dev server plus a Chrome the agent can drive (CDP on :9222)
+pnpm dev:chrome # Dev server plus a Chrome the agent can drive (CDP on :9222)
 pnpm build      # Build for production (generates RSS + builds Next.js)
 pnpm start      # Start production server
 pnpm new-post "Title" # Scaffold a draft post in app/posts/
