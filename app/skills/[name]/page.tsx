@@ -6,7 +6,13 @@ import { compile, run } from '@mdx-js/mdx';
 import * as runtime from 'react/jsx-runtime';
 import remarkGfm from 'remark-gfm';
 import { formatDate } from '@/lib/posts';
-import { getSkill, getSkillNames, repoUrl } from '@/lib/skills';
+import {
+  downloadableAssets,
+  getSkill,
+  getSkillAssets,
+  getSkillNames,
+  repoUrl,
+} from '@/lib/skills';
 
 interface Props {
   params: Promise<{ name: string }>;
@@ -49,6 +55,7 @@ export default async function SkillPage({ params }: Props) {
   const { name } = await params;
   const skill = getSkill(name);
   const { history } = skill;
+  const downloads = downloadableAssets(getSkillAssets(name));
 
   // format: 'md' because skills are plain Markdown, not MDX (no JSX parsing
   // of things like <domain> placeholders).
@@ -78,6 +85,15 @@ export default async function SkillPage({ params }: Props) {
           <a href={`/skills/${skill.name}/SKILL.md`} download="SKILL.md">
             Download SKILL.md
           </a>
+          {downloads.map((file) => (
+            <span key={file}>
+              {' '}
+              ·{' '}
+              <a href={`/skills/${skill.name}/assets/${file}`} download={file}>
+                Download {file}
+              </a>
+            </span>
+          ))}
         </p>
         <Content components={{ pre: Pre, a: A }} />
         {history && (

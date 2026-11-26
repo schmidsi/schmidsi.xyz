@@ -97,8 +97,17 @@ export function getSkill(name: string): Skill {
   };
 }
 
+// Newest edit first, so the home page shows what changed lately. Skills
+// without git history (not committed yet) go last.
+export function byLastEdit(
+  a: Pick<Skill, 'history'>,
+  b: Pick<Skill, 'history'>,
+): number {
+  return (b.history?.updated ?? '').localeCompare(a.history?.updated ?? '');
+}
+
 export function getSkills(): Skill[] {
-  return getSkillNames().map(getSkill);
+  return getSkillNames().map(getSkill).sort(byLastEdit);
 }
 
 // Files next to SKILL.md (e.g. screenshots) that the skill links relatively.
@@ -109,4 +118,10 @@ export function getSkillAssets(name: string): string[] {
 
 export function readSkillAsset(name: string, file: string): Buffer {
   return fs.readFileSync(path.join(skillsDirectory, name, 'assets', file));
+}
+
+// Assets worth a download link next to SKILL.md (scripts, configs). Images are
+// only there to be shown inline in the skill.
+export function downloadableAssets(files: string[]): string[] {
+  return files.filter((file) => !/\.(png|jpe?g|gif|webp|svg)$/i.test(file));
 }
