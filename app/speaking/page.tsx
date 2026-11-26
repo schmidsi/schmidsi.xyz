@@ -22,12 +22,11 @@ export const metadata = {
 function TalkList({ talks }: { talks: Talk[] }) {
   return (
     // No bullets: each entry is two lines, the gap separates them
-    <ul className="list-none pl-0 [&>li]:my-5 [&>li]:pl-0">
+    <ul className="list-none pl-0 [&>li]:my-5 [&>li]:pl-0 [&>li]:leading-snug">
       {talks.map((talk) => (
         <li key={talk.href}>
           <Link href={`/speaking/${talkSlug(talk)}/`}>{talk.title}</Link>
-          <br />
-          <span className="text-sm text-gray-500">
+          <span className="mt-1 block text-sm text-gray-500">
             {talkContext(talk)}
             {talk.with && (
               <>
