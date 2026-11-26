@@ -21,17 +21,21 @@ type Post = {
 };
 
 function getPosts(): Post[] {
-  return fs
-    .readdirSync(postsDirectory)
-    .filter((f) => f.endsWith('.mdx') && !f.startsWith('_')) // drafts start with _
-    .map((fileName) => {
-      const slug = fileName.replace(/\.mdx$/, '');
-      const { data, content } = matter(
-        fs.readFileSync(path.join(postsDirectory, fileName), 'utf8'),
-      );
-      return { slug, content, ...data } as Post;
-    })
-    .sort((a, b) => (a.date > b.date ? -1 : 1));
+  return (
+    fs
+      .readdirSync(postsDirectory)
+      .filter((f) => f.endsWith('.mdx') && !f.startsWith('_')) // drafts start with _
+      .map((fileName) => {
+        const slug = fileName.replace(/\.mdx$/, '');
+        const { data, content } = matter(
+          fs.readFileSync(path.join(postsDirectory, fileName), 'utf8'),
+        );
+        return { slug, content, ...data } as Post & { canonical?: string };
+      })
+      // Reposts live on other sites first, subscribers would see old news
+      .filter((post) => !post.canonical)
+      .sort((a, b) => (a.date > b.date ? -1 : 1))
+  );
 }
 
 const posts = getPosts();

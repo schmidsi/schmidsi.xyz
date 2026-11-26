@@ -21,3 +21,13 @@ test('parsePost keeps engage links in frontmatter order', () => {
 test('parsePost has no engage links when frontmatter has none', () => {
   assert.deepEqual(parsePost('p', post('')).engage, []);
 });
+
+test('parsePost reads canonical url and publisher of reposts', () => {
+  const parsed = parsePost(
+    'p',
+    post('canonical: https://example.com/orig\npublisher: Example blog\n'),
+  );
+  assert.equal(parsed.canonical, 'https://example.com/orig');
+  assert.equal(parsed.publisher, 'Example blog');
+  assert.equal(parsePost('p', post('')).canonical, undefined);
+});

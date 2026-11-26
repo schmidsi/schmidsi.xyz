@@ -1,0 +1,37 @@
+---
+title: "The Graph and Farcaster Frames: Powering Onchain Data Needs With Subgraphs"
+date: 2024-02-20
+description: "Most Farcaster Frames have onchain data needs. Subgraphs on The Graph provide them."
+tag: "the graph, farcaster"
+author: Simon Emanuel
+canonical: https://thegraph.com/blog/build-with-farcaster-frames-the-graph/
+publisher: "The Graph blog"
+---
+
+[In recent weeks Farcaster](https://warpcast.com/v/0x5236071b) unveiled [Frames](https://docs.farcaster.xyz/learn/what-is-farcaster/frames), a new feature that has ignited a surge of excitement within the web3 builder community. The functionality is simple yet powerful: Frames empower users to infuse programmable interactivity into their posts, opening doors to a multitude of creative possibilities. A great beginner’s example would be embedding a poll: Post a question on Farcaster and encourage your followers to select an answer within a multiple-choice interactive Frame. From there, use cases can get more interesting.
+
+With programmable interactivity, a multitude of creative possibilities are unleashed. Since the release of Frames, builders have already experimented with various use cases such as direct [NFT mints from the timeline](https://warpcast.com/tyson/0x5412119f), voting on [Safe proposals](https://warpcast.com/limone.eth/0x9715d06b), [a scavenger hunt](https://warpcast.com/six/0xe29345ce), incorporating a [Punk sales tracker](https://warpcast.com/schmidsi/0x05df9d12) and more. And because Frames are based on an [open standard](https://docs.farcaster.xyz/reference/frames/spec), other protocols soon followed suit, embracing the concept: Lens with [Lens Portals](https://yoginth.notion.site/Hey-Portals-Open-Graph-Spec-ddbedce64a2d4e1a80f66db182159aff) and [XMTP Frames](https://community.xmtp.org/t/xip-36-supporting-frames-in-xmtp/534).
+
+Now, how does The Graph come into play with this new web3 primitive?
+
+Most Frames have onchain data needs. A NFT mint Frame might want to verify if the connected user has already minted, whereas some Frames have [token-gated functionality](https://github.com/unlock-protocol/token-gated-frame/tree/main). Others simply wish to display some kind of organized and up-to-date onchain data. That’s where developers can tap in The Graph to build with confidence: by providing seamless access to onchain data using subgraphs.
+
+With [a plethora of existing subgraphs already published on The Graph Network](https://thegraph.com/explorer), developers can easily tap into these resources to fulfill their data requirements. And in cases where a suitable subgraph doesn't exist, [creating one tailored to specific needs is a straightforward](https://thegraph.com/docs/en/quick-start/) process, thanks to The Graph's intuitive infrastructure.
+
+What sets The Graph apart is not just its accessibility, but also the [economic guarantee](https://thegraph.com/docs/en/tokenomics/) it offers through Indexers' stake. This ensures a higher level of trust and integrity in the data retrieved, giving developers peace of mind as they integrate onchain information into their Frames. Additionally, querying data from The Graph Network is intuitive and efficient, making it the preferred choice for developers seeking reliable data sources.
+
+### The Graph + Farcaster Frames in action
+
+This isn’t a hypothetical think piece of how you might theoretically be able to integrate data from The Graph into Farcaster Frames. In fact, there are already some very interesting examples from [a recent Farcaster Bounty hosted by The Graph](https://www.bountycaster.xyz/bounty/0x04ad57b9bd47724ddc00cd72f334d90329cec06e?widget=fc-2024-02-29) that show real world examples of Frames that leverage The Graph for onchain data.
+
+Take a look at the winners:
+
+**1st Place**: [3070](https://warpcast.com/3070) implemented an NFT browser inside a Frame. It queries the NFT subgraphs on [Ethereum](https://thegraph.com/explorer/subgraphs/CBf1FtUKFnipwKVm36mHyeMtkuhjmh4KHzY3uWNNq5ow?view=Overview&chain=arbitrum-one) and [Base](https://thegraph.com/explorer/subgraphs/D4ab55j22wJLqdkmepiMVcSxQ44S2DTdh5aRQ5f5EqJF?view=Overview&chain=arbitrum-one). Check it out live on [Farcaster](https://warpcast.com/3070/0xb1cfd7bc) and view [the source code on GitHub](https://github.com/eucalyptus-viminalis/interframe/tree/main).
+
+**2nd Place**: [Hashir](https://warpcast.com/hashir) and [Shiyas](https://warpcast.com/shiyasmohd) created a Frame that can look up the activity of an Ethereum address on [POAP](https://thegraph.com/hosted-service/subgraph/poap-xyz/poap-xdai), [ENS](https://thegraph.com/hosted-service/subgraph/ensdomains/ens), [Uniswap](https://thegraph.com/explorer/subgraphs/4cKy6QQMc5tpfdx8yxfYeb9TLZmgLQe44ddW1G7NwkA6?view=Playground&chain=arbitrum-one), NFTs and [Lens](https://api.thegraph.com/subgraphs/name/schmidsi/anudit-lens). [Try it out](https://warpcast.com/hashir/0x0fe090bd) and [read the source on GitHub](https://github.com/shiyasmohd/ethwrapped-frames?tab=readme-ov-file).
+
+**3rd Place**: [limone.eth](https://warpcast.com/limone.eth), a serial Frames hacker, built a Frame that can vote on onchain proposals. A Safe would then execute if the quorum is met. Check [it out on Warpcast](https://warpcast.com/limone.eth/0x9715d06b) and view the [source code on GitHub](https://github.com/builders-garden/safe-proposal-frame).
+
+If you caught the Frames bug too and want to get your hands dirty, check out the [example repo from me, Simon](https://github.com/schmidsi/cryptopunks-frames) to quickly build a Frame that queries The Graph. Or look through [awesome-frames](https://github.com/davidfurlong/awesome-frames?tab=readme-ov-file) for more inspiration.
+
+*Connect with Simon on* [*Warpcast*](https://warpcast.com/schmidsi) *or* [*on X*](https://twitter.com/schmid_si) *to share your thoughts!*

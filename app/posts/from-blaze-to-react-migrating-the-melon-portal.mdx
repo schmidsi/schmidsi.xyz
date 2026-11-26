@@ -1,0 +1,114 @@
+---
+title: "From Blaze to React: Migrating the Melon Portal"
+date: 2017-06-14
+description: "How we planned the migration of portal.melonport.com from Meteor Blaze to React, without a rewrite."
+tag: "react, meteor, melonport"
+author: Simon Emanuel
+canonical: https://medium.com/enzymefinance/from-blaze-to-react-43097df5fc71
+publisher: "the Melonport blog on Medium"
+---
+
+![](/images/from-blaze-to-react-1.webp)
+
+In this article I describe our plan to migrate [portal.melonport.com](https://portal.melonport.com/) from [Blaze](http://blazejs.org/) to [React](https://facebook.github.io/react/). It should help our devs as a guideline for the transition, but also inspire others who face similar challenges.
+
+I’ll assume that you (the reader) have already heard about Blaze, React, [Redux](http://redux.js.org/) and Meteor. It’s furthermore crucial to understand that they are both “only” the [view-layer of the app](https://guide.meteor.com/ui-ux.html#view-layers).
+
+## Why?
+
+I think Blaze is an awesome view library for people coming from the jQuery/HTML world to get started with reactive apps because it’s easy to learn [Handlebars](http://handlebarsjs.com/)-syntax and compatibility with the jQuery ecosystem. Furthermore, prototyping an app with Meteor/Blaze is still incredibly fast thanks to packages like [Autoform](https://github.com/aldeed/meteor-autoform) (is there something similar to this in the React-world?). But it has some flaws that start to hurt as soon as the application/team grows. Most of them are already addressed in React (and supposedly also in other newer view layers like [Angular.js](https://angular.io/) or [vue.js](https://vuejs.org/)). So here are the main points:
+
+* jQuery: Although I think jQuery is a great library, it’s original intention and ecosystem focuses on building web-pages instead of web-apps (this distinction is really important). We should get rid of it completely.
+* Sessions: We worked with Meteor-Sessions on the v0.1 which helped to speed development up in the first place but is a [technical dept](https://github.com/dferber90/eslint-plugin-meteor/blob/master/docs/rules/no-session.md) on the long run. Working with Blaze/ReactiveDict doesn’t fell that much better. Session state management should be done by Redux.
+* Redux: It can be hard at the beginning, but once I really understood it, I can’t imagine how to manage state in a bigger application without these principles! Say goodbye to `console.log` thanks to the [Redux-Devtools](http://extension.remotedev.io/). Although it is possible to integrate Blaze with Redux ([see our transition hack](https://github.com/melonproject/portal/blob/708c214b4c59b55d32c00671ee039143d80c2368/imports/startup/client/sync-session.js)), it feels like forcing your mind to think in 2 different paradigms at the same time.
+* Modularity/Isolation/Testing: The ultimate goal is to have a decoupled component library following the [Atomic Design](http://atomicdesign.bradfrost.com/) principles. They should be decoupled from Meteor in general to have them ready to be used in a real Ðapp without a Meteor server and on other services. These properties also make them perfectly testable and auto documenting with [Storybook](https://storybook.js.org/). I don’t even know how to achieve something similar with Blaze.
+
+![](/images/from-blaze-to-react-2.webp)
+
+*Building software can feel like building a card house ([CC0](https://pixabay.com/en/playing-card-house-of-cards-luck-842037/))*
+
+## Don’t rewrite from scratch
+
+Although every programmer knows the feeling when looking at foreign code (it even does not have to be bad code in the first place): I’ll rewrite this from scratch: perfectly organised, scalable, maintainable, modular, isolated, \[insert more positive properties of the perfect code base here\]. [But you](https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/) [shouldn’t](https://www.youtube.com/watch?v=XcUUY8ziTuk). Here are my points:
+
+* It’s approximately 10 to 100 times harder (=more expensive) than it seems to be
+* If you already have some users on it, which we have, you end up managing two code bases in parallel which is waste of time, or your users get angry because their bug/feature request aren’t addressed on time: “Because, you know, we work on the rewrite. It will be better, faster, easier to use, prettier and super awesome in general. — No, we don’t know when we will release it yet. It takes a little bit longer than expected \*cough\*. — Yes I know, that you filed this bug a month ago, just wait for the rewrite.”
+
+### As a side note: When to do a rewrite?
+
+The answer lies in the difference between a MVP and a prototype:
+
+Sometimes, you created a prototype but you thought it was a MVP. To identify this really rare case, the following properties apply to the outcome:
+
+* You have almost zero real users
+* AND there are significant architectural errors
+
+Then, maybe, you could do a rewrite.
+
+![](/images/from-blaze-to-react-3.jpg)
+
+*The Battle Plan of Salerno (From [Wikimedia](https://commons.wikimedia.org/wiki/File:SalernoDDayPlans1943.jpg))*
+
+## Modus Operandi
+
+So how to evolve from a hacky MVP that was pushed out with the brute force of long nights and high pressure to a clean, maintainable and scalable code base without rewrite or refactoring camps?
+
+### 1. Define the goal
+
+The goal is long-term. Like how the whole system should look like in 6 months or so. There is also no rush getting there asap. It’s meant to be a mental lighthouse that gives direction.
+
+* Modularised and reusable components with loose coupling and high cohesion. Like a proper subsystem decomposition how it’s teached in software architecture classes.
+* Ensure unidirectional data flow accross components / services: User input → Redux → Blockchain → Mongodb → Redux → User Interface (But mask this tedious behaviour with an [optimistic UI](https://guide.meteor.com/ui-ux.html#optimistic-ui))
+* 100% ESLint (maybe with the help of [Prettier](https://prettier.github.io/prettier))
+* [100% Flow Typed](https://flow.org/)
+* 95% Unit Test Coverage
+* As less as possible dependencies to Atmosphere. I.e. try to only use packages from NPM.
+* All business critical scenarios are end-to-end tested (i.e. automated browser tests)
+* Completely remove Blaze from the code base in favour of React
+* Completely remove SCSS in favour of [JSS](http://cssinjs.org/?v=v7.1.5)
+* Await/Async instead of Promise-Chains/Callback hell
+* … (I’ll update this list if new things arise)
+
+![](/images/from-blaze-to-react-4.jpg)
+
+*[From devIQ.com](http://deviq.com/boy-scout-rule/)*
+
+### 2. The transition state
+
+Until we reached the goal, we are in a transition state. That means, we do not fully comply with the goal yet, but every single commit regardless of a bugfix or working on a new feature should bring the project nearer to the goal. This list follows a lot of the principles of [Working With Legacy Code](https://softwareengineering.stackexchange.com/questions/122014/what-are-the-key-points-of-working-effectively-with-legacy-code).
+
+* No new code without unit tests
+* No new code that does not pass eslint
+* Utilize the boy scout rule: “Leave your code better than you found it.” That means: If you touch some code, try to clean it a bit first, write unit tests, refactor it here and there a little and add your improvements afterwards.
+* Do bigger refactoring regularly. 1–4h tasks weekly, bigger tasks monthly.
+* If you find architectural flaws that need to be addressed somewhen in the future, [add in issue on Github](https://github.com/melonproject/portal/issues/new).
+* Write end-to-end test before changing the code.
+
+On a more technical side, during the transition state we have [Blaze and React running side by side](https://guide.meteor.com/react.html#react-in-blaze). Also SCSS and JSS.
+
+But it is really important to note that this transition phase should be finished at one point. Otherwise, the codebase is worse because of the use of multiple view modules, etc.
+
+![](/images/from-blaze-to-react-5.jpg)
+
+*[From pixabay.com](https://pixabay.com/en/lego-building-blocks-colorful-2285065/)*
+
+### Modularise
+
+One important technique to manage large code-bases, so called monoliths, is modularising:
+
+* Identify functionality that could be reused somewhere even if it is just hypothetical and you know for sure, that this functionality will only be used in this particular project.
+* Then, extract this functionality into its own folder \< npm module \< micro-service. Fully unit-tested of course. Whereas “\<” means: the best would be a micro-service, but it’s still better to have it in it’s own folder.
+* Depend on this now extracted module from your monolith.
+* Feel good about it.
+
+An example from our codebase is the refactoring of all Javascript methods that interact with our smart contracts into its [own folder](https://github.com/melonproject/portal/tree/5e6b5979ae0f1e0df9e1dfbf754109b9bd107ddb/imports/melon/interface). We plan to further isolate it into its own NPM module to enable other Javascript developers easily building other portals to the [Melon Protocol](https://github.com/melonproject/protocol). You don’t need to trust us.
+
+## Conclusion
+
+This was my first article as a Senior Fronted/UX Engineer at Melonport.com. The goal of these articles is to open source our internal knowledge and documentation, so that others can learn from it or give us feedback, so we can learn from others. I hope it was not too long.
+
+I’m happy for any comment, feedback or criticism. Also I’d like to hear which other topics you would like me to write about. I have the following topics in mind:
+
+* How we React: Usage of React/Redux, where React Components are fully stateless and functional.
+* Evaluation of a CSS successor. What’s important for us, what’s on the market, etc.
+* … Suggestions welcome

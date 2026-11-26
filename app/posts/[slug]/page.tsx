@@ -1,3 +1,4 @@
+import { ExternalLink } from '@/components/ExternalLink';
 import { SiteHeader } from '@/components/SiteHeader';
 import { notFound } from 'next/navigation';
 import { getPost, getAllPostSlugs, formatDate } from '@/lib/posts';
@@ -9,11 +10,7 @@ import remarkGfm from 'remark-gfm';
 // Readers keep their place in the post when following a reference.
 function PostLink(props: React.ComponentProps<'a'>) {
   const external = /^https?:\/\//.test(props.href ?? '');
-  return external ? (
-    <a {...props} target="_blank" rel="noopener noreferrer" />
-  ) : (
-    <a {...props} />
-  );
+  return external ? <ExternalLink {...props} /> : <a {...props} />;
 }
 
 interface Props {
@@ -34,6 +31,8 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: post.title,
     description: post.description,
+    // Reposts credit the original so search engines rank it, not this copy
+    alternates: post.canonical ? { canonical: post.canonical } : undefined,
     openGraph: {
       title: post.title,
       description: post.description,
@@ -72,6 +71,14 @@ export default async function PostPage({ params }: Props) {
     <div>
       <SiteHeader />
       <main className="prose mt-8 mb-8">
+        {post.canonical && (
+          <aside className="mb-6 border-l-4 border-gray-300 bg-slate-100 p-3 text-sm">
+            This is a repost, kept here as an archive. It was originally
+            published{post.publisher ? ` on ${post.publisher}` : ''} on{' '}
+            {formatDate(post.date)}.{' '}
+            <ExternalLink href={post.canonical}>Read the original</ExternalLink>
+          </aside>
+        )}
         <h1 className="mb-2">{post.title}</h1>
         <time dateTime={post.date} className="text-sm text-gray-500">
           {formatDate(post.date)}

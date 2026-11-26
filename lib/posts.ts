@@ -28,6 +28,11 @@ export interface Post {
   tag: string;
   author: string;
   image?: string;
+  // Set on reposts: where the post was originally published. The page marks
+  // itself as a repost and points search engines there.
+  canonical?: string;
+  // Name of the original publication, for "originally published on ..."
+  publisher?: string;
   // Where the post was shared, so readers can like, share or comment there
   engage: { label: string; href: string }[];
   content: string;
@@ -43,6 +48,8 @@ export function parsePost(slug: string, fileContents: string): Post {
     tag: data.tag,
     author: data.author,
     image: data.image,
+    canonical: data.canonical,
+    publisher: data.publisher,
     engage: Object.entries(data.engage ?? {}).map(([label, href]) => ({
       label,
       href: String(href),
