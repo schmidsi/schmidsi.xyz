@@ -47,7 +47,10 @@ test('pickSpotlight takes a skill published after the newest post', () => {
 test('pickSpotlight skips reposts and uncommitted skills', () => {
   assert.equal(
     pickSpotlight(
-      [post('repost', '2026-11-26', 'https://example.com'), post('own', '2026-01-01')],
+      [
+        post('repost', '2026-11-26', 'https://example.com'),
+        post('own', '2026-01-01'),
+      ],
       [skill('draft')],
     )?.title,
     'own',
