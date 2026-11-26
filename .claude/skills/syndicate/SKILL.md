@@ -16,6 +16,13 @@ Nothing gets posted until the user says go.
   cards need the live preview image.
 - Read `aside guide` once per session. Drive each platform with
   `aside exec` and watch the session, reporting every minute or so.
+- Run `aside settings save-sessions true` first. Unsaved sessions can't be
+  resumed ("Session not found"), and a fresh session doesn't find the
+  reviewed composer tabs, so the user's edits get lost.
+- Ask the user to log in to Farcaster in Aside before drafting. It is often
+  logged out, and login needs the phone (QR code in the Farcaster app). If
+  the user skips it, syndicate without Farcaster and leave it out of the
+  engage links.
 
 ## 1. Write one version per platform
 
