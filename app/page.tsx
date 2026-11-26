@@ -46,7 +46,7 @@ export default function HomePage() {
         ))}
       </div>
 
-      <h2 className="text-lg font-semibold mt-6">Read</h2>
+      <h2 className="text-lg font-semibold mt-6">Writing</h2>
       <ul>
         {posts.map((post) => (
           <li key={post.slug}>
